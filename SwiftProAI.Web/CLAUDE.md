@@ -4,6 +4,8 @@ This is the Angular 17 frontend for SwiftProAI, an insurance-tech SaaS platform.
 
 The build output is written directly into `SwiftProAI.Core/aspnet-core/src/ThinknInsurTech.Web.Host/wwwroot`.
 
+> **Code wiki:** browsable module-level documentation with dependency graphs is in [`wiki/web/`](../wiki/web/index.md). Open that folder as an Obsidian vault for the graph view.
+
 ---
 
 ## Build and run

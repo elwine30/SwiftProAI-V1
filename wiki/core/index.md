@@ -35,6 +35,10 @@ Generated from commit `b457674` on `2026-06-12`.
 
 See [[external]].
 
+## Developer guide
+
+See [CLAUDE.md](../../SwiftProAI.Core/CLAUDE.md) for build commands, architecture conventions, database setup and coding standards.
+
 ## How to regenerate
 
 Run the graphify skill pointing to SwiftProAI.Core as source path and wiki/core as vault path.

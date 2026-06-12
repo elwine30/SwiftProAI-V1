@@ -31,6 +31,10 @@ Generated from commit `b457674` on `2026-06-12`.
 
 See [[external]].
 
+## Developer guide
+
+See [CLAUDE.md](../../SwiftProAI.Web/CLAUDE.md) for build commands, Angular conventions, API proxy regeneration and coding standards.
+
 ## How to regenerate
 
 Run the graphify skill pointing to SwiftProAI.Web as source path and wiki/web as vault path.

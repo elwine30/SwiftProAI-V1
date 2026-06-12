@@ -4,6 +4,8 @@ This is the backend for SwiftProAI, an insurance-tech SaaS platform. It is built
 
 The internal namespace throughout the codebase is `ThinknInsurTech`. All projects, classes and migrations use this prefix.
 
+> **Code wiki:** browsable module-level documentation with dependency graphs is in [`wiki/core/`](../wiki/core/index.md). Open that folder as an Obsidian vault for the graph view.
+
 ---
 
 ## Build and run
