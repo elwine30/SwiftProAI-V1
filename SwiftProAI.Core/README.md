@@ -1,92 +1,276 @@
-# SwiftProAI.AspNetCore
+# SwiftProAI.Core
 
+Backend API and domain layer for SwiftProAI — an insurance-tech SaaS platform built on ASP.NET Core 8 and the ABP (ASP.NET Boilerplate) framework.
 
+---
+
+## Tech stack
+
+| Layer | Technology |
+|-------|-----------|
+| Runtime | .NET 8.0 |
+| Framework | ASP.NET Core + ABP 9.1.3 / ASP.NET Zero 5.0 |
+| ORM | Entity Framework Core 8 (SQL Server) |
+| Auth | JWT Bearer, OpenIddict (OAuth2/OIDC), ABP Zero |
+| Real-time | SignalR |
+| Background jobs | Hangfire (SQL Server backing store) |
+| Caching | Redis (Abp.RedisCache) |
+| API | REST (ABP dynamic controllers) and GraphQL 7.7 |
+| Docs | Swagger / OpenAPI (Swashbuckle) |
+| Mobile | .NET MAUI (iOS, Android, Windows, macOS) |
+| Payments | Stripe and PayPal |
+| SMS | Twilio |
+| OCR | OpenAI-backed document recognition |
+| Containers | Docker and Docker Compose |
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    subgraph Clients
+        A[Angular SPA\nSwiftProAI.Web]
+        B[MAUI Mobile App]
+        C[External Integrations]
+    end
+
+    subgraph Web Layer
+        D[ThinknInsurTech.Web.Host\nEntry point · Kestrel · CORS]
+        E[ThinknInsurTech.Web.Core\nJWT · SignalR · Swagger · Health checks]
+        F[ThinknInsurTech.Web.Public\nPublic portal]
+    end
+
+    subgraph Application Layer
+        G[ThinknInsurTech.Application\nAppServices · DTOs · AutoMapper]
+        H[ThinknInsurTech.Application.Shared\nService interfaces · shared DTOs]
+        I[ThinknInsurTech.Application.Client\nClient-side service wrappers]
+        J[ThinknInsurTech.GraphQL\nGraphQL schema · resolvers]
+    end
+
+    subgraph Domain Layer
+        K[ThinknInsurTech.Core\nEntities · Domain services · ABP module]
+        L[ThinknInsurTech.Core.Shared\nConstants · Enums · shared models]
+    end
+
+    subgraph Data Layer
+        M[ThinknInsurTech.EntityFrameworkCore\nDbContext · Repositories · Migrations]
+    end
+
+    subgraph Infrastructure
+        N[(SQL Server)]
+        O[(Redis Cache)]
+        P[Hangfire\nBackground jobs]
+        Q[SignalR Hub\nChat · Notifications]
+    end
+
+    A -->|REST + SignalR| D
+    B -->|REST| D
+    C -->|REST| D
+    D --> E
+    D --> G
+    D --> J
+    E --> G
+    G --> H
+    G --> K
+    J --> K
+    K --> L
+    K --> M
+    M --> N
+    E --> O
+    E --> P
+    E --> Q
+```
+
+### Layer responsibilities
+
+**Web.Host** — application entry point. Configures Kestrel, CORS, middleware pipeline and environment-specific settings.
+
+**Web.Core** — web-layer infrastructure shared across host and public portal. Owns JWT configuration, SignalR hub registration, Swagger setup, health check endpoints and OpenIddict OIDC configuration.
+
+**Application** — all business use cases implemented as ABP AppServices. Handles DTO mapping via AutoMapper (`CustomDtoMapper.cs`), data export/import (Excel, PDF) and integration orchestration (OCR, payments, SMS).
+
+**Application.Shared** — service interfaces and DTOs that are shared with client projects (MAUI app, console client). Consumed by the Angular frontend via NSwag-generated proxies.
+
+**Core** — domain entities, domain services, events and ABP module wiring. All business invariants live here. Never bypass this layer by writing queries directly in Application or Web.
+
+**EntityFrameworkCore** — `ThinknInsurTechDbContext`, EF repositories and all migrations. Schema was migrated from PostgreSQL to SQL Server in the initial migration.
+
+---
+
+## Domain areas
+
+```mermaid
+graph LR
+    subgraph Registration and Cases
+        R[Registration\nworkflow]
+        CA[Case\nlifecycle]
+        AP[Approval\nmulti-step]
+    end
+
+    subgraph Stakeholders
+        CO[Companies\ninsurers]
+        WS[Workshops\nrepairers]
+        LF[Law Firms]
+        OR[Organisations]
+    end
+
+    subgraph Assets
+        VH[Vehicles]
+        DO[Documents\nOCR]
+        FI[File uploads]
+    end
+
+    subgraph Platform
+        AU[Audit trail]
+        CH[Chat\nSignalR]
+        RP[Reports]
+        MT[Multi-tenancy]
+        PY[Payments\nStripe · PayPal]
+        SM[SMS\nTwilio]
+    end
+
+    R --> CA
+    CA --> AP
+    CA --> CO
+    CA --> WS
+    CA --> LF
+    CA --> VH
+    CA --> DO
+```
+
+---
+
+## Project layout
+
+```
+aspnet-core/
+├── src/
+│   ├── ThinknInsurTech.Core
+│   ├── ThinknInsurTech.Core.Shared
+│   ├── ThinknInsurTech.Application
+│   ├── ThinknInsurTech.Application.Shared
+│   ├── ThinknInsurTech.Application.Client
+│   ├── ThinknInsurTech.EntityFrameworkCore
+│   ├── ThinknInsurTech.GraphQL
+│   ├── ThinknInsurTech.Web.Core
+│   ├── ThinknInsurTech.Web.Host
+│   ├── ThinknInsurTech.Web.Public
+│   ├── ThinknInsurTech.Migrator
+│   └── ThinknInsurTech.Mobile.MAUI
+├── test/
+│   ├── ThinknInsurTech.Tests
+│   ├── ThinknInsurTech.GraphQL.Tests
+│   ├── ThinknInsurTech.Test.Base
+│   └── ThinknInsurTech.ConsoleApiClient
+└── docker/
+```
+
+---
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Prerequisites
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- .NET 8 SDK
+- SQL Server (local or Docker)
+- Redis (local or Docker)
+- Node.js 18+ (only if building the Angular frontend)
 
-## Add your files
+### 1. Configure the database
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Update the connection string in `appsettings.json`:
 
+```json
+"ConnectionStrings": {
+  "Default": "Server=localhost; Database=ThinknInsurTechDb; Trusted_Connection=True; TrustServerCertificate=True;"
+}
 ```
-cd existing_repo
-git remote add origin https://gitlab.abagofdreams.com/thinkn/swiftproai/SwiftProAI.AspNetCore.git
-git branch -M main
-git push -uf origin main
+
+### 2. Run migrations
+
+```bash
+cd aspnet-core/src/ThinknInsurTech.Migrator
+dotnet run
 ```
 
-## Integrate with your tools
+### 3. Start the host
 
-- [ ] [Set up project integrations](https://gitlab.abagofdreams.com/thinkn/swiftproai/SwiftProAI.AspNetCore/-/settings/integrations)
+```bash
+cd aspnet-core/src/ThinknInsurTech.Web.Host
+dotnet run
+```
 
-## Collaborate with your team
+The API is available at `https://localhost:44301` by default (configured in `appsettings.json` under `App.ServerRootAddress`).
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Swagger UI: `https://localhost:44301/swagger`
+GraphQL playground: `https://localhost:44301/graphql`
 
-## Test and Deploy
+### Docker (alternative)
 
-Use the built-in continuous integration in GitLab.
+```bash
+cd aspnet-core/docker
+docker compose -f docker-compose.infrastructure.yml up -d   # SQL Server and Redis
+docker compose -f docker-compose.migrator.yml up            # Apply migrations
+docker compose -f docker-compose-host.yml up                # Web host
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
+## Configuration files
 
-# Editing this README
+| File | Environment |
+|------|------------|
+| `appsettings.json` | Development (default) |
+| `appsettings.Production.json` | Production |
+| `appsettings.Staging.json` | Staging |
+| `appsettings.SIT.json` | System integration testing |
+| `appsettings.UAT.json` | User acceptance testing |
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Key sections: `ConnectionStrings`, `Abp.RedisCache`, `App` (CORS origins, root URLs), `Authentication` (JWT, social logins), `Payment` (Stripe, PayPal), `Twilio`, `Recaptcha`, `OCR`, `FileUpload`.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+---
 
-## Name
-Choose a self-explaining name for your project.
+## Adding a migration
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+cd aspnet-core/src/ThinknInsurTech.EntityFrameworkCore
+dotnet ef migrations add <MigrationName> \
+  --startup-project ../ThinknInsurTech.Web.Host
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## API endpoints
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+| Endpoint | Description |
+|----------|------------|
+| `POST /api/TokenAuth/Authenticate` | Obtain JWT token |
+| `GET  /api/services/app/**` | ABP dynamic REST endpoints |
+| `POST /graphql` | GraphQL queries and mutations |
+| `GET  /swagger` | OpenAPI documentation |
+| `GET  /healthz` | Health check |
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+---
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Running tests
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```bash
+dotnet test aspnet-core/ThinknInsurTech.Web.sln
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+---
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Deployment notes
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+- Run the Migrator before every deploy to apply pending schema changes
+- Rotate `Authentication.JwtBearer.SecurityKey` per environment — never share keys across environments
+- `OCR.IsOCREnabled` can be toggled in appsettings to disable OpenAI calls without a code change
+- `UseEncryptedConnectionString` encrypts the connection string at rest — enable in production
+- File uploads are stored on disk at the path configured in `Folder.root` — ensure the host has write access to that path
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+---
 
-## License
-For open source projects, say how it is licensed.
+## Licence
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Proprietary. All rights reserved — ABOD Technology Services.
