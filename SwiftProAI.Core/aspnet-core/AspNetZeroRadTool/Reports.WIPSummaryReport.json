@@ -1,0 +1,83 @@
+{
+  "IsRegenerate": false,
+  "MenuPosition": "main",
+  "RelativeNamespace": "Reports",
+  "EntityName": "WIPSummaryReport",
+  "EntityNamePlural": "WIPSummaryReports",
+  "TableName": "WIPSummaryReports",
+  "PrimaryKeyType": "int",
+  "BaseClass": "Entity",
+  "EntityHistory": false,
+  "AutoMigration": false,
+  "UpdateDatabase": false,
+  "CreateUserInterface": true,
+  "CreateViewOnly": true,
+  "CreateExcelExport": true,
+  "CreateExcelImport": false,
+  "IsNonModalCRUDPage": false,
+  "IsMasterDetailPage": false,
+  "GenerateOverridableEntity": false,
+  "GenerateUnitTest": false,
+  "GenerateUiTest": false,
+  "PagePermission": {
+    "Host": true,
+    "Tenant": true
+  },
+  "Properties": [],
+  "NavigationProperties": [
+    {
+      "Namespace": "ThinknInsurTech.Case",
+      "ForeignEntityName": "CaseType",
+      "ForeignEntityNamePlural": "CaseTypes",
+      "IdType": "int",
+      "IsNullable": true,
+      "PropertyName": "CaseTypeId",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "ShortName"
+        ]
+      }
+    },
+    {
+      "Namespace": "ThinknInsurTech.Authorization.Users",
+      "ForeignEntityName": "User",
+      "ForeignEntityNamePlural": "Users",
+      "IdType": "long",
+      "IsNullable": true,
+      "PropertyName": "UserId",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "Name"
+        ]
+      }
+    },
+    {
+      "Namespace": "ThinknInsurTech.Companies",
+      "ForeignEntityName": "Company",
+      "ForeignEntityNamePlural": "Companies",
+      "IdType": "int",
+      "IsNullable": true,
+      "PropertyName": "CompanyId",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "ShortName"
+        ]
+      }
+    }
+  ],
+  "NavigationPropertyOneToManyTables": [],
+  "EnumDefinitions": [],
+  "DbContext": null
+}

@@ -1,0 +1,110 @@
+<div [@routerTransition]>
+
+    <div [class]="containerClass">
+        <div *ngIf="showMe" class="row">
+            <actions-button></actions-button>
+
+        </div>
+
+        <div class="col-lg-12 d-none d-md-block">
+            <div *ngIf="showMe" class="navigation">
+                <div class="step-container">
+                    <div class="step">
+                        <a routerLinkActive="active" #rla1="routerLinkActive" [routerLink]="[navigationService.step1Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 1}">
+                            <div class="step-title" [class.active]="rla1.isActive" [ngClass]="isDarkModeActive()">
+                                General<br><br></div>
+                            <div class="step-circle" [class.active]="rla1.isActive">
+                                <div class="step-numbering">1</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla2="routerLinkActive" [routerLink]="[navigationService.step2Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 2}">
+                            <div class="step-title" [class.active]="rla2.isActive" [ngClass]="isDarkModeActive()">Insured
+                                <br>Owner
+                            </div>
+                            <div class="step-circle" [class.active]="rla2.isActive">
+                                <div class="step-numbering">2</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla3="routerLinkActive" [routerLink]="[navigationService.step3Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 3}">
+                            <div class="step-title" [class.active]="rla3.isActive" [ngClass]="isDarkModeActive()">Insured
+                                <br>Driver
+                            </div>
+                            <div class="step-circle" [class.active]="rla3.isActive">
+                                <div class="step-numbering">3</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla4="routerLinkActive" [routerLink]="[navigationService.step4Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 4}">
+                            <div class="step-title" [class.active]="rla4.isActive" [ngClass]="isDarkModeActive()">Lawyers,
+                                Insurer<br>& Workshop</div>
+                            <div class="step-circle" [class.active]="rla4.isActive">
+                                <div class="step-numbering">4</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla5="routerLinkActive" [routerLink]="[navigationService.step5Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 5}">
+                            <div class="step-title" [class.active]="rla5.isActive" [ngClass]="isDarkModeActive()">Incident
+                                <br>Details
+                            </div>
+                            <div class="step-circle" [class.active]="rla5.isActive">
+                                <div class="step-numbering">5</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla6="routerLinkActive" [routerLink]="[navigationService.step6Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 6}">
+                            <div class="step-title" [class.active]="rla6.isActive" [ngClass]="isDarkModeActive()">Police
+                                <br>Report
+                            </div>
+                            <div class="step-circle" [class.active]="rla6.isActive">
+                                <div class="step-numbering">6</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla7="routerLinkActive" [routerLink]="[navigationService.step7Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 7}">
+                            <div class="step-title" [class.active]="rla7.isActive" [ngClass]="isDarkModeActive()">Third
+                                Party <br>Vehicle Details</div>
+                            <div class="step-circle" [class.active]="rla7.isActive">
+                                <div class="step-numbering">7</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="step">
+                        <a routerLinkActive="active" #rla8="routerLinkActive" [routerLink]="[navigationService.step8Url]"
+                            [queryParams]="{id: navigationService.registerId, stepId: 8}">
+                            <div class="step-title" [class.active]="rla8.isActive" [ngClass]="isDarkModeActive()">Third
+                                Party <br>Personal Details</div>
+                            <div class="step-circle" [class.active]="rla8.isActive">
+                                <div class="step-numbering">8</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="showMe" class="row mb-4 justify-content-end d-md-none">
+            <div class="col-xl-4 text-end">
+                <select id="selectStep" name="selectStep" class="form-select custom-select" [(ngModel)]="selectedStepUrl" (change)="navigateToStep(selectedStepUrl)">
+                    <option value="" disabled>Select a step</option>
+                    <option *ngFor="let step of steps" [value]="step.url">{{ step.label }}</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>

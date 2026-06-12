@@ -1,0 +1,25 @@
+.upload-area {
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.upload-area input[type='file'] {
+    display: none;
+}
+
+.upload-area button {
+    margin-top: 20px;
+}
+
+.preview-area {
+    border: 1px solid #eeeeee;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.file-preview img {
+    max-width: 100%;
+    height: auto;
+}

@@ -1,0 +1,36 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #caseSearchFeeForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="caseSearchFee.id">{{l("EditCaseSearchFee")}}</span>
+                        <span *ngIf="!caseSearchFee.id">{{l("NewSearchFee")}}</span>
+                    </h4>                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                    <div class="my-3">
+                        <label class="form-label" for="CaseSearchFee_Remark">{{l("Remark")}} *</label>
+                        <input type="text" #CaseSearchFee_Remark="ngModel" id="CaseSearchFee_Remark" class="form-control" [(ngModel)]="caseSearchFee.remark" name="Remark"   minlength="1"  maxlength="100"  required/>
+                        <validation-messages [formCtrl]="CaseSearchFee_Remark"></validation-messages>
+                    </div>
+        
+                    <div class="my5">
+                        <label class="form-label" for="CaseSearchFee_Amount">{{l("Amount")}} *</label>
+                        <input type="number" #CaseSearchFee_Amount="ngModel" id="CaseSearchFee_Amount" class="form-control" [(ngModel)]="caseSearchFee.amount" name="Amount"  min="0" step="0.01" pattern="^\d+(\.\d{1,2})?$" required amount/>
+                        <validation-messages [formCtrl]="CaseSearchFee_Amount"></validation-messages>
+                    </div>
+					
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!caseSearchFeeForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

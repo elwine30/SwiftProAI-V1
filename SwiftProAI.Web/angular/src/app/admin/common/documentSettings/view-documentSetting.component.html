@@ -1,0 +1,70 @@
+﻿<div [@routerTransition]>
+  
+  
+  
+                 <sub-header [title]="('DocumentSettings' | localize) +' '+ ('Details' | localize)" [breadcrumbs]="breadcrumbs">
+                 </sub-header>
+             
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                                     <div class="col-6 mb-3">
+                        <h6>{{l("businessRegistrationNo")}} :</h6>
+                        {{ item.documentSetting.businessRegistrationNo }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("companyLegalName")}} :</h6>
+                        {{ item.documentSetting.companyLegalName }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("address")}} :</h6>
+                        {{ item.documentSetting.address }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("taxNo")}} :</h6>
+                        {{ item.documentSetting.taxNo }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("telNo")}} :</h6>
+                        {{ item.documentSetting.telNo }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("invoiceRefNoPrefix")}} :</h6>
+                        {{ item.documentSetting.invoiceRefNoPrefix }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("invoiceRefNoLength")}} :</h6>
+                        {{ item.documentSetting.invoiceRefNoLength }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("debitRefNoPrefix")}} :</h6>
+                        {{ item.documentSetting.debitRefNoPrefix }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("debitRefNoLength")}} :</h6>
+                        {{ item.documentSetting.debitRefNoLength }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("creditRefNoPrefix")}} :</h6>
+                        {{ item.documentSetting.creditRefNoPrefix }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("creditRefNoLength")}} :</h6>
+                        {{ item.documentSetting.creditRefNoLength }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("caseRefNoPrefix")}} :</h6>
+                        {{ item.documentSetting.caseRefNoPrefix }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("caseRefNoLength")}} :</h6>
+                        {{ item.documentSetting.caseRefNoLength }}
+                    </div>
+
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>

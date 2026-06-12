@@ -1,0 +1,63 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #declarationQuestionForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="declarationQuestion.id">{{l("EditDeclarationQuestion")}}</span>
+                        <span *ngIf="!declarationQuestion.id">{{l("CreateNewDeclarationQuestion")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+
+                    <div class="my-3">
+                        <label class="form-label" for="DeclarationQuestion_Question">{{l("Question")}} *</label>
+                        <input type="text" #DeclarationQuestion_Question="ngModel" id="DeclarationQuestion_Question" class="form-control" [(ngModel)]="declarationQuestion.question" name="Question"   minlength="1"  maxlength="150"  required/>
+                        <validation-messages [formCtrl]="DeclarationQuestion_Question"></validation-messages>
+                    </div>
+        
+                    <div class="my-3">
+                        <label class="form-label" for="DeclarationQuestion_OptionType">{{l("OptionType")}} *</label>
+                        <select
+                        id="DeclarationQuestion_OptionType"
+                        #DeclarationQuestion_OptionType="ngModel"
+                        name="OptionType"
+                        class="form-select"
+                        [(ngModel)]="declarationQuestion.optionType"
+                        required
+                        >
+                            <option *ngFor="let item of optionTypes" [value]="item.value">
+                                {{ item.display }}
+                            </option>
+                        </select>
+
+                        <validation-messages [formCtrl]="DeclarationQuestion_OptionType"></validation-messages>
+                    </div>
+        
+                    <div class="my-3" *ngIf="declarationQuestion.optionType !== 'SINGLE_LINE'">
+                        <label class="form-label" for="DeclarationQuestion_OptionValues">{{l("OptionValues")}}</label>
+                        <div *ngFor="let option of options.controls; index as i" class="input-group mb-2">
+                            <input type="text" [formControl]="option" class="form-control">
+                            <button type="button" class="btn btn-outline-secondary" (click)="removeOption(i)">
+                                &times;
+                            </button>
+                        </div>
+                        <input #newOption type="text"  class="form-control" (keydown.enter)="addOption(newOption.value); newOption.value=''">
+                        <small class="form-text text-muted">{{l("OptionValuesTip")}}</small>
+                    </div>
+	
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!declarationQuestionForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

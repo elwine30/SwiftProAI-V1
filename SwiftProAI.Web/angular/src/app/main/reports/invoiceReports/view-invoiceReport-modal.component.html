@@ -1,0 +1,80 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ l('Invoice Details') }}</h4>
+                <button
+                    type="button"
+                    class="btn-close"
+                    (click)="close()"
+                    aria-label="Close"
+                    [disabled]="saving"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <ng-container *ngFor="let field of invoiceFields">
+                        <div class="col-3 mb-3">
+                            <h6>{{ l(field.label) }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3"
+                        [ngStyle]="field.type === 'currency' ? {'text-align': 'End'} : {}">
+                            <ng-container *ngIf="field.type === 'date'; else notDate">
+                                <span *ngIf="isValidDate(item.invoiceReport[field.key]); else invalidDate">
+                                    {{ item.invoiceReport[field.key] | luxonFormat: 'dd MMMM yyyy' }}
+                                </span>
+                                <ng-template #invalidDate>-</ng-template>
+                            </ng-container>
+                            <ng-template #notDate>
+                                <span *ngIf="item.invoiceReport[field.key] !== null && item.invoiceReport[field.key] !== undefined; else noData">
+                                    {{ field.type === 'currency' ? ('RM ' + (item.invoiceReport[field.key] | number:'1.2-2')) : item.invoiceReport[field.key] }}
+                                </span>
+                                <ng-template #noData>-</ng-template>
+                            </ng-template>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <hr />
+
+                <h5 class="modal-title" style="margin-bottom: 5px; margin-top: 5px;">
+                    {{ l('Breakdown Details') }}
+                </h5>
+
+                <table class="table table-bordered">
+                    <thead style="background-color: lightgray;">
+                        <tr>
+                            <th>Item Description</th>
+                            <th style="text-align: end;">Cost (RM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let breakdown of breakdownFields">
+                            <td>{{ l(breakdown.label) }}</td>
+                            <td [ngStyle]="breakdown.type === 'currency' ? {'text-align': 'End'} : {}">
+                                <span *ngIf="item.invoiceReport[breakdown.key] !== null && item.invoiceReport[breakdown.key] !== undefined; else noDataBreakdown">
+                                    {{ item.invoiceReport[breakdown.key] | number:'1.2-2' }}
+                                </span>
+                                <ng-template #noDataBreakdown>-</ng-template>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">
+                    {{ l('Close') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

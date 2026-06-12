@@ -1,0 +1,39 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #creditNoteItemForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="creditNoteItem.id">{{l("EditCreditNoteItem")}}</span>
+                        <span *ngIf="!creditNoteItem.id">{{l("CreateNewCreditNoteItem")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+					 
+					<div class="my-3">
+						<label class="form-label" for="CreditNoteItem_Remark">{{l("Remark")}} *</label>
+						<input type="text" #CreditNoteItem_Remark="ngModel" id="CreditNoteItem_Remark" class="form-control" [(ngModel)]="creditNoteItem.remark" name="Remark"   minlength="1"  maxlength="100"  required/>
+						<validation-messages [formCtrl]="CreditNoteItem_Remark"></validation-messages>
+					</div>
+		
+					<div class="my5">
+						<label class="form-label" for="CreditNoteItem_Amount">{{l("Amount")}}</label>
+						<input type="number" #CreditNoteItem_Amount="ngModel" id="CreditNoteItem_Amount" class="form-control" [(ngModel)]="creditNoteItem.amount" name="Amount"     step="0.01" amount/>
+						<validation-messages [formCtrl]="CreditNoteItem_Amount"></validation-messages>
+					</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!creditNoteItemForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

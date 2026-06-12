@@ -1,0 +1,184 @@
+{
+  "IsRegenerate": false,
+  "MenuPosition": "main",
+  "RelativeNamespace": "Registration",
+  "EntityName": "CaseExpense",
+  "EntityNamePlural": "CaseExpenses",
+  "TableName": "CaseExpenses",
+  "PrimaryKeyType": "int",
+  "BaseClass": "FullAuditedEntity",
+  "EntityHistory": false,
+  "AutoMigration": true,
+  "UpdateDatabase": true,
+  "CreateUserInterface": true,
+  "CreateViewOnly": true,
+  "CreateExcelExport": false,
+  "CreateExcelImport": false,
+  "IsNonModalCRUDPage": true,
+  "IsMasterDetailPage": false,
+  "GenerateOverridableEntity": false,
+  "GenerateUnitTest": false,
+  "GenerateUiTest": false,
+  "PagePermission": {
+    "Host": true,
+    "Tenant": true
+  },
+  "Properties": [
+    {
+      "Name": "Amount",
+      "Type": "double",
+      "MaxLength": 0,
+      "MinLength": 0,
+      "Range": {
+        "IsRangeSet": false,
+        "MinimumValue": 0.0,
+        "MaximumValue": 0.0
+      },
+      "Required": false,
+      "Nullable": false,
+      "Regex": "",
+      "IsMultiLingual": false,
+      "UserInterface": {
+        "AdvancedFilter": true,
+        "List": true,
+        "CreateOrUpdate": true
+      },
+      "ViewType": null,
+      "AdditionalData": {}
+    },
+    {
+      "Name": "ApprovedAmount",
+      "Type": "double",
+      "MaxLength": -1,
+      "MinLength": -1,
+      "Range": {
+        "IsRangeSet": false,
+        "MinimumValue": 0.0,
+        "MaximumValue": 0.0
+      },
+      "Required": false,
+      "Nullable": false,
+      "Regex": "",
+      "IsMultiLingual": false,
+      "UserInterface": {
+        "AdvancedFilter": true,
+        "List": true,
+        "CreateOrUpdate": true
+      },
+      "ViewType": null,
+      "AdditionalData": {}
+    },
+    {
+      "Name": "Remark",
+      "Type": "string",
+      "MaxLength": -1,
+      "MinLength": -1,
+      "Range": {
+        "IsRangeSet": false,
+        "MinimumValue": 0.0,
+        "MaximumValue": 0.0
+      },
+      "Required": false,
+      "Nullable": true,
+      "Regex": "",
+      "IsMultiLingual": false,
+      "UserInterface": {
+        "AdvancedFilter": true,
+        "List": true,
+        "CreateOrUpdate": true
+      },
+      "ViewType": null,
+      "AdditionalData": {}
+    }
+  ],
+  "NavigationProperties": [
+    {
+      "Namespace": "ThinknInsurTech.Common",
+      "ForeignEntityName": "Lookup",
+      "ForeignEntityNamePlural": "Lookups",
+      "IdType": "int",
+      "IsNullable": false,
+      "PropertyName": "StatusId",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "Description"
+        ]
+      }
+    },
+    {
+      "Namespace": "ThinknInsurTech.Common",
+      "ForeignEntityName": "Lookup",
+      "ForeignEntityNamePlural": "Lookups",
+      "IdType": "int",
+      "IsNullable": true,
+      "PropertyName": "TypeId",
+      "DuplicationNumber": 2,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "Description"
+        ]
+      }
+    },
+    {
+      "Namespace": "ThinknInsurTech.Common",
+      "ForeignEntityName": "Lookup",
+      "ForeignEntityNamePlural": "Lookups",
+      "IdType": "int",
+      "IsNullable": true,
+      "PropertyName": "SubTypeId",
+      "DuplicationNumber": 3,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "Description"
+        ]
+      }
+    },
+    {
+      "Namespace": "ThinknInsurTech.Common",
+      "ForeignEntityName": "Lookup",
+      "ForeignEntityNamePlural": "Lookups",
+      "IdType": "int",
+      "IsNullable": false,
+      "PropertyName": "RegisterId",
+      "DuplicationNumber": 4,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "Description"
+        ]
+      }
+    },
+    {
+      "Namespace": "ThinknInsurTech.Authorization.Users",
+      "ForeignEntityName": "User",
+      "ForeignEntityNamePlural": "Users",
+      "IdType": "long",
+      "IsNullable": false,
+      "PropertyName": "AdjusterId",
+      "DuplicationNumber": 0,
+      "RelationType": "single",
+      "ViewType": "LookupTable",
+      "DisplayPropertyNameInfos": {
+        "MergeFormat": "{0}",
+        "DisplayPropertyNames": [
+          "Name"
+        ]
+      }
+    }
+  ],
+  "NavigationPropertyOneToManyTables": [],
+  "EnumDefinitions": [],
+  "DbContext": null
+}

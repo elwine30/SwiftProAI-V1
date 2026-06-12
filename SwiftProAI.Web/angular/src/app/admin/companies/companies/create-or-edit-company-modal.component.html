@@ -1,0 +1,129 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #companyForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="company.id">{{l("EditCompany")}}</span>
+                        <span *ngIf="!company.id">{{l("CreateNewCompany")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+					<div class="my-3">
+						<label class="form-label" for="CaseTypeDescription">{{l("CaseType")}}</label>
+						<select name="company.caseTypeId" [(ngModel)]="company.caseTypeId" class="form-select" required>
+							<option value="">{{l("SelectACaseType")}}</option>
+							<option *ngFor="let item of allCaseTypes" value="{{item.id}}">{{item.displayName}}</option>
+						</select>
+					</div>
+					 
+
+
+								<div class="my-3">
+									<label class="form-label" for="Company_Name">{{l("Name")}} *</label>
+									<input type="text" #Company_Name="ngModel" id="Company_Name" class="form-control" [(ngModel)]="company.name" name="Name"   minlength="1"  maxlength="100"  required/>
+								    <validation-messages [formCtrl]="Company_Name"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Company_ShortName">{{l("ShortName")}} *</label>
+									<input type="text" #Company_ShortName="ngModel" id="Company_ShortName" class="form-control" [(ngModel)]="company.shortName" name="ShortName"   minlength="1"  maxlength="50"  required/>
+								    <validation-messages [formCtrl]="Company_ShortName"></validation-messages>
+								</div>
+					
+								<div class="my5">
+									<label class="form-label" for="Company_ClaimRate">{{l("ClaimRate")}}</label>
+									<input type="number" #Company_ClaimRate="ngModel" id="Company_ClaimRate" class="form-control" [(ngModel)]="company.claimRate" name="ClaimRate"  min="0"  max="100"   step="0.01" />
+									<validation-messages [formCtrl]="Company_ClaimRate"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Company_Address">{{l("Address")}} *</label>
+									<input type="text" #Company_Address="ngModel" id="Company_Address" class="form-control" [(ngModel)]="company.address" name="Address"   minlength="1"  maxlength="100"  required/>
+								    <validation-messages [formCtrl]="Company_Address"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Company_GstRegNo">{{l("GstRegNo")}} *</label>
+									<input type="text" #Company_GstRegNo="ngModel" id="Company_GstRegNo" class="form-control" [(ngModel)]="company.gstRegNo" name="GstRegNo"   minlength="1"  maxlength="50"  required/>
+								    <validation-messages [formCtrl]="Company_GstRegNo"></validation-messages>
+								</div>
+
+								<div class="my-3">
+									<label class="form-label" for="Company_PhotographCharge">{{l("PhotographCharge")}}</label>
+									<input type="number" #Company_PhotographCharge="ngModel" id="Company_PhotographCharge" class="form-control" [(ngModel)]="company.photographCharge" name="PhotographCharge"    />
+									<validation-messages [formCtrl]="Company_PhotographCharge"></validation-messages>
+								</div>
+
+								<div class="my-3">
+									<label class="form-label" for="Company_BusinessRegistrationNo">{{l("businessRegistrationNo")}}</label>
+									<input type="text" #Company_BusinessRegistrationNo="ngModel" id="Company_BusinessRegistrationNo" class="form-control" [(ngModel)]="company.businessRegistrationNo" name="BusinessRegistrationNo" [readOnly]="!isCancelled && company.viewThirdPartyCaseRequest"   />
+									<validation-messages [formCtrl]="Company_BusinessRegistrationNo"></validation-messages>
+								</div>
+								
+								<br/>
+								<label class="form-check form-check-custom form-check-solid">
+                                    <input
+                                        id="Company_IsActive" 
+                                        #Company_IsActive="ngModel"
+                                        name="IsActive" 
+                                        [(ngModel)]="company.isActive"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                    />
+                                    <span class="form-check-label">
+                                        {{l("IsActive")}}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="Company_IsActive"></validation-messages>
+					
+								<label class="form-check form-check-custom form-check-solid pt-2">
+                                    <input
+                                        id="Company_AllowToViewAssignedCases" 
+                                        #Company_AllowToViewAssignedCases="ngModel"
+                                        name="allowToViewAssignedCases" 
+                                        [(ngModel)]="company.allowToViewAssignedCases"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        (click)="toggleAllowCompanyToViewAssignedCases($event)"
+                                    />
+                                    <span class="form-check-label">
+                                        {{l("AllowCompanyToViewAssignedCases")}}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="Company_AllowToViewAssignedCases"></validation-messages>
+
+                                <div class="my-5" [hidden]="isHideRemark" *ngIf="viewThirdPartyCaseRequest">
+                                    <label 
+                                    class="form-label" 
+                                    for="Remark">{{ 'Remark' | localize }}
+                                    </label>
+                                    <textarea
+                                            id="ViewThirdPartyCaseRequest_CancelRemark"
+                                            #ViewThirdPartyCaseRequest_CancelRemark="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="Remark"
+                                            [(ngModel)]="viewThirdPartyCaseRequest.cancelRemark"
+                                            placeholder="Enter remarks here"
+                                            rows="3"
+                                        ></textarea>
+                                    <validation-messages [formCtrl]="ViewThirdPartyCaseRequest_CancelRemark"></validation-messages>
+                                </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!companyForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

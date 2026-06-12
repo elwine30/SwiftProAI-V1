@@ -1,0 +1,95 @@
+/* Basic styling for the navigation */
+.navigation {
+    //background-color: white;
+    /* Changed background color */
+    color: #333;
+    /* Changed text color */
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+}
+
+.step-container {
+    display: flex;
+    justify-content: space-between;
+    /* Adjusted to space between */
+    width: 100%;
+    /* Full width */
+}
+
+.step {
+    flex: 1;
+    /* Equal width for each step */
+    text-align: center;
+    position: relative;
+}
+
+.step a {
+    display: flex;
+    /* Use flexbox */
+    flex-direction: column;
+    /* Stack title and circle numbering vertically */
+    align-items: center;
+    /* Center items horizontally */
+    text-decoration: none;
+    color: #333;
+    /* Changed text color */
+}
+
+.step-circle {
+    width: 30px;
+    /* Adjusted width */
+    height: 30px;
+    /* Adjusted height */
+    border-radius: 50%;
+    background-color: white;
+    /* Circle background color */
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.5);
+    /* Added shadow effect */
+    margin: 0 auto 10px;
+    /* Adjusted margin */
+}
+
+.step-numbering {
+    font-size: 16px;
+    /* Adjusted font size */
+    line-height: 30px;
+    /* Adjusted line height */
+    position: relative;
+    z-index: 1;
+    /* Ensure numbering appears above the shadow */
+}
+
+.step-title {
+    margin-bottom: auto;
+    /* Pushes the title to the top */
+}
+
+.step-title.dark{
+    color: white;
+
+    /* Pushes the title to the top */
+}
+
+/* Active style for circle numbering */
+.step-circle.active {
+    background-color: #3E97FF;
+    /* Active background color */
+    color: white;
+    /* Active text color */
+}
+
+/* Active style for title */
+.step-title.active {
+    color: #3E97FF;
+    /* Active text color */
+    font-weight: bold;
+}
+
+.custom-select {
+    border-width: 1px;
+    border-radius: 0.625rem;
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.03);
+    background-color: #fff;
+    border-color: #f1f1f2;
+}

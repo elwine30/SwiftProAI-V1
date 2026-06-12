@@ -1,0 +1,120 @@
+<div
+    appBsModal
+    #createModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form
+                #registrationCreateForm="ngForm"
+                role="form"
+                novalidate
+                class="form-validation"
+                *ngIf="active"
+                (ngSubmit)="save()"
+            >
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{ 'Payment Update' | localize }}</span>
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        [attr.aria-label]="l('Close')"
+                        [disabled]="saving"
+                    >
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label required" for="Payment_Mode">{{ 'Payment Mode' | localize }}</label>
+                            <select id="Payment_Mode" #Payment_Mode="ngModel"
+                                name="PaymentMode" class="form-select" [(ngModel)]="payment.paymentMode"
+                                required>
+                                <option *ngFor="let item of paymentModeList" [value]="item.code">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="Payment_Mode"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <label class="form-label required" for="Ref_No">{{ 'Ref No' | localize }}</label>
+                            <input
+                                id="RefNo"
+                                #reNoInput="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="RefNo"
+                                [(ngModel)]="payment.invoiceRefNo"
+                                required
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="reNoInput"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <label class="form-label required" for="Ref_No">{{ 'Date Paid' | localize }}</label>
+                            <input class="form-control" 
+                                id="DatePaid"
+                                name="DatePaid"
+                                #datePaid
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [(date)]="payment.datePaid"
+                                required />
+                            <validation-messages [formCtrl]="datePaid"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <label class="form-label required" for="Ref_No">{{ 'Amount Paid' | localize }}</label>
+                            <input
+                                id="AmountPaid"
+                                #amountPaid="ngModel"
+                                class="form-control"
+                                type="number"
+                                name="AmountPaid"
+                                [(ngModel)]="payment.amountPaid"
+                                required
+                                amount
+                            />
+                            <validation-messages [formCtrl]="amountPaid"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        [disabled]="saving"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()"
+                    >
+                        {{ 'Back' | localize }}
+                    </button>
+                    <button
+                        type="submit"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                        class="btn btn-primary fw-bold"
+                        [disabled]="!registrationCreateForm.form.valid || saving"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Update Amount' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>

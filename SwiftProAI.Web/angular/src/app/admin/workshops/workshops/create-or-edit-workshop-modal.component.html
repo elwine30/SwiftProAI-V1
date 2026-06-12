@@ -1,0 +1,109 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #workshopForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="workshop.id">{{l("EditWorkshop")}}</span>
+                        <span *ngIf="!workshop.id">{{l("CreateNewWorkshop")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+
+
+								<div class="my-3">
+									<label class="form-label" for="Workshop_WorkshopNo">{{l("WorkshopNo")}} *</label>
+									<input type="text" #Workshop_WorkshopNo="ngModel" id="Workshop_WorkshopNo" class="form-control" [(ngModel)]="workshop.workshopNo" name="WorkshopNo" required   />
+								    <validation-messages [formCtrl]="Workshop_WorkshopNo"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Workshop_WorkshopName">{{l("WorkshopName")}} *</label>
+									<input type="text" #Workshop_WorkshopName="ngModel" id="Workshop_WorkshopName" class="form-control" [(ngModel)]="workshop.workshopName" name="WorkshopName" required   />
+								    <validation-messages [formCtrl]="Workshop_WorkshopName"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Workshop_Address">{{l("Address")}} *</label>
+									<input type="text" #Workshop_Address="ngModel" id="Workshop_Address" class="form-control" [(ngModel)]="workshop.address" name="Address" required />
+								    <validation-messages [formCtrl]="Workshop_Address"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Workshop_ClaimRate">{{l("ClaimRate")}} *</label>
+									<input type="number" #Workshop_ClaimRate="ngModel" id="Workshop_ClaimRate" class="form-control" [(ngModel)]="workshop.claimRate" name="ClaimRate" required />
+									<validation-messages [formCtrl]="Workshop_ClaimRate"></validation-messages>
+								</div>
+
+                                <div class="my-3">
+									<label class="form-label" for="Workshop_BusinessRegistrationNo">{{l("businessRegistrationNo")}}</label>
+									<input type="text" #Workshop_BusinessRegistrationNo="ngModel" id="Workshop_BusinessRegistrationNo" class="form-control" [(ngModel)]="workshop.businessRegistrationNo" name="BusinessRegistrationNo" [readOnly]="!isCancelled && workshop.viewThirdPartyCaseRequest" />
+									<validation-messages [formCtrl]="Workshop_BusinessRegistrationNo"></validation-messages>
+								</div>
+					
+								<br/>
+								<label class="form-check form-check-custom form-check-solid">
+                                    <input
+                                        id="Workshop_IsActive" 
+                                        #Workshop_IsActive="ngModel"
+                                        name="IsActive" 
+                                        [(ngModel)]="workshop.isActive"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                    />
+                                    <span class="form-check-label">
+                                        {{l("IsActive")}}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="Workshop_IsActive"></validation-messages>
+					
+                                <label class="form-check form-check-custom form-check-solid pt-2">
+                                    <input
+                                        id="Workshop_AllowToViewAssignedCases" 
+                                        #Workshop_AllowToViewAssignedCases="ngModel"
+                                        name="allowToViewAssignedCases" 
+                                        [(ngModel)]="workshop.allowToViewAssignedCases"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        (click)="toggleAllowCompanyToViewAssignedCases($event)"
+                                    />
+                                    <span class="form-check-label">
+                                        {{l("AllowCompanyToViewAssignedCases")}}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="Workshop_AllowToViewAssignedCases"></validation-messages>
+
+                                <div class="my-5" [hidden]="isHideRemark" *ngIf="viewThirdPartyCaseRequest">
+                                    <label 
+                                    class="form-label" 
+                                    for="Remark">{{ 'Remark' | localize }}
+                                    </label>
+                                    <textarea
+                                            id="ViewThirdPartyCaseRequest_CancelRemark"
+                                            #ViewThirdPartyCaseRequest_CancelRemark="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="Remark"
+                                            [(ngModel)]="viewThirdPartyCaseRequest.cancelRemark"
+                                            placeholder="Enter remarks here"
+                                            rows="3"
+                                        ></textarea>
+                                    <validation-messages [formCtrl]="ViewThirdPartyCaseRequest_CancelRemark"></validation-messages>
+                                </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!workshopForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

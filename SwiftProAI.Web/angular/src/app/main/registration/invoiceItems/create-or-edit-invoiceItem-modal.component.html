@@ -1,0 +1,39 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #invoiceItemForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="invoiceItem.id">{{l("EditInvoiceItem")}}</span>
+                        <span *ngIf="!invoiceItem.id">{{l("CreateNewInvoiceItem")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+					 
+					<div class="my-3">
+						<label class="form-label" for="InvoiceItem_Remark">{{l("Remark")}} *</label>
+						<input type="text" #InvoiceItem_Remark="ngModel" id="InvoiceItem_Remark" class="form-control" [(ngModel)]="invoiceItem.remark" name="Remark"   minlength="1"  maxlength="100"  required/>
+						<validation-messages [formCtrl]="InvoiceItem_Remark"></validation-messages>
+					</div>
+		
+					<div class="my5">
+						<label class="form-label" for="InvoiceItem_Amount">{{l("Amount")}}</label>
+						<input type="number" #InvoiceItem_Amount="ngModel" id="InvoiceItem_Amount" class="form-control" [(ngModel)]="invoiceItem.amount" name="Amount" step="0.01" amount/>
+						<validation-messages [formCtrl]="InvoiceItem_Amount"></validation-messages>
+					</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!invoiceItemForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

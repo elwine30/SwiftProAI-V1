@@ -1,0 +1,111 @@
+<div [@routerTransition]>
+    <sub-header [title]="'OCR' | localize">
+    </sub-header>
+    <div [class]="containerClass">
+        <div class="row">
+            <form #ocrUploadForm>
+                <div>
+                    <div class="form-group">
+                        <input type="file" id="ocrUploader" ng2FileSelect [uploader]="ocrUploader" class="col-lg-12"
+                            required accept=".jpg, .jpeg, .png" style="padding: 0;" />
+                        <span *ngIf="invalidFileSize" class="form-text" style="color: red;">{{l("FileSizeExceeded",
+                            "2MB")}}</span>
+                    </div>
+                    <div class="row">
+                        <label>Select a JPG/JPEG/PNG file with a maximum size of 2MB</label>
+                    </div>
+                    <button [disabled]="uploadedFile == null || uploading || invalidFileSize" class="btn btn-primary"
+                        type="button" (click)="uploadLogo()">{{"Upload"
+                        |
+                        localize}}</button>
+                    <button [disabled]="(uploadedFile == null || uploading) && !invalidFileSize" class="btn btn-default"
+                        type="button" (click)="clearLogo()">{{"Clear" | localize}}</button>
+                </div>
+            </form>
+            <!-- <div *ngIf="result != null" class="form-group row">
+                <div class="col-xl-10 mb-5">
+                    <textarea class="form-control" rows="20" name="content" [(ngModel)]="result.choices[0].message.content"></textarea>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form #ocrForm="ngForm" autocomplete="off">
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="Name">{{ 'PoliceStation' | localize }}</label>
+                            <input class="form-control" type="text" id="Name" name="Name" [(ngModel)]="ocr.policeStation" />
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="ReportNo">{{ 'ReportNo' | localize }}</label>
+                            <input class="form-control" type="text" id="ReportNo" name="ReportNo" [(ngModel)]="ocr.reportNo" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="OfficerName">{{ 'OfficerName' | localize }}</label>
+                            <input class="form-control" type="text" id="OfficerName" name="OfficerName" [(ngModel)]="ocr.officerName" />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="OfficerServiceNo">{{ 'OfficerServiceNo' | localize }}</label>
+                            <input class="form-control" type="text" id="OfficerServiceNo" name="OfficerServiceNo" [(ngModel)]="ocr.officerServiceNo" />
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-body">
+                <form autocomplete="off">
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="IncidentDateTime">{{ 'IncidentDateTime' | localize }}</label>
+                            <input class="form-control" type="text" id="IncidentDateTime" name="IncidentDateTime" [(ngModel)]="ocr.incidentDateTime" />
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="IncidentLocation">{{ 'IncidentLocation' | localize }}</label>
+                            <input class="form-control" type="text" id="IncidentLocation" name="IncidentLocation" [(ngModel)]="ocr.incidentLocation" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="ReporterName">{{ 'ReporterName' | localize }}</label>
+                            <input class="form-control" type="text" id="ReporterName" name="ReporterName" [(ngModel)]="ocr.reporterName" />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="VehicleRegistrationNo">{{ 'VehicleRegistrationNo' | localize }}</label>
+                            <input class="form-control" type="text" id="VehicleRegistrationNo" name="VehicleRegistrationNumbers" [(ngModel)]="ocr.vehicleRegistrationNumbers" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="VehicleModels">{{ 'VehicleModels' | localize }}</label>
+                            <input class="form-control" type="text" id="VehicleModels" name="VehicleModels" [(ngModel)]="ocr.vehicleModels" />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label class="form-label required" for="VehicleColours">{{ 'VehicleColours' | localize }}</label>
+                            <input class="form-control" type="text" id="VehicleColours" name="VehicleColours" [(ngModel)]="ocr.vehicleColours" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <label class="form-label required" for="Summary">{{ 'Summary' | localize }}</label>
+                            <textarea class="form-control" rows="20" name="summary" [(ngModel)]="ocr.summary"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,277 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <form #caseIncidentDetailForm="ngForm">
+                <div class="row">
+                    <div class="col-xl-10">
+                        <sub-header [title]="'INCIDENT DETAILS' | localize"></sub-header>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Time From') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.timeFrom | luxonFormat: 'yyyy-LL-dd HH:mm:ss' }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Time To') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.timeTo | luxonFormat: 'yyyy-LL-dd HH:mm:ss' }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Country') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.country }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Postcode') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.postcode }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('State') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.state }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Address 1') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.address1 }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('City') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.city }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Address 2') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.address2 }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <sub-header [title]="'TRAVEL DIRECTION FOR INSURED / PARTICIPANT' | localize"></sub-header>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Direction To') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.directionTo }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Driver Driving With') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.driverDrivingWith }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Direction Via') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.directionVia }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Passenger No') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.passengerNo }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Direction From') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.directionFrom }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Passenger Remarks') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.passengerRemarks }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Speed Prior') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.speedPrior }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <sub-header [title]="'SCENE OF ACCIDENT' | localize"></sub-header>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Site Of Accident') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.siteOfAccident }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('View Of Road') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.viewOfRoad }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Type Of Road') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.typeOfRoad }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('View Due To') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.viewDueTo }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Width Of Road') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.widthOfRoad }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Visibility') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.visibility }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Center Demarcation') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.centerDemarcation }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Visibility Due To') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.visibilityDueTo }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Driver Path Left') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.driverPathLeft }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Surrounding Area') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.surroundingArea }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Driver Path Right') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.driverPathRight }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Surrounding Locality') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.surroundingLocality }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Road Condition') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.roadCondition }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Weather Condition') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.weatherCondition }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <sub-header [title]="'CIRCUMSTANCES LEADING TO ACCIDENT' | localize"></sub-header>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('Circumstances') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <span>{{ item.caseIncidentDetail.circumstances }}</span>
+                        </div>
+
+                        <div class="col-3 mb-3">
+                            <h6 class="font-weight-bold">{{ l('CircumstancesFileUpload') }} :</h6>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <a
+                                href="{{ getDownloadUrl(item.caseIncidentDetail.circumstancesFileUpload) }}"
+                                target="_blank"
+                            >
+                                {{ item.caseIncidentDetail.circumstancesFileUploadFileName }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="col-lg-12" style="text-align: right">
+                        <a
+                            [routerLink]="[navigationService.step4Url]"
+                            [queryParams]="{ id: registerId, stepId: 4 }"
+                            class="btn btn-primary green float-right"
+                        >
+                            <i class="fa fa-arrow-left"></i>
+                            <span>{{ l('Back') }}</span>
+                        </a>
+                        <a
+                            [routerLink]="[navigationService.step6Url]"
+                            [queryParams]="{ id: registerId, stepId: 6 }"
+                            class="btn btn-primary green float-right"
+                        >
+                            <i class="fa fa-arrow-right"></i>
+                            <span>{{ l('Next') }}</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #branchForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="branch.id">{{l("EditBranch")}}</span>
+                        <span *ngIf="!branch.id">{{l("CreateNewBranch")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+
+
+								<div class="my-3">
+									<label class="form-label" for="Branch_Name">{{l("Name")}}</label>
+									<input type="text" #Branch_Name="ngModel" id="Branch_Name" class="form-control" [(ngModel)]="branch.name" name="Name"    />
+								    <validation-messages [formCtrl]="Branch_Name"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Branch_ShortName">{{l("ShortName")}}</label>
+									<input type="text" #Branch_ShortName="ngModel" id="Branch_ShortName" class="form-control" [(ngModel)]="branch.shortName" name="ShortName"    />
+								    <validation-messages [formCtrl]="Branch_ShortName"></validation-messages>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!branchForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

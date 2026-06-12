@@ -1,0 +1,267 @@
+<div [@routerTransition]>
+    <sub-header [title]="'Dashboard 3rdParty' | localize"></sub-header>
+    <div [class]="containerClass">
+        <div class="row g-1" style="cursor: pointer;">
+            <div class="col-6 col-lg-6 col-xxl-3">
+                <a (click)="onClick(enumRegistrationStatus.UnderInvestigation)">
+                    <div class="card hover-elevate-up shadow-sm parent-hover" style="background-color: #ffc700">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                Under
+                                <br />
+                                Investigation
+                            </h2>
+                            <h1 class="card-title" style="text-align: right">{{ underInvestigationCount }}</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-lg-6 col-xxl-3">
+                <a (click)="onClick(enumRegistrationStatus.Completed)">
+                    <div class="card hover-elevate-up shadow-sm parent-hover" style="background-color: #04c8c8">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                Completed
+                                <br />
+                                <br />
+                            </h2>
+                            <h1 class="card-title" style="text-align: right">{{ completedInvoiceCount }}</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-lg-6 col-xxl-3">
+                <a (click)="onClick(enumRegistrationStatus.Cancelled)">
+                    <div class="card hover-elevate-up shadow-sm parent-hover" style="background-color: #f1416c">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                Cancelled
+                                <br />
+                                <br />
+                            </h2>
+                            <h1 class="card-title" style="text-align: right">{{ cancelledCount }}</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-lg-6 col-xxl-3">
+                <a (click)="onClick(-1)">
+                    <div class="card hover-elevate-up shadow-sm parent-hover" style="background-color: #50cd89">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                Total
+                                <br />
+                                Case
+                            </h2>
+                            <h1 class="card-title" style="text-align: right">{{ totalCount }}</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <form (submit)="getMainRegistrationDetails()" class="form-horizontal">
+                        <div class="form-body">
+                            <div class="row mb-4 justify-content-end">
+                                <div class="col-xl-4 text-end">
+                                    <button class="btn btn-primary" (click)="exportTable()">
+                                        <i class="fa fa-download btn-md-icon"></i>
+                                        <span class="d-none d-md-inline-block">{{ 'Export to Excel' | localize }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-xl-4">
+                                    <label class="form-label" for="filterText">{{ 'Search' | localize }}</label>
+                                    <div class="input-group">
+                                        <input id="filterText" [(ngModel)]="filters.filterText" name="filterText"
+                                            class="form-control"
+                                            placeholder="{{ 'Vehicle Reg No. or Case ID' | localize }}" type="text" />
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <label class="form-check form-check-solid form-label py-1 mb-1">
+                                        <input id="AssignmentDateRangeActive" type="checkbox"
+                                            name="AssignmentDateRangeActive"
+                                            [(ngModel)]="filters.assignmentDateRangeActive" class="form-check-input"
+                                            value="true" />
+                                        <span class="form-check-label text-dark">
+                                            {{ 'Assignment Date' | localize }}
+                                        </span>
+                                    </label>
+                                    <input class="form-control" name="AssignmentDateRange"
+                                        [attr.disabled]="!filters.assignmentDateRangeActive ? 'disabled' : null"
+                                        #drpCreationDateRange="bsDaterangepicker" bsDaterangepicker
+                                        dateRangePickerLuxonModifier [(date)]="assignmentDateRange" />
+                                </div>
+                                <div class="col-xl-4">
+                                    <label class="form-label" for="StatusId">{{ 'Select Status' | localize }}</label>
+                                    <select id="StatusId" name="StatusId" class="form-select"
+                                        [(ngModel)]="selectedStatusId">
+                                        <option value="" disabled>{{ 'Select Status' | localize }}</option>
+                                        <option value=-1 selected>{{ 'All' | localize }}</option>
+
+                                        <option *ngFor="let status of statuses" [value]="status.value">
+                                            {{ status.display }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-6">
+                                <div class="col-xl-4">
+                                    <label class="form-label" for="AdjusterCompanyOUId">{{ 'Select Adjuster Company' | localize }}</label>
+                                    <select id="AdjusterCompanyOUId" name="AdjusterCompanyOUId" class="form-select"
+                                        (change)="filterAdjuster()"
+                                        [(ngModel)]="filters.selectedAdjusterCompanyOUId">
+                                        <option value="" disabled>{{ 'Select Adjuster Company' | localize }}</option>
+                                        <option value=-1 selected>{{ 'All' | localize }}</option>
+
+                                        <option *ngFor="let item of adjusterCompanies" value="{{ item.id }}">
+                                            {{ item.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-xl-4">
+                                    <label class="form-label" for="AdjusterId">
+                                        {{ 'Select Adjuster' | localize }}
+                                    </label>
+                                    <select id="AdjusterId" name="AdjusterId" class="form-select"
+                                        [(ngModel)]="filters.selectedAdjusterId">
+                                        <option value="" disabled>{{ 'Select Adjuster' | localize }}</option>
+                                        <option value=-1 selected>{{ 'All' | localize }}</option>
+                                        <option *ngFor="let item of allAdjusters" value="{{ item.id }}">
+                                            {{ item.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-xl-4 text-end">
+                                    <br />
+                                    <button name="RefreshButton" class="btn btn-primary">
+                                        <i class="fa fa-search btn-md-icon"></i>
+                                        <span class="d-none d-md-inline-block">{{ 'Search' | localize }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-TurboTable-Start>-->
+                    <div class="col primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable sortMode="single" (onLazyLoad)="getMainRegistrationDetails($event)"
+                            [value]="primengTableHelper.records" [columns]="cols"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}" [paginator]="false" [lazy]="true"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="Id">
+                                        {{ 'Case No' | localize }}
+                                        <p-sortIcon field="CaseNo"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="AssignTime">
+                                        {{ 'Assignment Date' | localize }}
+                                        <p-sortIcon field="AssignTime"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="CaseTypeShortName">
+                                        {{ 'Case Type' | localize }}
+                                        <p-sortIcon field="CaseTypeShortName"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="VehicleNo">
+                                        {{ 'Vehicle Number' | localize }}
+                                        <p-sortIcon field="VehicleNo"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="CompanyShortName">
+                                        {{ 'Company' | localize }}
+                                        <p-sortIcon field="CompanyShortName"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="BranchShortName">
+                                        {{ 'Branch' | localize }}
+                                        <p-sortIcon field="BranchShortName"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="ModeOfAssignment"
+                                        *ngIf="!isInvoiceStatus(filters.selectedStatusId)">
+                                        {{ 'Mode of Assignment' | localize }}
+                                        <p-sortIcon field="ModeOfAssignment"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="AdjusterUserName">
+                                        {{ 'Adjuster' | localize }}
+                                        <p-sortIcon field="AdjusterUserName"></p-sortIcon>
+                                    </th>
+                                    <th *ngIf="isInvoiceStatus(filters.selectedStatusId)">
+                                        {{ 'Invoice' | localize }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <td>
+                                        <a (click)="onRowClicked(record.id, record.isReadOnly); "
+                                            style="cursor: pointer;">
+                                            {{ record.prefix }}{{ record.caseNo }}
+                                        </a>
+                                    </td>
+
+                                    <td>{{ record.assignTime ? (record.assignTime) : '-' }}</td>
+                                    <td>{{ record.caseTypeShortName }}</td>
+                                    <td>{{ record.vehicleNo }}</td>
+                                    <td>{{ record.companyShortName }}</td>
+                                    <td>{{ record.branchShortName }}</td>
+                                    <td *ngIf="!isInvoiceStatus(filters.selectedStatusId)">
+                                        {{ record.modeOfAssignment }}
+                                    </td>
+                                    <td>{{ record.adjusterUserName }}</td>
+                                    <td *ngIf="isInvoiceStatus(filters.selectedStatusId)">
+                                        <a *ngIf="permission.isGranted('Pages.CaseInvoices.Create')"
+                                            [routerLink]="['/app/main/registration/caseInvoices/createOrEdit']"
+                                            [queryParams]="{ id: record.id }" [tooltip]="l('Invoices')">
+                                            <button type="button" class="btn btn-sm btn-link">
+                                                <i class="fa fa-file-text"></i>
+                                            </button>
+                                        </a>
+                                        <a *ngIf="
+                                                permission.isGranted('Pages.CaseDebitNotes.Create') &&
+                                                filters.selectedStatusId ==
+                                                    this.enumRegistrationStatus.Completed
+                                            " [routerLink]="['/app/main/registration/caseDebitNotes/createOrEdit']"
+                                            [queryParams]="{ id: record.id }" [tooltip]="l('Debit Note')">
+                                            <button type="button" class="btn btn-sm btn-link">
+                                                <i class="fa fa-plus-square"></i>
+                                            </button>
+                                        </a>
+                                        <a *ngIf="
+                                                permission.isGranted('Pages.CaseCreditNotes.Create') &&
+                                                filters.selectedStatusId ==
+                                                    this.enumRegistrationStatus.Completed
+                                            " [routerLink]="['/app/main/registration/caseCreditNotes/createOrEdit']"
+                                            [queryParams]="{ id: record.id }" [tooltip]="l('Credit Note')">
+                                            <button type="button" class="btn btn-sm btn-link">
+                                                <i class="fa fa-minus-square"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                    <!-- <td>{{ record.statusCode }}</td> -->
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ 'NoData' | localize }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage" #paginator
+                                (onPageChange)="getMainRegistrationDetails($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true" [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "></p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-TurboTable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

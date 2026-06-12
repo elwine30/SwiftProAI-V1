@@ -1,0 +1,43 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #promptForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="prompt.id">{{l("EditPrompt")}}</span>
+                        <span *ngIf="!prompt.id">{{l("CreateNewPrompt")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+
+
+								<div class="my-3">
+									<label class="form-label" for="Prompt_PromptName">{{l("PromptName")}} *</label>
+									<input type="text" #Prompt_PromptName="ngModel" id="Prompt_PromptName" class="form-control" [(ngModel)]="prompt.promptName" name="PromptName"     required/>
+								    <validation-messages [formCtrl]="Prompt_PromptName"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Prompt_PromptRequest">{{l("PromptRequest")}}</label>
+									<textarea #Prompt_PromptRequest="ngModel" id="Prompt_PromptRequest" class="form-control" [(ngModel)]="prompt.promptRequest" name="PromptRequest" rows="4"></textarea>
+								    <validation-messages [formCtrl]="Prompt_PromptRequest"></validation-messages>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!promptForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,152 @@
+<style>
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+        border-style: dashed;
+        border-left: none;
+        border-right: none;
+    }
+</style>
+
+<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{ l('Case Expenses') }}</span>
+                </h4>
+                <button
+                    type="button"
+                    class="btn-close"
+                    (click)="close()"
+                    aria-label="Close"
+                    [disabled]="saving"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <form #caseExpensessForm="ngForm" (ngSubmit)="saveCaseExpense()">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">{{ l('Remarks') }}</label>
+                                <input
+                                    type="text"
+                                    name="remarks"
+                                    required
+                                    maxlength="32"
+                                    class="form-control"
+                                    [(ngModel)]="expense.remark"
+                                    #remarks="ngModel"
+                                />
+                                <div *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)" class="text-danger">
+                                    <div *ngIf="remarks.errors?.required">{{ l('Remarks is required') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">{{ l('Amount') }}</label>
+                                <input
+                                    type="number"
+                                    name="amount"
+                                    required
+                                    min="0.01"
+                                    maxlength="32"
+                                    class="form-control"
+                                    [(ngModel)]="expense.amount"
+                                    #amount="ngModel"
+                                    amount
+                                />
+                                <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger">
+                                    <div *ngIf="amount.errors?.required">{{ l('Amount is required') }}</div>
+                                    <div *ngIf="amount.errors?.min">{{ l('Amount must be greater than 0') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">{{ l('Expenses Type') }}</label>
+                                <select
+                                    class="form-select"
+                                    [(ngModel)]="expense.typeId"
+                                    name="typeId"
+                                    required
+                                    #typeId="ngModel"
+                                >
+                                    <option value="">Select Expense Type</option>
+                                    <option *ngFor="let expenseType of expenseTypeList" [value]="expenseType.id">
+                                        {{ expenseType.description }}
+                                    </option>
+                                </select>
+                                <div *ngIf="typeId.invalid && (typeId.dirty || typeId.touched)" class="text-danger">
+                                    <div *ngIf="typeId.errors?.required">{{ l('Expense Type is required') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-2">
+                        <button
+                            type="submit"
+                            class="btn btn-primary blue float-right"
+                            [disabled]="caseExpensessForm.invalid || saving"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                        >
+                            <i class="fa fa-save"></i>
+                            <span>{{ l('Save') }}</span>
+                        </button>
+                    </div>
+                </form>
+                <hr class="my-2" />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="background: #e4e4e4; font-weight: 500">{{ l('Remarks') }}</th>
+                            <th scope="col" style="background: #e4e4e4; font-weight: 500">{{ l('Amount') }}</th>
+                            <th scope="col" style="background: #e4e4e4; font-weight: 500">{{ l('Expense Type') }}</th>
+                            <th scope="col" style="background: #e4e4e4; font-weight: 500">{{ l('Created By') }}</th>
+                            <th scope="col" style="background: #e4e4e4; font-weight: 500">{{ l('Created Date') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="!caseExpensesList || caseExpensesList.length === 0">
+                            <td colspan="5" class="text-center">No data available</td>
+                        </tr>
+                        <tr *ngFor="let expense of caseExpensesList">
+                            <td>{{ expense.remarks }}</td>
+                            <td class="text-end">{{ expense.amount | number: '1.2-2' }}</td>
+                            <td>{{ expense.typeOfExpenses }}</td>
+                            <td>{{ expense.createdBy }}</td>
+                            <td>{{ expense.createdDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button
+                    (click)="close()"
+                    class="btn btn-light-primary fw-bold"
+                    [buttonBusy]="saving"
+                    [busyText]="l('LoadingWithThreeDot')"
+                >
+                    <span>{{ l('Back') }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

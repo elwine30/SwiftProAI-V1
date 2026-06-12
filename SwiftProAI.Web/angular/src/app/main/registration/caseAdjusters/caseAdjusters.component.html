@@ -1,0 +1,189 @@
+﻿<div [@routerTransition]>
+  
+  
+   <sub-header [title]="'CaseAdjusters' | localize" [description]="'CaseAdjustersHeaderInfo' | localize">
+             <div role="actions">
+                  
+                 <button id="btn_create_caseAdjuster" *ngIf="isGranted('Pages.CaseAdjusters.Create')" (click)="createCaseAdjuster()" 
+                                        class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewCaseAdjuster")}}</button>
+             </div>
+            </sub-header>
+    
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="off">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                
+                                
+        	<div class="my-3">                
+                <div class="input-group mb-3">
+                  <input [(ngModel)]="filterText" (ngModelChange)="getCaseAdjusters()" name="filterText" autoFocus type="text" class="form-control" [placeholder]="l('SearchWithThreeDot')">
+                  <button class="btn btn-primary" type="submit" (click)="getCaseAdjusters()"><i class="flaticon-search-1"></i></button>
+                </div>
+            </div>
+        	
+                            </div>
+                        </div>
+						 <div class="row" [hidden]="!advancedFiltersAreShown">
+						 	<div class="col-md-12">
+						         
+						     </div>
+
+
+
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="StatusFilter">{{l("Status")}}</label>
+									<input type="text" class="form-control" id="StatusFilter" name="statusFilter" [(ngModel)]="statusFilter" (ngModelChange)="getCaseAdjusters()">
+								</div>
+                            </div>
+
+
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="ScopeAssignmentDescriptionFilter">({{l("ScopeAssignment")}}) {{l("Description")}}</label>
+									<input type="text" class="form-control" id="ScopeAssignmentDescriptionFilter" name="scopeAssignmentDescriptionFilter" [(ngModel)]="scopeAssignmentDescriptionFilter">
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="MainRegistrationVehicleNoFilter">({{l("MainRegistration")}}) {{l("VehicleNo")}}</label>
+									<input type="text" class="form-control" id="MainRegistrationVehicleNoFilter" name="mainRegistrationVehicleNoFilter" [(ngModel)]="mainRegistrationVehicleNoFilter">
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="LocationNameFilter">({{l("Location")}}) {{l("Name")}}</label>
+									<input type="text" class="form-control" id="LocationNameFilter" name="locationNameFilter" [(ngModel)]="locationNameFilter">
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="UserNameFilter">({{l("User")}}) {{l("Name")}}</label>
+									<input type="text" class="form-control" id="UserNameFilter" name="userNameFilter" [(ngModel)]="userNameFilter">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-5">
+                                <button (click)="resetFilters()" class="btn btn-secondary btn-sm" id="btn-reset-filters">Reset</button>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12"
+                         [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable
+                                     (onLazyLoad)="getCaseAdjusters($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     [scrollable]="true"
+                                     ScrollWidth="100%"
+                                     [tableStyle]="{'min-width': '50rem'}"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.CaseAdjusters.Edit', 'Pages.CaseAdjusters.Delete')">{{l('Actions')}}</th>
+                                    <th style="width: 150px" pSortableColumn="scopeAssignmentFk.description">
+                                        {{l('Description')}}
+                                        <p-sortIcon field="scopeAssignmentDescription"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="registerFk.vehicleNo">
+                                        {{l('VehicleNo')}}
+                                        <p-sortIcon field="mainRegistrationVehicleNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="stateLocationFk.name">
+                                        {{l('Name')}}
+                                        <p-sortIcon field="locationName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="editorUserFk.name">
+                                        {{l('Name')}}
+                                        <p-sortIcon field="userName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="status">
+                                        {{l('Status')}}
+                                        <p-sortIcon field="caseAdjuster.status"></p-sortIcon>
+                                    </th>
+
+                                </tr>
+                            </ng-template>                           
+							<ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <td style="width: 130px"
+                                        [hidden]="!isGrantedAny('Pages.CaseAdjusters.Edit', 'Pages.CaseAdjusters.Delete')">
+                                       <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            </button>
+												<ul class="dropdown-menu"  *dropdownMenu>
+
+												<li>
+                                                 <a *ngIf="permission.isGranted('Pages.CaseAdjusters.Edit')" class="dropdown-item"
+			[routerLink]="['/app/main/registration/caseAdjusters/createOrEdit']" [queryParams]="{id: record.caseAdjuster.id}">
+  {{l('Edit')}}	
+</a>												
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width:150px">
+												<span class="p-column-title"> {{l('Description')}}</span>
+												{{record.scopeAssignmentDescription}}
+											</td>
+                                    <td style="width:150px">
+												<span class="p-column-title"> {{l('VehicleNo')}}</span>
+												{{record.mainRegistrationVehicleNo}}
+											</td>
+                                    <td style="width:150px">
+												<span class="p-column-title"> {{l('Name')}}</span>
+												{{record.locationName}}
+											</td>
+                                    <td style="width:150px">
+												<span class="p-column-title"> {{l('Name')}}</span>
+												{{record.userName}}
+											</td>
+                                    <td style="width:150px">
+											<span class="p-column-title"> {{l('Status')}}</span>
+											{{record.caseAdjuster.status}}
+										</td>
+
+                                </tr>
+                               
+                            </ng-template>
+                        </p-table>
+						<div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                         #paginator
+                                         (onPageChange)="getCaseAdjusters($event)"
+                                         [totalRecords]="primengTableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                         [showCurrentPageReport]="true"
+                                         [currentPageReportTemplate]="'TotalRecordsCount' | localize:primengTableHelper.totalRecordsCount"    
+                            >
+                            </p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    
+    
+  </div>

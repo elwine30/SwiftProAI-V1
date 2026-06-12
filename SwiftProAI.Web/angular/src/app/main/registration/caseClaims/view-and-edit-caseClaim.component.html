@@ -1,0 +1,695 @@
+<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <sub-header [title]="'CaseClaims' | localize"></sub-header>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <!-- #region Filter-->
+                    <div class="row col-xl-12 mb-12">
+                        <div class="col-md-4 xl-4">
+                            <div class="my-3">
+                                <label class="form-label" for="VehicleNumber">{{ 'Search' | localize }}</label>
+                                <div class="input-group">
+                                    <input
+                                        id="VehicleNumber"
+                                        [(ngModel)]="filters.vehicleNumber"
+                                        name="VehicleNumber"
+                                        class="form-control"
+                                        placeholder="{{ l('Vehicle Reg No.') }}"
+                                        type="text"
+                                    />
+                                    <!-- <button class="btn btn-primary" type="submit">
+                                        <i class="flaticon-search-1" [attr.aria-label]="l('Search')"></i>
+                                    </button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 xl-4">
+                            <div class="my-3">
+                                <label class="form-label" for="MonthFilter">
+                                    {{ l('Select Month') }}
+                                </label>
+                                <div class="input-group">
+                                    <input
+                                            class="form-control m-input"
+                                            id="monthFilter"
+                                            name="monthFilter"
+                                            type="datetime"
+                                            [bsConfig]="bsConfigMonth"
+                                            bsDatepicker
+                                            placeholder="{{ l('Select Month') }}"
+                                            [(ngModel)]="filters.month"
+                                            (ngModelChange)="onMonthFilterChange()"
+                                        />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 xl-4">
+                            <div class="my-3">
+                                <label class="form-label" for="YearFilter">
+                                    {{ l('Select Year') }}
+                                </label>
+                                <div class="input-group">
+                                    <input
+                                            class="form-control m-input"
+                                            id="yearFilter"
+                                            name="yearFilter"
+                                            type="datetime"
+                                            [bsConfig]="bsConfigYear"
+                                            bsDatepicker
+                                            placeholder="{{ l('Select Year') }}"
+                                            [(ngModel)]="filters.year"
+                                            (ngModelChange)="onYearFilterChange()"
+                                        />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 xl-12 d-flex justify-content-end">
+                            <div class="my-3">
+                                <button (click)="resetFilters()" class="btn btn-primary" id="btn-reset-filters">
+                                    <i class="fa fa-sync btn-md-icon"></i>
+                                    <span class="d-none d-md-inline-block">{{ 'Reset' | localize }}</span>
+                                </button>
+                                <button (click)="getCaseClaimsList()" class="btn btn-primary" id="btn-search-report">
+                                    <i class="fa fa-search btn-md-icon"></i>
+                                    <span class="d-none d-md-inline-block">Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- #endregion -->
+                    <!--<Primeng-TurboTable-Start>-->
+                    <!-- #region Table -->
+                    <div class="col primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+                        <p-table
+                            #dataTable
+                            sortMode="single"
+                            (onLazyLoad)="getCaseClaimsList($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                            [paginator]="false"
+                            [lazy]="true"
+                            [scrollable]="true"
+                            ScrollWidth="100%"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th colspan="9" class="text-center bg-light">
+                                        <h2>Case Claims List</h2>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th pSortableColumn="registerId" class="col-md-1 col-xl-1 col-lg-1">
+                                        {{ l('Case No') }}
+                                        <p-sortIcon field="registerId"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="fraudAmount" class="col">
+                                        {{ l('Fraud Amount') }}
+                                        <p-sortIcon field="fraudAmount"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="fileCharges" class="col">
+                                        {{ l('File Charges') }}
+                                        <p-sortIcon field="fileCharges"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="mileageTotal" class="col">
+                                        {{ l('Mileage') }}
+                                        <p-sortIcon field="mileageTotal"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="police" class="col">
+                                        {{ l('Police') }}
+                                        <p-sortIcon field="police"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="airFare" class="col">
+                                        {{ l('Air Fare') }}
+                                        <p-sortIcon field="airFare"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="charteredTransport" class="col">
+                                        {{ l('Chartered Transport') }}
+                                        <p-sortIcon field="charteredTransport"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="total" class="col">
+                                        {{ l('Total') }}
+                                        <p-sortIcon field="total"></p-sortIcon>
+                                    </th>
+                                    <th class="col-md-1 col-xl-1 col-lg-1">Actions</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <td>
+                                        <span class="p-column-title">{{ l('Case No') }}</span>
+                                        {{ record.caseNo }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="p-column-title">{{ l('Fraud Amount') }}</span>
+                                        {{ record.fraudAmount | number: '1.2-2' }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="p-column-title">{{ l('File Charges') }}</span>
+                                        {{ record.fileCharges | number: '1.2-2' }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="p-column-title">{{ l('Mileage') }}</span>
+                                        {{ record.mileageTotal | number: '1.2-2' }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="p-column-title">{{ l('Police') }}</span>
+                                        {{ record.police | number: '1.2-2' }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="p-column-title">{{ l('Air Fare') }}</span>
+                                        {{ record.airFare | number: '1.2-2' }}
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="p-column-title">{{ l('Chartered Transport') }}</span>
+                                        {{ record.charteredTransport | number: '1.2-2' }}
+                                    </td>
+                                    <td class="text-end">{{ record.total | number: '1.2-2' }}</td>
+                                    <td class="">
+                                        <button type="button" class="btn btn-primary" (click)="selectCaseClaim(record)">
+                                            Select
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ 'NoData' | localize }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator
+                                [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                #paginator
+                                (onPageChange)="getCaseClaimsList($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true"
+                                [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "
+                            ></p-paginator>
+                        </div>
+                    </div>
+                    <!-- #endregion Table -->
+                    <!--<Primeng-TurboTable-End>-->
+
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- #region  -->
+                    <div *ngIf="!selectedCaseClaim; else caseClaimDetails">
+                        <div class="alert alert-primary" role="alert">
+                            No case claim selected. Please select a case claim to view details.
+                        </div>
+                    </div>
+
+                    <ng-template #caseClaimDetails>
+                        <div class="form-group row">
+                            <div class="col-xl-6">
+                                <h5 class="card-title bg-light p-2 text-center">{{ l('Item') }}</h5>
+                            </div>
+                            <div class="col-xl-5">
+                                <h5 class="card-title bg-light p-2 text-center">{{ l('Amount') }}</h5>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-check form-check-custom form-check-solid">
+                                    <input
+                                        id="CaseClaim_Fraud"
+                                        #CaseClaim_Fraud="ngModel"
+                                        name="Fraud"
+                                        [(ngModel)]="selectedCaseClaim.fraud"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                    />
+                                    <span class="form-check-label">
+                                        {{ l('Fraud') }}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="CaseClaim_Fraud"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3 mb-5" *ngIf="selectedCaseClaim.fraud == true">
+                                <label class="form-label" for="CaseClaim_FraudAmount">{{ l('FraudAmount') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_FraudAmount="ngModel"
+                                    id="CaseClaim_FraudAmount"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.fraudAmount"
+                                    (keyup)="updateTotal()"
+                                    name="FraudAmount"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_FraudAmount"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-label" for="CaseClaim_FileChargesRemark">
+                                    {{ l('FileChargesRemark') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseClaim_FileChargesRemark="ngModel"
+                                    id="CaseClaim_FileChargesRemark"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.fileChargesRemark"
+                                    name="FileChargesRemark"
+                                    minlength="1"
+                                    maxlength="100"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_FileChargesRemark"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3 mb-5">
+                                <label class="form-label" for="CaseClaim_FileCharges">{{ l('FileCharges') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_FileCharges="ngModel"
+                                    id="CaseClaim_FileCharges"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.fileCharges"
+                                    (ngModelChange)="selectedCaseClaim.fileCharges = $event"
+                                    name="FileCharges"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_FileCharges"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-3 mb-5">
+                                <label class="form-label" for="CaseClaim_MileageKM">{{ l('MileageKM') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_MileageKM="ngModel"
+                                    id="CaseClaim_MileageKM"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.mileageKM"
+                                    name="MileageKM"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_MileageKM"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_MileageUnitPrice">
+                                    {{ l('MileageUnitPrice') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_MileageUnitPrice="ngModel"
+                                    id="CaseClaim_MileageUnitPrice"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.mileageUnitPrice"
+                                    name="MileageUnitPrice"
+                                    min="0"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    disabled
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_MileageUnitPrice"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_MileageTotal">{{ l('MileageTotal') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_MileageTotal="ngModel"
+                                    id="CaseClaim_MileageTotal"
+                                    class="form-control"
+                                    [ngModel]="this.selectedCaseClaim.mileageTotal"
+                                    (ngModelChange)="this.selectedCaseClaim.mileageTotal = $event"
+                                    name="MileageTotal"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    disabled
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_MileageTotal"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-label" for="CaseClaim_Remarks">{{ l('Remarks') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseClaim_Remarks="ngModel"
+                                    id="CaseClaim_Remarks"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.remarks"
+                                    name="Remarks"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_Remarks"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-6"></div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-label" for="CaseClaim_PoliceRemark">{{ l('PoliceRemark') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseClaim_PoliceRemark="ngModel"
+                                    id="CaseClaim_PoliceRemark"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.policeRemark"
+                                    name="PoliceRemark"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_PoliceRemark"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_Police">{{ l('Police') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_Police="ngModel"
+                                    id="CaseClaim_Police"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.police"
+                                    (ngModelChange)="selectedCaseClaim.police = $event"
+                                    name="Police"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_Police"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-label" for="CaseClaim_AirFareRemark">{{ l('AirFareRemark') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseClaim_AirFareRemark="ngModel"
+                                    id="CaseClaim_AirFareRemark"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.airFareRemark"
+                                    name="AirFareRemark"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_AirFareRemark"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_AirFare">{{ l('AirFare') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_AirFare="ngModel"
+                                    id="CaseClaim_AirFare"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.airFare"
+                                    (ngModelChange)="selectedCaseClaim.airFare = $event"
+                                    name="AirFare"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_AirFare"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-label" for="CaseClaim_CharteredTransportRemark">
+                                    {{ l('CharteredTransportRemark') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseClaim_CharteredTransportRemark="ngModel"
+                                    id="CaseClaim_CharteredTransportRemark"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.charteredTransportRemark"
+                                    name="CharteredTransportRemark"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseClaim_CharteredTransportRemark"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_CharteredTransport">
+                                    {{ l('CharteredTransport') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_CharteredTransport="ngModel"
+                                    id="CaseClaim_CharteredTransport"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.charteredTransport"
+                                    (ngModelChange)="selectedCaseClaim.charteredTransport = $event"
+                                    name="CharteredTransport"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_CharteredTransport"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5">
+                                <label class="form-label" for="CaseClaim_TollRemark">{{ l('TollRemark') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseClaim_TollRemark="ngModel"
+                                    id="CaseClaim_TollRemark"
+                                    class="form-control"
+                                    [(ngModel)]="selectedCaseClaim.tollRemark"
+                                    name="TollRemark"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_TollRemark"></validation-messages>
+                            </div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_Toll">{{ l('Toll') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_Toll="ngModel"
+                                    id="CaseClaim_Toll"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.toll"
+                                    (ngModelChange)="selectedCaseClaim.toll = $event"
+                                    name="Toll"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_Toll"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5"></div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3 mb-5">
+                                <label class="form-label" for="CaseClaim_Hotel">{{ l('Hotel') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_Hotel="ngModel"
+                                    id="CaseClaim_Hotel"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.hotel"
+                                    (ngModelChange)="selectedCaseClaim.hotel = $event"
+                                    name="Hotel"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_Hotel"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-6 mb-5"></div>
+
+                            <div class="col-xl-1"></div>
+
+                            <div class="col-xl-3">
+                                <label class="form-label" for="CaseClaim_SD">{{ l('SD') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseClaim_SD="ngModel"
+                                    id="CaseClaim_SD"
+                                    class="form-control"
+                                    [ngModel]="selectedCaseClaim.sd"
+                                    (ngModelChange)="selectedCaseClaim.sd = $event"
+                                    name="SD"
+                                    min="0"
+                                    step="0.01"
+                                    pattern="^\d+(\.\d{1,2})?$"
+                                    style="text-align: right"
+                                    (keyup)="updateTotal()"
+                                />
+                                <validation-messages [formCtrl]="CaseClaim_SD"></validation-messages>
+                            </div>
+                        </div>
+                        <!-- Breakline -->
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-xl-6 d-flex justify-content-between">
+                                    <label class="form-label" for="CaseClaim_SearchFee">{{ l('SearchFee') }}</label>
+                                    <label
+                                        id="btn_create_caseSearchFee"
+                                        *ngIf="isGranted('Pages.CaseSearchFees.Create') && caseClaim.statusId == null"
+                                        (click)="createCaseSearchFee()"
+                                        class="form-label"
+                                        [class.disabled]="caseClaim.statusId != null"
+                                        style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                                    >
+                                        <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                        {{ l('AddSearchFee') }}
+                                    </label>
+                                </div>
+
+                                <div class="col-xl-1"></div>
+
+                                <div class="col-xl-3">
+                                    <label class="form-label" for="CaseClaim_SearchFee">
+                                        {{ l('SearchFeeTotal') }}
+                                    </label>
+                                    <validation-messages [formCtrl]="CaseClaim_SearchFee"></validation-messages>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-xl-7 mb-5">
+                                    <caseSearchFeesTable #caseSearchFeesTable></caseSearchFeesTable>
+                                </div>
+
+                                <div class="col-xl-3 mb-5">
+                                    <input
+                                        type="number"
+                                        #CaseClaim_SearchFee="ngModel"
+                                        id="CaseClaim_SearchFee"
+                                        class="form-control"
+                                        [ngModel]="selectedCaseClaim.searchFee"
+                                        (ngModelChange)="updateTotal()"
+                                        name="SearchFee"
+                                        min="0"
+                                        step="0.01"
+                                        pattern="^\d+(\.\d{1,2})?$"
+                                        style="text-align: right"
+                                        disabled
+                                    />
+                                    <validation-messages [formCtrl]="CaseClaim_SearchFee"></validation-messages>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="form-group row">
+                                <div class="col-xl-7 mb-5"></div>
+
+                                <div class="col-xl-3">
+                                    <label class="form-label" for="CaseClaim_Total">= {{ l('Total') }}:</label>
+                                    <div class="input-group">
+                                        <input
+                                            type="number"
+                                            #CaseClaim_Total="ngModel"
+                                            id="CaseClaim_Total"
+                                            class="form-control"
+                                            [(ngModel)]="selectedCaseClaim.total"
+                                            name="Total"
+                                            step="0.01"
+                                            readonly
+                                        />
+                                    </div>
+                                    <!-- <label class="form-label" for="CaseClaim_Total">= {{l("Total")}}:</label>
+						<input type="number" #CaseClaim_Total="ngModel" id="CaseClaim_Total" class="form-control" [(ngModel)]="this.total" name="Total"  step="0.01" readonly/> -->
+                                </div>
+
+                                <!-- <div class="col-xl-2 mb-5">
+						<br>
+						<button (click)="save()" class="btn btn-primary blue float-right " *ngIf="caseClaim.statusId == null"
+						[buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> 
+						<span>{{l("Update")}}</span>
+						</button>
+					</div> -->
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="form-group row">
+                                <div class="col-xl-6 mb-5"></div>
+
+                                <div class="col-xl-4 d-flex justify-content-end">
+                                    <button
+                                        (click)="updateCaseClaim()"
+                                        class="btn btn-primary blue float-left"
+                                        *ngIf="caseClaim.statusId == null"
+                                        [buttonBusy]="saving"
+                                        [busyText]="l('SavingWithThreeDot')"
+                                    >
+                                        <i class="fa fa-paper-plane"></i>
+                                        <span>{{ l('FinalizeAndSubmit') }}</span>
+                                    </button>
+                                </div>
+
+                                <div class="col-xl-1 mb-5" *ngIf="caseClaim.statusId != null"></div>
+
+                                <!-- <div class="col-xl-2 d-flex justify-content-end" *ngIf="caseClaim.statusId != null">
+                                    <button (click)="goBack()" class="btn btn-secondary blue float-right flex-grow-1">
+                                        <span>{{ l('Back') }}</span>
+                                    </button>
+                                </div> -->
+                            </div>
+                        </div>
+                    </ng-template>
+
+                    <!-- #endregion -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<createOrEditCaseSearchFeeModal
+    #createOrEditCaseSearchFeeModal
+    (modalSave)="onModalSave($event)"
+></createOrEditCaseSearchFeeModal>

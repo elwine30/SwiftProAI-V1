@@ -1,0 +1,67 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Details")}}</span>
+                </h4>               
+                
+                
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Name")}} :</h6>
+                        {{ item.company.name }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ShortName")}} :</h6>
+                        {{ item.company.shortName }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ClaimRate")}} :</h6>
+                        {{ item.company.claimRate }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Address")}} :</h6>
+                        {{ item.company.address }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("GstRegNo")}} :</h6>
+                        {{ item.company.gstRegNo }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsActive")}} :</h6>
+                        <div *ngIf="item.company.isActive" class="text-left"><i class="fa fa-check-circle text-success"
+                                title="True"></i></div>
+                        <div *ngIf="!item.company.isActive" class="text-left"><i class="fa fa-times-circle" title="False"></i></div>
+                    </div>                    <div class="col-6 mb-3">
+                        <h6>{{l("PhotographCharge")}} :</h6>
+                        {{ item.company.photographCharge }}
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <h6>({{l("CaseType")}}) {{l("Description")}} :</h6>
+                        {{item.caseTypeDescription}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("businessRegistrationNo")}} :</h6>
+                        {{ item.company.businessRegistrationNo }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Remark")}} :</h6>
+                        {{ remark }}
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,16 @@
+﻿@page "/"
+@using ThinknInsurTech.Core.Dependency
+@inherits ThinknInsurTechMainLayoutPageComponentBase
+
+<div class="card">
+    <div class="card-body">
+        INDEX
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        DependencyResolver.Resolve<INavigationService>().NavigateTo(NavigationUrlConsts.User);
+    }
+}

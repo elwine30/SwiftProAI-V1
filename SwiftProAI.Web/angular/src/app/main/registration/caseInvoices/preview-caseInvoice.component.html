@@ -1,0 +1,490 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass" >
+        <div class="row mb-5">
+            <div class="col-xl-10"></div>
+            <div class="col-xl-2 d-flex justify-content-end">
+                <button (click)="print()" class="btn btn-primary blue float-right"
+                    ><i class="fa fa-print"></i> 
+                    <span>{{l("PrintInvoice")}}</span>
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom gutter-b">
+            <div class="card-body" id="invoiceArea">
+                <div class="row mb-20">
+                    <div class="col-xl-12 text-center">
+                        <h2>{{ tenantCompanyName }}</h2>
+                    </div>
+                    <div class="col-xl-12 text-center">
+                        <h5>(Company No: {{tenantBusinessRegistrationNo}})</h5>
+                    </div>
+                    <div class="col-xl-12 text-center">
+                        <h5>{{tenantCompanyAddress}}</h5>
+                    </div>
+                    <div class="col-xl-12 text-center company-telno-info">
+                        <h5>{{tenantCompanyTelNo}}</h5>
+                    </div>
+                </div>
+
+                <div class="row mb-20">
+                    <!-- <div class="col-xl-12">
+						<p>File Reference: {{ fileReference }}</p>
+					</div> -->
+                    <div class="col-xl-12 text-center invoice-title">
+                        <h1>{{l("INVOICE")}}</h1>
+                    </div>
+                </div>
+                <div class="row mb-20">
+                    <div class="col-xl-6">
+                        <table class="client-info" style="font-size:medium; width:50%; float:left">
+                            <tbody>
+                                <tr>
+                                    <td class="col-xl-12">
+                                        The Claims Manager
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-12">
+                                        {{companyName}}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-12">
+                                        {{companyAddress}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xl-6">
+                        <table class="invoice-info" style="font-size:medium; width:50%; float:right">
+                            <tbody>
+                                <tr id="InvoicePreview_CompanySstRegNo">
+                                    
+                                    <td class="col-xl-4">
+                                        SST Reg No
+                                    </td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-5">
+                                        {{companySstRegNo}}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td class="col-xl-4"><span id="InvoicePreview_InvoiceNo">Invoice No</span>
+                                    </td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-5">{{caseInvoice.invoiceRefNoPrefix}}{{caseInvoice.invoiceRefNo}}</td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td class="col-xl-4">Date</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-5">{{invoiceDate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+
+                <div class="row mb-20">
+                    <div class="col-xl-12">
+                        <table class="reference-info" style="font-size:medium; width:50%">
+                            <tbody>
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-2">Your Reference</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8"><span id="InvoicePreview_lblreference"></span></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">Insured</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">{{insuredPersonName}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">Policy No</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">{{insuredPersonPolicyNo}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">Vehicle No</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">{{mainRegistrationVehicleNo}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">File Ref. No</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">
+                                        {{fileRefNo}}
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mb-10">
+                    <div class="col-xl-12">
+                        <table id="InvoiceTable" class="table table-bordered td" style="font-weight:normal; border: 1px solid grey;">
+                            <tbody>
+                                <tr style="height:30px">
+                                    <td style="font-size: medium; text-align:center;width:600px">
+                                        ITEM</td>
+                                    <td style="text-align:center;font-size: medium">AMOUNT
+                                    </td>
+                                    <td style="text-align:center;font-size: medium">
+                                        SST
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                            <tbody style="font-size:medium">
+
+                                <tr id="InvoicePreview_trService" *ngIf="caseInvoice.serviceAmount!=0">
+                                    <td>Service Fee
+                                        <div id="InvoicePreview_ServiceRemark" *ngIf="caseInvoice.serviceRemark" style="margin-left:20px">-
+                                            {{caseInvoice.serviceRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdServiceAmount" style="text-align:right;"> <span
+                                            id="InvoicePreview_ServiceAmount">{{caseInvoice.serviceAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdServiceSST" style="text-align:right"><span
+                                            id="InvoicePreview_ServiceSST">{{caseInvoice.serviceSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trMileage" *ngIf="caseInvoice.mileageAmount!=0">
+                                    <td>Mileage
+                                        <div>
+                                            <span id="InvoicePreview_MileageKM">{{caseInvoice.mileageKM}}
+                                                KM</span>
+                                            <span id="InvoicePreview_MileageUnitPrice"> (RM {{caseInvoice.mileageUnitPrice}}
+                                                per KM)</span>
+                                        </div>
+                                        <div id="InvoicePreview_MileageRemark" *ngIf="caseInvoice.mileageRemark" style="margin-left:20px">-
+                                            {{caseInvoice.mileageRemark}}
+
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdMileageAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_MileageAmount">{{caseInvoice.mileageAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdMileageSST" style="text-align:right"><span
+                                            id="InvoicePreview_MileageSST">{{caseInvoice.mileageSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trPhotograph" *ngIf="caseInvoice.photographTotalPrice!=0">
+                                    <td>Photograph
+                                        <div>
+                                            <span id="InvoicePreview_PhotographQty">{{caseInvoice.photographQty}}
+                                                pc</span>
+                                            <span id="InvoicePreview_PhotographCharge"> (RM {{caseInvoice.photographCharge}}
+                                                per pc)</span>
+                                        </div>
+                                        <div id="InvoicePreview_PhotographRemark"*ngIf="caseInvoice.photographRemark" style="margin-left:20px">-
+                                            {{caseInvoice.photographRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdPhotographTotalPrice" style="text-align:right"> <span
+                                            id="InvoicePreview_PhotographTotalPrice">{{caseInvoice.photographTotalPrice | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdPhotographSST" style="text-align:right"><span
+                                            id="InvoicePreview_PhotographSST">{{caseInvoice.photographSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trToll" *ngIf="caseInvoice.tollAmount!=0">
+                                    <td>Toll
+                                        <div id="InvoicePreview_TollRemark" *ngIf="caseInvoice.tollRemark" style="margin-left:20px">-
+                                            {{caseInvoice.tollRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdTollAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_TollAmount">{{caseInvoice.tollAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdTollSST" style="text-align:right"><span
+                                            id="InvoicePreview_TollSST">{{caseInvoice.tollSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trBridgeToll" *ngIf="caseInvoice.bridgeTollAmount!=0">
+                                    <td>Bridge Toll
+                                        <div id="InvoicePreview_BridgeTollRemark" *ngIf="caseInvoice.bridgeTollRemark" style="margin-left:20px">-
+                                            {{caseInvoice.bridgeTollRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdBridgeTollAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_BridgeTollAmount">{{caseInvoice.bridgeTollAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdBridgeTollSST" style="text-align:right"><span
+                                            id="InvoicePreview_BridgeTollSST">{{caseInvoice.bridgeTollSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trPolice" *ngIf="caseInvoice.policeAmount!=0">
+                                    <td>Police
+                                    </td>
+                                    <td id="InvoicePreview_tdPoliceAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_PoliceAmount">{{caseInvoice.policeAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdPoliceSST" style="text-align:right"><span
+                                            id="InvoicePreview_PoliceSST">{{caseInvoice.policeSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trStatutoryDeclaration" *ngIf="caseInvoice.statutoryDeclarationAmount!=0">
+                                    <td>Statutory Declaration
+                                    </td>
+                                    <td id="InvoicePreview_tdStatutoryDeclarationAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_StatutoryDeclarationeAmount">{{caseInvoice.statutoryDeclarationAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdStatutoryDeclarationSST" style="text-align:right"><span
+                                            id="InvoicePreview_StatutoryDeclarationSST">{{caseInvoice.statutoryDeclarationSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trSurveillance" *ngIf="caseInvoice.surveillanceAmount!=0">
+                                    <td>Surveillance
+                                        <div id="InvoicePreview_SurveillanceRemark" *ngIf="caseInvoice.surveillanceRemark" style="margin-left:20px">-&nbsp;
+                                            {{caseInvoice.surveillanceRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdSurveillanceAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_SurveillanceAmount">{{caseInvoice.surveillanceAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdSurveillanceSST" style="text-align:right"><span
+                                            id="InvoicePreview_SurveillanceSST">{{caseInvoice.surveillanceSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trTelco" *ngIf="caseInvoice.telcoAmount!=0">
+                                    <td>Telco
+                                    </td>
+                                    <td id="InvoicePreview_tdTelcoAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_TelcoAmount">{{caseInvoice.telcoAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdTelcoSST" style="text-align:right"><span
+                                            id="InvoicePreview_TelcoSST">{{caseInvoice.telcoSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trThirdParty" *ngIf="caseInvoice.thirdPartyAmount!=0">
+                                    <td>Third Party
+                                        <div *ngFor="let item of thirdPartyItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdThirdPartyAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_ThirdPartyAmount">{{caseInvoice.thirdPartyAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdThirdPartySST" style="text-align:right"><span
+                                            id="InvoicePreview_ThirdPartySST">{{caseInvoice.thirdPartySST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trCourtAttendance" *ngIf="caseInvoice.courtAttendanceAmount!=0">
+                                    <td>Court Attendance
+                                        <div id="InvoicePreview_CourtAttendanceRemark" *ngIf="caseInvoice.courtAttendanceRemark" style="margin-left:20px">- {{caseInvoice.courtAttendanceRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdCourtAttendanceAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_CourtAttendanceAmount">{{caseInvoice.courtAttendanceAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdCourtAttendanceSST" style="text-align:right"><span
+                                            id="InvoicePreview_CourtAttendanceSST">{{caseInvoice.courtAttendanceSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trSearchFee" *ngIf="caseInvoice.searchFeeAmount!=0">
+                                    <td>Search Fee
+                                        <div *ngFor="let item of searchFeeItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdSearchFeeAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_SearchFeeAmount">{{caseInvoice.searchFeeAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdSearchFeeSST" style="text-align:right"><span
+                                            id="InvoicePreview_SearchFeeSST">{{caseInvoice.searchFeeSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trAirFare" *ngIf="caseInvoice.airFareAmount!=0">
+                                    <td>Air Fare
+                                        <div *ngFor="let item of airFareItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdAirFareAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_AirFareAmount">{{caseInvoice.airFareAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdAirFareSST" style="text-align:right"><span
+                                            id="InvoicePreview_AirFareSST">{{caseInvoice.airFareSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trChartered" *ngIf="caseInvoice.charteredAmount!=0">
+                                    <td>Chartered Transport
+                                        <div *ngFor="let item of charteredItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdCharteredAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_CharteredAmount">{{caseInvoice.charteredAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdCharteredSST" style="text-align:right"><span
+                                            id="InvoicePreview_CharteredSST">{{caseInvoice.charteredSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trTaxiFare" *ngIf="caseInvoice.taxiFareAmount!=0">
+                                    <td>Taxi Fare
+                                        <div *ngFor="let item of taxiFareItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdTaxiFareAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_TaxiFareAmount">{{caseInvoice.taxiFareAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdTaxiFareSST" style="text-align:right"><span
+                                            id="InvoicePreview_TaxiFareSST">{{caseInvoice.taxiFareSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trAccommodation" *ngIf="caseInvoice.accommodationAmount!=0">
+                                    <td>Accommodation
+                                        <div *ngFor="let item of accommodationItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdAccommodationAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_AccommodationAmount">{{caseInvoice.accommodationAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdAccommodationSST" style="text-align:right"><span
+                                            id="InvoicePreview_AccommodationSST">{{caseInvoice.accommodationSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="InvoicePreview_trMisc" *ngIf="caseInvoice.miscAmount!=0">
+                                    <td>Miscellaneous Fees
+                                        <div *ngFor="let item of miscItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="InvoicePreview_tdMiscAmount" style="text-align:right"> <span
+                                            id="InvoicePreview_MiscAmount">{{caseInvoice.miscAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdMiscSST" style="text-align:right"><span
+                                            id="InvoicePreview_MiscSST">{{caseInvoice.miscSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+
+                                <tr id="InvoicePreview_trAmountExcludeSST">
+                                    <td> 
+                                        <div id="InvoicePreview_AmountExcludeSSTHeading">Amount
+                                            Excluding SST
+                                        </div>
+                                    </td>
+                                    <td style="text-align:right"><span
+                                            id="InvoicePreview_AmountExcludeSST">{{caseInvoice.amountExcludeSST | number :
+                                                '1.2-2'}}</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+
+                                <tr *ngIf="caseInvoice.includeSST">
+                                    <td><span id="InvoicePreview_IncludeSSTHeading"> Add SST (6%)</span></td>
+                                    <td style="text-align:right"> </td>
+                                    <td id=" InvoicePreview_tdSSTAmount" style="text-align:right"><span
+                                            id="InvoicePreview_SSTAmount">{{sstAmount | number :
+                                                '1.2-2'}}</span></td>
+
+                                </tr>
+                                <tr class="total-row">
+                                    <td><em>Ringgit Malaysia: </em> <span id="InvoicePreview_TotalInTextForm"
+                                            style="font-style:italic;">{{caseInvoice.totalInTextForm}}</span></td>
+                                    <td style="text-align:right"> <span id="InvoicePreview_TotalAmount">{{caseInvoice.totalAmount | number :
+                                        '1.2-2'}}</span>
+                                    </td>
+                                    <td id="InvoicePreview_tdTotal"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="note text-center">This is a computer generated Invoice. No signature is required</div>
+
+            </div>
+
+
+            <div class="card-footer">
+
+                <div class="form-group row">
+                    <div class="form-group row">
+                        <div class="col-xl-9 mb-5">
+                        </div>
+    
+    
+                        <div class="col-xl-3 d-flex justify-content-end">
+
+                            <button (click)="edit()" class="btn btn-primary blue float-right "
+                                ><i class="fa fa-pencil"></i> 
+                                <span>{{l("Edit")}}</span>
+                            </button>
+
+                            <button (click)="completeInvoice()" class="btn btn-success float-right"
+                                [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"
+                                *ngIf="showCompleteInvoiceButton">
+                                <span>
+                                    {{ l('CompleteInvoice') }}
+                                </span>
+                            </button>
+
+                        </div>
+    
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>

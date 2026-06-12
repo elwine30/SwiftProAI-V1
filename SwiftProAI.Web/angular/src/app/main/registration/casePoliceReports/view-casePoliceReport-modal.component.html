@@ -1,0 +1,178 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{ l('Details') }}</span>
+                </h4>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    (click)="close()"
+                    aria-label="Close"
+                    [disabled]="saving"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Police Station') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.policeStation }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('IPD') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.ipd }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('OfficerName') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.officerName }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('OfficerContact') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.officerContact }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{l('OfficerServiceNo')}} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.serviceNo }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{l('IncidentTime')}} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.incidentTime }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('ReportNo') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.reportNo }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('ReportTime') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.reportTime | luxonFormat: 'dd-LL-yyyy HH:mm:ss' }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('VehicleNo') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.vehicleNo }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('InvolvedPartyType') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.type }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('LateReport') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.lateReport }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('LateReason') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.lateReason }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('PoliceFinding') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.policeFinding }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('PoliceOutcome') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.policeOutcome }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('ReportType') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.reportType }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('ComplainantIdentityNo') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.complainantIdentityNo }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('IsDataConsistent') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.casePoliceReport.isDataConsistent }}</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">{{ l('Statement') }} :</h6>
+                    </div>
+                    <div class="mb-3">
+                        <span>{{ item.casePoliceReport.statement }}</span>
+                    </div>
+
+                    <!-- <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Report File Upload') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <a href="{{ getDownloadUrl(item.casePoliceReport.reportFileUpload) }}" target="_blank">
+                            {{ item.casePoliceReport.reportFileUploadFileName }}
+                        </a>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">({{ l('Main Registration') }}) {{ l('Vehicle No') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.mainRegistrationVehicleNo }}</span>
+                    </div> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">
+                    {{ l('Close') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

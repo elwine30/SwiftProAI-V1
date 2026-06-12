@@ -1,0 +1,141 @@
+﻿<div [@routerTransition]>
+    <sub-header [title]="'Case Reports' | localize">
+        <div role="actions">
+            <div class="btn-group" placement="button right">
+                <button class="btn btn-primary" (click)="exportToExcel()">
+                    <i class="fa fa-download btn-md-icon"></i>
+                    <span class="d-none d-md-inline-block">{{ 'Export to Excel' | localize }}</span>
+                </button>
+            </div>
+        </div>
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="off" (ngSubmit)="searchReport()">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-12"></div>
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="minReportDateFilter">
+                                        {{ l('Report Date Range') }}
+                                    </label>
+                                    <div class="input-group">
+                                        <input
+                                            class="form-control"
+                                            name="AssignmentDateRange"
+                                            #drpCreationDateRange="bsDaterangepicker"
+                                            bsDaterangepicker
+                                            dateRangePickerLuxonModifier
+                                            [(date)]="reportDateRangeFilter"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="reportFilter">{{ l('Report Filter') }}</label>
+                                    <select
+                                        id="reportFilter"
+                                        name="reportFilter"
+                                        class="form-select"
+                                        [(ngModel)]="reportFilter"
+                                        (ngModelChange)="getCaseReports()"
+                                    >
+                                        <option value="" disabled>{{ 'Select Report Filter' | localize }}</option>
+                                        <option value="insuranceCompany">Insurance Company</option>
+                                        <option value="caseType">Case Type</option>
+                                        <option value="state">State</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="reportTypeFilter">{{ l('Report Type') }}</label>
+                                    <select
+                                        id="reportTypeFilter"
+                                        name="reportTypeFilter"
+                                        class="form-select"
+                                        [(ngModel)]="reportTypeFilter"
+                                        (ngModelChange)="getCaseReports()"
+                                    >
+                                        <option value="" disabled>{{ 'Select Report Type' | localize }}</option>
+                                        <option value="caseDetails">Case Details</option>
+                                        <option value="invoiceReport">Invoice</option>
+                                        <!-- <option *ngFor="let company of companies" [value]="company.value">
+                                            {{ company.display }}
+                                        </option> -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-8 mb-5 d-flex justify-content-end">
+                                <div class="my-4">
+                                    <button (click)="resetFilters()" class="btn btn-primary" id="btn-reset-filters">
+                                        <i class="fa fa-sync btn-md-icon"></i>
+                                        <span class="d-none d-md-inline-block">{{ 'Reset' | localize }}</span>
+                                    </button>
+                                    <button (click)="searchReport()" class="btn btn-primary" id="btn-search-report">
+                                        <i class="fa fa-search btn-md-icon"></i>
+                                        <span class="d-none d-md-inline-block">Search</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!-- <Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                        <p-table
+                            #dataTable
+                            (onLazyLoad)="getCaseReports($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                            [paginator]="false"
+                            [lazy]="true"
+                            [scrollable]="true"
+                            ScrollWidth="100%"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let column of columnHeaders">{{ column }}</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record>
+                                <tr>
+                                    <td>{{ record.column }}</td>
+                                    <td *ngFor="let column of columnHeaders.slice(1)">
+                                        {{ getCellData(record, column) }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ l('NoData') }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator
+                                [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                #paginator
+                                (onPageChange)="getCaseReports($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true"
+                                [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "
+                            ></p-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

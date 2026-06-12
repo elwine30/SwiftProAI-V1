@@ -1,0 +1,89 @@
+<div [@routerTransition]>
+    <sub-header [title]="'WIPSummaryReport' | localize">
+        <div role="actions">
+            <div class="btn-group" placement="button right">
+                <button class="btn btn-primary" (click)="download()">
+                    <i class="fa fa-download btn-md-icon"></i>
+                    <span class="d-none d-md-inline-block">{{ 'Export to Excel' | localize }}</span>
+                </button>
+            </div>
+        </div>
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <label class="form-label required" for="caseType">{{ l('Select Case Type') }}</label>
+                        <select
+                            id="caseType"
+                            class="form-select form-select-lg"
+                            required
+                            [(ngModel)]="selectedCaseType"
+                        >
+                            <option value="" disabled>{{ 'Select Case Type' | localize }}</option>
+                            <option *ngFor="let caseType of caseTypeList" [value]="caseType.id">
+                                {{ caseType.displayName }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label required" for="insuranceCompany">
+                            {{ l('Select Insurance Company') }}
+                        </label>
+                        <select
+                            id="insuranceCompany"
+                            class="form-select form-select-lg"
+                            required
+                            [(ngModel)]="selectedCompany"
+                        >
+                            <option value="" disabled>{{ 'Select Insurance Company' | localize }}</option>
+                            <option *ngFor="let company of insuranceCompanyList" [value]="company.id">
+                                {{ company.displayName }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label required" for="user">{{ l('Select Adjuster') }}</label>
+                        <select id="user" class="form-select form-select-lg" required [(ngModel)]="selectedUser">
+                            <option value="" disabled>{{ 'Select Adjuster' | localize }}</option>
+                            <option *ngFor="let user of userList" [value]="user.id">
+                                {{ user.displayName }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-8 mb-5 d-flex justify-content-end">
+                    <div class="my-4">
+                        <button (click)="resetFilters()" class="btn btn-primary" id="btn-reset-filters">
+                            <i class="fa fa-sync btn-md-icon"></i>
+                            <span class="d-none d-md-inline-block">{{ 'Reset' | localize }}</span>
+                        </button>
+                        <button (click)="search()" class="btn btn-primary" id="btn-search-report">
+                            <i class="fa fa-search btn-md-icon"></i>
+                            <span class="d-none d-md-inline-block">Search</span>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="pivotData" class="table-responsive">
+                    <!-- Pivot Table Display Section -->
+                    <table class="table table-bordered table-striped table-lg">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th *ngFor="let column of columnHeaders">{{ column }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of rowHeaders">
+                                <td>{{ row }}</td>
+                                <td *ngFor="let column of columnHeaders">{{ getCellData(column, row) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

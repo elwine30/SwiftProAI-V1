@@ -1,0 +1,210 @@
+<div
+    appBsModal
+    #createModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form
+                #registrationCreateForm="ngForm"
+                role="form"
+                novalidate
+                class="form-validation"
+                *ngIf="active"
+                (ngSubmit)="save()"
+            >
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{ 'Reassign Case Adjuster' | localize }}</span>
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        [attr.aria-label]="l('Close')"
+                        [disabled]="saving"
+                    >
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-5">
+                        <label class="form-label required" for="CaseTypeId">{{ 'Case Type' | localize }}</label>
+                        <div class="col-lg-6 col-md-4 col-sm-3">
+                        <select
+                            id="CaseTypeId"
+                            #caseTypeIdInput="ngModel"
+                            name="CaseTypeId"
+                            class="form-select"
+                            [(ngModel)]="registrationDetails.caseTypeId"
+                            required
+                            disabled
+                        >
+                            <option *ngFor="let item of allCaseTypes" value="{{item.id}}">{{item.displayName}}</option>
+                        </select>
+                        </div>
+                        <validation-messages [formCtrl]="caseTypeIdInput"></validation-messages>
+                    </div>
+
+                    <div class="mb-5">
+                        <label 
+                        class="form-label" 
+                        for="Remark">{{ 'Remark' | localize }}
+                        </label>
+                        <div class="col-lg-12 col-md-9 col-sm-8">
+                            <textarea
+                                id="Remark"
+                                #remarkInput="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="Remark"
+                                [(ngModel)]="remarkDescription"
+                                placeholder="Enter remarks here"
+                                rows="3"
+                                required></textarea>
+                        </div>
+                        <validation-messages [formCtrl]="remarkInput"></validation-messages>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label required" for="AssignTime">{{ 'Assignment Date' | localize }}</label>
+                        <div class="col-lg-6 col-md-4 col-sm-3">
+                            <div class="input-group">
+                                <input
+                                    id="AssignTime"
+                                    #assignTimeInput
+                                    name="AssignTime"
+                                    class="form-control"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [maxDate]="today"
+                                    [(date)]="registrationDetails.assignTime"
+                                    required
+                                    disabled
+                                />
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <validation-messages [formCtrl]="assignTimeInput"></validation-messages>
+                    </div>
+                    
+
+                    <div class="mb-5">
+                        <label class="form-label required" for="VehicleNo">{{ 'Vehicle No' | localize }}</label>
+                        <div class="col-lg-6 col-md-4 col-sm-3">
+                        <input
+                            id="VehicleNo"
+                            #vehicleNoInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="VehicleNo"
+                            [(ngModel)]="registrationDetails.vehicleNo"
+                            required
+                            maxlength="10"
+                            disabled
+                        />
+                        </div>
+                        <validation-messages [formCtrl]="vehicleNoInput"></validation-messages>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 mb-5">
+                            <label class="form-label required" for="CompanyId">{{ 'Insurance Company' | localize }}</label>
+                            <select
+                                id="CompanyId"
+                                #companyIdInput="ngModel"
+                                name="CompanyId"
+                                class="form-select"
+                                [(ngModel)]="registrationDetails.companyId"
+                                required
+                                disabled
+                            >
+                                <option *ngFor="let item of allCompanies" value="{{item.id}}">{{item.displayName}}</option>
+                            </select>
+                            <validation-messages [formCtrl]="companyIdInput"></validation-messages>
+                        </div>
+                    
+                        <div class="col-lg-6 mb-5">
+                            <label class="form-label required" for="BranchId">{{ 'Branch' | localize }}</label>
+                            <select
+                                id="BranchId"
+                                #branchIdInput="ngModel"
+                                name="BranchId"
+                                class="form-select"
+                                [(ngModel)]="registrationDetails.branchId"
+                                required
+                                disabled
+                            >
+                                <option *ngFor="let item of allBranches" value="{{item.id}}">{{item.displayName}}</option>
+                            </select>
+                            <validation-messages [formCtrl]="branchIdInput"></validation-messages>
+                        </div>
+                    </div>
+                    
+
+                    <div class="mb-5">
+                        <label class="form-label required" for="AdjusterMemberId">{{ 'Adjuster' | localize }}</label>
+                        <select
+                            id="AdjusterMemberId"
+                            #adjusterMemberIdInput="ngModel"
+                            name="AdjusterMemberId"
+                            class="form-select"
+                            [(ngModel)]="registrationDetails.adjusterMemberId"
+                            required
+                        >
+                            <option *ngFor="let item of allAdjusters" value="{{item.id}}">{{item.displayName}}</option>
+                        </select>
+                        <validation-messages [formCtrl]="adjusterMemberIdInput"></validation-messages>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label required" for="ModeOfAssignment">{{ 'Mode of Assignment' | localize }}</label>
+                        <select
+                            id="ModeOfAssignment"
+                            #modeOfAssignmentInput="ngModel"
+                            name="ModeOfAssignment"
+                            class="form-select"
+                            [(ngModel)]="registrationDetails.modeOfAssignment"
+                            required
+                            disabled
+                        >
+                            <option *ngFor="let modeOfAssignment of modesOfAssignment" [value]="modeOfAssignment.value">
+                                {{ modeOfAssignment.value }}
+                            </option>
+                        </select>
+                        <validation-messages [formCtrl]="modeOfAssignmentInput"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        [disabled]="saving"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()"
+                    >
+                        {{ 'Back' | localize }}
+                    </button>
+                    <button
+                        type="submit"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                        class="btn btn-primary fw-bold"
+                        [disabled]="!registrationCreateForm.form.valid || saving"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Reassign' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>

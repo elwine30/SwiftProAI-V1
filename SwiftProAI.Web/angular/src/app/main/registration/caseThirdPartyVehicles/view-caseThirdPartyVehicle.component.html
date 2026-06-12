@@ -1,0 +1,146 @@
+<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="row">
+                <div class="col-xl-10">
+                    <sub-header [title]="'THIRD PARTY VEHICLES' | localize"></sub-header>
+                </div>
+                <!-- <div class="col-xl-2 mb-5 mt-5 text-end">
+                    <button  class="btn btn-primary blue" style="margin-right: 30px">
+                        <span>{{ l('Upload File') }}</span>
+                    </button>
+                </div> -->
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable (onLazyLoad)="getCaseThirdPartyVehicles($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}" [paginator]="false" [lazy]="true"
+                            [scrollable]="true" ScrollWidth="100%" [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px">
+                                        {{ l('Actions') }}
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="vehicleNo">
+                                        {{ l('VehicleNo') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.vehicleNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="registeredOwner">
+                                        {{ l('RegisteredOwner') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.registeredOwner"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="vehicleMake">
+                                        {{ l('VehicleMake') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.vehicleMake"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="vehicleYear">
+                                        {{ l('VehicleYear') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.vehicleYear"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="policyNo">
+                                        {{ l('PolicyNo') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.policyNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="typeCover">
+                                        {{ l('TypeCover') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.typeCover"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="coverStartDate">
+                                        {{ l('CoverStartDate') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.coverStartDate"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="coverEndDate">
+                                        {{ l('CoverEndDate') }}
+                                        <p-sortIcon field="caseThirdPartyVehicle.coverEndDate"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <td style="width: 130px">
+                                        <button class="btn btn-primary btn-sm" (click)="viewcaseThirdPartyVehicleModal.show(record)">
+                                            <i class="fas fa-eye"></i>
+                                            {{ l('View') }}
+                                        </button>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('VehicleNo') }}</span>
+                                        {{ record.caseThirdPartyVehicle.vehicleNo }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('RegisteredOwner') }}</span>
+                                        {{ record.caseThirdPartyVehicle.registeredOwner }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('VehicleMake') }}</span>
+                                        {{ record.caseThirdPartyVehicle.vehicleMake }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('VehicleYear') }}</span>
+                                        {{ record.caseThirdPartyVehicle.vehicleYear }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('PolicyNo') }}</span>
+                                        {{ record.caseThirdPartyVehicle.policyNo }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('TypeCover') }}</span>
+                                        {{ record.caseThirdPartyVehicle.typeCover }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('CoverStartDate') }}</span>
+                                        <span *ngIf="record.caseThirdPartyVehicle.coverStartDate">
+                                            {{ record.caseThirdPartyVehicle.coverStartDate | luxonFormat: 'dd/MM/yyyy, t' }}
+                                        </span>
+                                        <span *ngIf="!record.caseThirdPartyVehicle.coverStartDate">-</span>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('CoverEndDate') }}</span>
+                                        <span *ngIf="record.caseThirdPartyVehicle.coverEndDate">
+                                            {{ record.caseThirdPartyVehicle.coverEndDate | luxonFormat: 'dd/MM/yyyy, t' }}
+                                        </span>
+                                        <span *ngIf="!record.caseThirdPartyVehicle.coverEndDate">-</span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ l('NoData') }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage" #paginator
+                                (onPageChange)="getCaseThirdPartyVehicles($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true" [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "></p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+                <div class="card-footer">
+                    <div class="col-lg-12" style="text-align: right">
+                        <a [routerLink]="[navigationService.step6Url]" [queryParams]="{ id: registerIdFilter, stepId: 6 }"
+                            class="btn btn-primary green float-right">
+                            <i class="fa fa-arrow-left"></i>
+                            <span>{{ l('Back') }}</span>
+                        </a>
+        
+                        <a [routerLink]="[navigationService.step8Url]" [queryParams]="{ id: registerIdFilter, stepId: 8 }"
+                            class="btn btn-primary green float-right">
+                            <i class="fa fa-arrow-right"></i>
+                            <span>{{ l('Next') }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <viewcaseThirdPartyVehicleModal #viewcaseThirdPartyVehicleModal></viewcaseThirdPartyVehicleModal>
+</div>

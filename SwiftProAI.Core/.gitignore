@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/angular
+/build
+/ui-tests-playwright
+.vs/slnx.sqlite
+/aspnet-core/src/ThinknInsurTech.Web.Host/wwwroot
+.vs/

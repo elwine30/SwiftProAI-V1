@@ -1,0 +1,57 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("CaseDeclarationAnswers")}}</span>
+                </h4>
+                <button type="button" class="btn-close" (click)="close()" aria-label="Close"
+                    [disabled]="saving"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form #caseDeclarationForm="ngForm">
+                    <div *ngFor="let item of caseDeclarationList; let i = index" class="form-group">
+                        <div class="my-3">
+                            <label class="form-label question-label" for="answer_{{i}}">{{i + 1}}. {{item.question}}</label>
+    
+                            <div *ngIf="item.optionType === 'RADIO'">
+                                <div *ngFor="let option of item.optionValues.split(',')">
+                                    <input type="radio" [(ngModel)]="caseDeclarationAnswerList[i].answer" [value]="option"
+                                        name="answer_{{i}}"> {{option}}
+                                </div>
+                            </div>
+    
+                            <div *ngIf="item.optionType === 'SINGLE_LINE'">
+                                <input type="text" [(ngModel)]="caseDeclarationAnswerList[i].answer" name="answer_{{i}}"
+                                    class="form-control">
+                            </div>
+    
+                            <div *ngIf="item.optionType === 'CHECKBOX'">
+                                <div *ngFor="let option of item.optionValues.split(','); let j = index">
+                                    <input type="checkbox" [checked]="isOptionChecked(i, option)"
+                                        (change)="updateAnswerForCheckboxInput(i, option, $event.target.checked)"
+                                        name="answer_{{i}}_{{j}}">
+                                    {{option}}
+                                </div>
+                            </div>
+    
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button (click)="save()" class="btn btn-primary blue float-right" [buttonBusy]="saving"
+                    [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                    <span>{{l("Save")}}</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div [@routerTransition]>
+    <sub-header [title]="('thirdPartyViewApproval' | localize)">
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label text-dark">{{ l('Status') }}</label>
+                                <select class="form-select" id="status" name="status"
+                                    (change)="onChangeStatus($event.target.value)">
+                                    <option *ngFor="let status of statusList" [value]="status.id">
+                                        {{ status.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-dark">{{ l('Date of') }} ({{ selectedStatus }})</label>
+                                <div class="input-group">
+                                    <input id="creationDate" #assignTimeInput name="creationDate" class="form-control"
+                                        bsDatepicker datePickerLuxonModifier [(ngModel)]="creationDateString" [bsConfig]="{
+                                            rangeInputFormat: 'YYYY-MM-DD',
+                                            dateInputFormat: 'YYYY-MM-DD',
+                                            adaptivePosition: true,
+                                            showWeekNumbers: false
+                                        }" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mt-8 mb-5 d-flex">
+                                <button (click)="getDataTable()" class="btn btn-primary" id="btn-search-report">
+                                    <i class="fa fa-search btn-md-icon"></i>
+                                    <span class="d-none d-md-inline-block">Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="mt-8">
+                    <tabset>
+                        <tab heading="Onboarded" id="onboarded" (selectTab)="onTabChange('onBoard')">
+                            <ng-template tabHeading>
+                                <span class="badge badge-danger assigned-role-count ms-2">
+                                    <!-- {{ getDataCount() }} -->
+                                      {{ getDataCountOnboard() }}
+                                </span>
+                            </ng-template>
+                            <!-- Content for Onboarded tab -->
+                            <onBoardDataTable #onBoardDataTable></onBoardDataTable>
+                        </tab>
+                        <tab heading="Not Onboarded" id="notOnboarded" (selectTab)="onTabChange('notOnBoard')">
+                            <ng-template tabHeading>
+                                <span class="badge badge-danger assigned-role-count ms-2">
+                                    {{ getDataCountNotOnboarded() }}
+                                </span>
+                            </ng-template>
+                            <!-- Content for Not Onboarded tab -->
+                             <notonboardDataTable #notOnboardDataTable></notonboardDataTable>
+                        </tab>
+                    </tabset>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template id="dataTable">
+
+</ng-template>

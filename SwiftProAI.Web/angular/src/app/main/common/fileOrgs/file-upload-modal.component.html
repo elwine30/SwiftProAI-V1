@@ -1,0 +1,74 @@
+<div
+    class="modal fade"
+    bsModal
+    #fileUploadModal="bs-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="fileUploadModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileUploadModalLabel">Upload File</h5>
+                <button type="button" class="btn-close" (click)="close()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- File Upload Section -->
+                    <div class="col-md-6 d-flex flex-column align-items-center justify-content-center upload-area">
+                        <div
+                            class="file-upload-container"
+                            (drop)="onDrop($event)"
+                            (dragover)="onDragOver($event)"
+                            (dragleave)="onDragLeave($event)"
+                        >
+                            <div class="row">
+                                <i
+                                    class="fa fa-upload"
+                                    style="font-size: 3em; padding-bottom: 2em; padding-top: 2em"
+                                ></i>
+                                <h5>Drag and Drop file</h5>
+                                <h5>or</h5>
+                                <label for="fileInput" class="btn btn-primary">Click to Browse</label>
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    class="form-control-file d-none"
+                                    (change)="handleFileInput($event)"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div class="col-md-6 preview-area">
+                        <div *ngIf="previewUrl" class="file-preview">
+                            <ng-container [ngSwitch]="fileType">
+                                <!-- Image Preview -->
+                                <img *ngSwitchCase="'image'" [src]="previewUrl" class="img-fluid" />
+
+                                <!-- PDF Preview -->
+                                <embed
+                                    *ngSwitchCase="'application/pdf'"
+                                    [src]="previewUrl"
+                                    type="application/pdf"
+                                    width="100%"
+                                    height="600px"
+                                />
+
+                                <!-- Default Preview -->
+                                <div *ngSwitchDefault>File type not supported for preview.</div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="uploadFile()">Upload</button>
+                <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

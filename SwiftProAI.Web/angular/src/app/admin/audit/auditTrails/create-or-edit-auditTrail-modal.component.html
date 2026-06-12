@@ -1,0 +1,55 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #auditTrailForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="auditTrail.id">{{l("EditAuditTrail")}}</span>
+                        <span *ngIf="!auditTrail.id">{{l("CreateNewAuditTrail")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+
+
+								<div class="my-3">
+									<label class="form-label" for="AuditTrail_Operation">{{l("Operation")}}</label>
+									<input type="text" #AuditTrail_Operation="ngModel" id="AuditTrail_Operation" class="form-control" [(ngModel)]="auditTrail.operation" name="Operation"    />
+								    <validation-messages [formCtrl]="AuditTrail_Operation"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="AuditTrail_TableName">{{l("TableName")}}</label>
+									<input type="text" #AuditTrail_TableName="ngModel" id="AuditTrail_TableName" class="form-control" [(ngModel)]="auditTrail.tableName" name="TableName"    />
+								    <validation-messages [formCtrl]="AuditTrail_TableName"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="AuditTrail_ChangedBy">{{l("ChangedBy")}}</label>
+									<input type="text" #AuditTrail_ChangedBy="ngModel" id="AuditTrail_ChangedBy" class="form-control" [(ngModel)]="auditTrail.changedBy" name="ChangedBy"    />
+								    <validation-messages [formCtrl]="AuditTrail_ChangedBy"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="AuditTrail_ChangedDate">{{l("ChangedDate")}}</label>
+									 <input required class="form-control m-input" #AuditTrail_ChangedDate type="datetime" bsDatepicker  datePickerLuxonModifier  [(date)]="auditTrail.changedDate" id="AuditTrail_ChangedDate" name="AuditTrail_ChangedDate">
+									<validation-messages [formCtrl]="AuditTrail_ChangedDate"></validation-messages>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!auditTrailForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

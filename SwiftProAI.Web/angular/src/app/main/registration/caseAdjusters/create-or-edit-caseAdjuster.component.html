@@ -1,0 +1,279 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <sub-header [title]="'GENERAL' | localize"></sub-header>
+
+            <div class="card-body">
+                <form #caseAdjusterForm="ngForm" novalidate>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label">{{ 'Branch' | localize }}</label>
+                            <select
+                                id="CaseAdjuster_BranchName"
+                                #CaseAdjuster_BranchName="ngModel"
+                                name="BranchId"
+                                disabled
+                                class="form-select"
+                                [(ngModel)]="branchId"
+                            >
+                                <option *ngFor="let item of allBranches" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseAdjuster_BranchName"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label">{{ l('AdjusterName') }}</label>
+                            <select
+                                id="CaseAdjuster_AdjusterName"
+                                #CaseAdjuster_AdjusterName="ngModel"
+                                name="AdjusterName"
+                                disabled
+                                class="form-select"
+                                [(ngModel)]="adjusterMemberId"
+                            >
+                                <option *ngFor="let item of allAdjusters" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseAdjuster_AdjusterName"></validation-messages>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label for="CaseAdjuster_AdjusterName">{{l("AdjusterName")}}</label>
+                            <input type="text" #CaseAdjuster_AdjusterName="ngModel" id="CaseAdjuster_AdjusterName"
+                                class="form-control" [(ngModel)]="adjusterName" name="AdjusterName" />
+                            <validation-messages [formCtrl]="CaseAdjuster_AdjusterName"></validation-messages>
+                        </div> -->
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseAdjuster_RegistrationCaseTypeId">
+                                {{ l('RegistrationCaseTypeId') }}
+                            </label>
+                            <select
+                                id="CaseAdjuster_RegistrationCaseTypeId"
+                                #CaseAdjuster_RegistrationCaseTypeId="ngModel"
+                                name="RegistrationCaseTypeId"
+                                class="form-select"
+                                [(ngModel)]="caseTypeId"
+                                disabled
+                                required
+                            >
+                                <option *ngFor="let item of allCaseTypes" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseAdjuster_RegistrationCaseTypeId"></validation-messages>
+                        </div>
+                        <!-- <div class="form-group">
+                        <label for="CaseAdjuster_RegistrationCaseTypeId">{{l("RegistrationCaseTypeId")}}</label>
+                        <input type="text" #CaseAdjuster_RegistrationCaseTypeId="ngModel"
+                            id="CaseAdjuster_RegistrationCaseTypeId" class="form-control"
+                            [(ngModel)]="registrationCaseTypeId" name="RegistrationCaseTypeId" />
+                        <validation-messages [formCtrl]="CaseAdjuster_RegistrationCaseTypeId"></validation-messages>
+                    </div> -->
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseAdjuster_AdjusterContact">
+                                {{ l('AdjusterContact') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseAdjuster_AdjusterContact="ngModel"
+                                id="CaseAdjuster_AdjusterContact"
+                                disabled
+                                class="form-control"
+                                [(ngModel)]="adjusterContact"
+                                name="AdjusterContact"
+                            />
+                            <validation-messages [formCtrl]="CaseAdjuster_AdjusterContact"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseAdjuster_AssignmentTime">
+                                {{ l('AssignmentTime') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseAdjuster_AssignmentTime="ngModel"
+                                id="CaseAdjuster_AssignmentTime"
+                                disabled
+                                class="form-control"
+                                [(ngModel)]="assignmentTime"
+                                name="AssignmentTime"
+                            />
+                            <validation-messages [formCtrl]="CaseAdjuster_AssignmentTime"></validation-messages>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseAdjuster_CompletionTime">{{ l('CompletionTime')
+                            }}</label>
+                            <input type="text" #CaseAdjuster_CompletionTime="ngModel" id="CaseAdjuster_CompletionTime"
+                                disabled class="form-control" [(ngModel)]="completionTime" name="CompletionTime" />
+                            <validation-messages [formCtrl]="CaseAdjuster_CompletionTime"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label 
+                            class="form-label" 
+                            for="Remark">{{ 'ExtendedCompletionDate' | localize }}
+                            </label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseAdjuster_ExtendedCompletionDate
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [bsConfig]="{
+                                        minDate: minExtendDate
+                                    }"
+                                    [(ngModel)]="extendedCompletionDateString"
+                                    id="CaseAdjuster_ExtendedCompletionDate"
+                                    name="CaseAdjuster_ExtendedCompletionDate"
+                                    [disabled]="!permission.isGranted('Pages.CaseAdjusters.ExtendCompletion')"
+                                />
+                            <validation-messages [formCtrl]="CaseAdjuster_ExtendedCompletionDate"></validation-messages>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <label 
+                            class="form-label" 
+                            for="Remark">{{ 'ExtendCompletionRemark' | localize }}
+                            </label>
+                            <input
+                                    id="CaseAdjuster_ExtendCompletionRemark"
+                                    #CaseAdjuster_ExtendCompletionRemark="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    name="ExtendCompletionRemark"
+                                    [(ngModel)]="caseAdjuster.extendCompletionRemark"
+                                    [disabled]="!permission.isGranted('Pages.CaseAdjusters.ExtendCompletion')"
+                                />
+                            <validation-messages [formCtrl]="CaseAdjuster_ExtendCompletionRemark"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="ScopeAssignmentDescription">
+                                {{ l('ScopeAssignment') }}
+                            </label>
+                            <select
+                                name="caseAdjuster.scopeAssignmentId"
+                                [(ngModel)]="caseAdjuster.scopeAssignmentId"
+                                class="form-select"
+                                required
+                            >
+                                <option value="" disabled>{{ l('SelectAScopeAssignment') }}</option>
+                                <option *ngFor="let item of allScopeAssignments" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseAdjuster_Status">{{ l('Status') }}</label>
+                            <select
+                                id="CaseAdjuster_Status"
+                                name="Status"
+                                class="form-select"
+                                [(ngModel)]="caseAdjuster.status"
+                                (ngModelChange)="onStatusChange($event)"
+                            >
+                                <option value="" disabled>{{ 'Select Status' | localize }}</option>
+                                <option *ngFor="let status of statuses" [value]="status.value">
+                                    {{ status.display }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" [hidden]="caseAdjuster.scopeAssignmentId != scopeAssignment_othersId">
+                        <div class="col-xl-6">
+                            <label class="form-label" for="ScopeAssignmentRemarks">
+                                {{ l('Scope Assignment Remarks') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseAdjuster_ScopeAssignmentRemarks="ngModel"
+                                id="CaseAdjuster_ScopeAssignmentRemarks"
+                                class="form-control"
+                                [(ngModel)]="caseAdjuster.scopeAssignmentRemarks"
+                                name="scopeAssignmentRemarks"
+                            />
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                    <label for="CaseAdjuster_Status">{{l("Status")}}</label>
+                    <input type="text" #CaseAdjuster_Status="ngModel" id="CaseAdjuster_Status" class="form-control"
+                        [(ngModel)]="caseAdjuster.status" name="Status" />
+                    <validation-messages [formCtrl]="CaseAdjuster_Status"></validation-messages>
+                </div> -->
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="LocationName">{{ l('State') }}</label>
+                            <select
+                                name="caseAdjuster.stateLocationId"
+                                [(ngModel)]="caseAdjuster.stateLocationId"
+                                class="form-select"
+                            >
+                                <option value="" disabled>{{ l('SelectAState') }}</option>
+                                <option *ngFor="let item of allStateLocations" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="UserName">{{ l('Editor') }}</label>
+                            <select
+                                name="caseAdjuster.editorUserId"
+                                [(ngModel)]="caseAdjuster.editorUserId"
+                                class="form-select"
+                            >
+                                <option value="" disabled>{{ l('SelectAnEdtior') }}</option>
+                                <option *ngFor="let item of allEditorUsers" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-footer">
+                <div class="col-lg-12" style="text-align: right">
+                    <a [routerLink]="['/app/main/dashboard']" class="btn btn-primary blue float-right">
+                        <i class="fa fa-arrow-left"></i>
+                        <span>{{ l('Back') }}</span>
+                    </a>
+                    <button
+                        (click)="save()"
+                        class="btn btn-primary blue float-right"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                        [hidden]="isHidden"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                    <a
+                        [routerLink]="[navigationService.step2Url]"
+                        [queryParams]="{ id: registerId, stepId: 2 }"
+                        class="btn btn-primary green float-right"
+                    >
+                        <i class="fa fa-arrow-right"></i>
+                        <span>{{ l('Next') }}</span>
+                    </a>
+                    <!-- <button *ngIf="!this.caseAdjuster.id" (click)="saveAndNew()"
+                        class="btn btn-primary blue float-right" [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span>{{l("SaveAndNew")}}</span>
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <createRemarkModal #createRemarkModal></createRemarkModal>
+</div>

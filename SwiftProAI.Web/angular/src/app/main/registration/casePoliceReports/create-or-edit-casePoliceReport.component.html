@@ -1,0 +1,669 @@
+﻿<div [@routerTransition]>
+    <div class="col-xl-6 mb-5"></div>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <form #casePoliceReportForm="ngForm">
+                <div class="form-group row">
+                    <div class="col-xl-10 mb-5">
+                        <sub-header [title]="'POLICE REPORTS' | localize"></sub-header>
+                    </div>
+                    <div class="col-xl-2 mb-5 mt-5 text-end">
+                        <button
+                            (click)="showFileUpload()"
+                            class="btn btn-primary blue"
+                            style="margin-right: 30px"
+                            [hidden]="isHidden"
+                        >
+                            <i class="fa-solid fa-wand-magic-sparkles fa-xl" style="font-size: 18px"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_PoliceStation">
+                                {{ l('PoliceStation') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_PoliceStation="ngModel"
+                                id="CasePoliceReport_PoliceStation"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.policeStation"
+                                name="PoliceStation"
+                                minlength="1"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_PoliceStation"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_IPD">{{ l('IPD') }}</label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_IPD="ngModel"
+                                id="CasePoliceReport_IPD"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.ipd"
+                                name="IPD"
+                                minlength="1"
+                                maxlength="50"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_IPD"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_OfficerName">{{ l('OfficerName') }}</label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_OfficerName="ngModel"
+                                id="CasePoliceReport_OfficerName"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.officerName"
+                                name="OfficerName"
+                                minlength="1"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_OfficerName"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_OfficerContact">
+                                {{ l('OfficerContact') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_OfficerContact="ngModel"
+                                id="CasePoliceReport_OfficerContact"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.officerContact"
+                                name="OfficerContact"
+                                onlyNumber
+                            />
+                            <!-- <validation-messages [formCtrl]="CasePoliceReport_OfficerContact"></validation-messages> -->
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_ServiceNo">
+                                {{ l('OfficerServiceNo') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_ServiceNo="ngModel"
+                                id="CasePoliceReport_ServiceNo"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.serviceNo"
+                                name="ServiceNo"
+                                minlength="1"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_ServiceNo"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_IncidentTime">
+                                {{ l('IncidentTime') }}
+                            </label>
+                            <input
+                                required
+                                class="form-control m-input"
+                                #CasePoliceReport_IncidentTime
+                                type="datetime"
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [withTimepicker]="true"
+                                [(ngModel)]="casePoliceReport.incidentTime"
+                                [(date)]="casePoliceReport.incidentTime"
+                                id="CasePoliceReport_IncidentTime"
+                                name="CasePoliceReport_IncidentTime"
+                                (ngModelChange)="updateLateReport()"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_IncidentTime"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_ReportNo">{{ l('ReportNo') }}</label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_ReportNo="ngModel"
+                                id="CasePoliceReport_ReportNo"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.reportNo"
+                                name="ReportNo"
+                                minlength="1"
+                                maxlength="50"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_ReportNo"></validation-messages>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_ReportTime">{{ l('ReportTime') }}</label>
+                            <input
+                                required
+                                class="form-control m-input"
+                                #CasePoliceReport_ReportTime
+                                type="datetime"
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [withTimepicker]="true"
+                                [(ngModel)]="casePoliceReport.reportTime"
+                                [(date)]="casePoliceReport.reportTime"
+                                id="CasePoliceReport_ReportTime"
+                                name="CasePoliceReport_ReportTime"
+                                (ngModelChange)="updateLateReport()"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_ReportTime"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_VehicleNo">{{ l('VehicleNo') }}</label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_VehicleNo="ngModel"
+                                id="CasePoliceReport_VehicleNo"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.vehicleNo"
+                                name="VehicleNo"
+                                minlength="1"
+                                maxlength="1000"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_VehicleNo"></validation-messages>
+                        </div>
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_Type">{{ l('InvolvedPartyType') }}</label>
+                            <select
+                                id="CasePoliceReport_Type"
+                                #CasePoliceReport_Type="ngModel"
+                                name="Type"
+                                class="form-select"
+                                [(ngModel)]="casePoliceReport.type"
+                            >
+                                <option *ngFor="let item of types" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CasePoliceReport_Type"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_LateReport">{{ l('LateReport') }}</label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_LateReport="ngModel"
+                                id="CasePoliceReport_LateReport"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.lateReport"
+                                name="LateReport"
+                                minlength="1"
+                                maxlength="10"
+                                required
+                                readonly
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_LateReport"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_LateReason">{{ l('LateReason') }}</label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_LateReason="ngModel"
+                                id="CasePoliceReport_LateReason"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.lateReason"
+                                name="LateReason"
+                                [disabled]="casePoliceReport.lateReport === 'No'"
+                                [required]="casePoliceReport.lateReport === 'Yes'"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_LateReason"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_PoliceFinding">
+                                {{ l('PoliceFinding') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_PoliceFinding="ngModel"
+                                id="CasePoliceReport_PoliceFinding"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.policeFinding"
+                                name="PoliceFinding"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_PoliceFinding"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CasePoliceReport_PoliceOutcome">
+                                {{ l('PoliceOutcome') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_PoliceOutcome="ngModel"
+                                id="CasePoliceReport_PoliceOutcome"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.policeOutcome"
+                                name="PoliceOutcome"
+                            />
+                            <validation-messages [formCtrl]="CasePoliceReport_PoliceOutcome"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_ReportType">{{ l('ReportType') }}</label>
+                            <select
+                                id="CasePoliceReport_ReportType"
+                                #CasePoliceReport_ReportType="ngModel"
+                                name="ReportType"
+                                class="form-select"
+                                [(ngModel)]="casePoliceReport.reportType"
+                            >
+                                <option *ngFor="let item of reportTypes" [value]="item.displayName">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CasePoliceReport_ReportType"></validation-messages>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CasePoliceReport_ComplainantIdentityNo">
+                                {{ l('ComplainantIdentityNo') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CasePoliceReport_ComplainantIdentityNo="ngModel"
+                                id="CasePoliceReport_ComplainantIdentityNo"
+                                class="form-control"
+                                [(ngModel)]="casePoliceReport.complainantIdentityNo"
+                                name="Complainant Identity Number"
+                            />
+                            <validation-messages
+                                [formCtrl]="CasePoliceReport_ComplainantIdentityNo"
+                            ></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="mb-5">
+                            <label class="form-label" for="CasePoliceReport_Statement">{{ l('Statement') }}</label>
+                            <textarea
+                                id="CasePoliceReport_Statement"
+                                #CasePoliceReport_Statement="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="Statement"
+                                [(ngModel)]="casePoliceReport.statement"
+                                rows="3"
+                            ></textarea>
+                            <validation-messages [formCtrl]="CasePoliceReport_Statement"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="col-lg-12" style="text-align: right">
+                        <a
+                            [routerLink]="[navigationService.step5Url]"
+                            [queryParams]="{ id: registerIdFilter, stepId: 5 }"
+                            class="btn btn-primary green float-right"
+                        >
+                            <i class="fa fa-arrow-left"></i>
+                            <span>{{ l('Back') }}</span>
+                        </a>
+                        <button
+                            *ngIf="this.casePoliceReport.id"
+                            (click)="save()"
+                            class="btn btn-primary blue float-right"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                            [hidden]="isHidden"
+                        >
+                            <i class="fa fa-save"></i>
+                            <span>{{ l('Save') }}</span>
+                        </button>
+                        <button
+                            *ngIf="!this.casePoliceReport.id"
+                            (click)="saveAndNew()"
+                            class="btn btn-primary blue float-right"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                            [hidden]="isHidden"
+                        >
+                            <i class="fa fa-save"></i>
+                            <span>{{ l('Add') }}</span>
+                        </button>
+                        <a
+                            [routerLink]="[navigationService.step7Url]"
+                            [queryParams]="{ id: registerIdFilter, stepId: 7 }"
+                            class="btn btn-primary green float-right"
+                        >
+                            <i class="fa fa-arrow-right"></i>
+                            <span>{{ l('Next') }}</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                        <p-table
+                            #dataTable
+                            class="casePoliceReportDatatable"
+                            (onLazyLoad)="getCasePoliceReports($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                            [paginator]="false"
+                            [lazy]="true"
+                            [scrollable]="true"
+                            ScrollWidth="100%"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th
+                                        style="width: 130px"
+                                        [hidden]="
+                                            !isGrantedAny(
+                                                'Pages.CasePoliceReports.Edit',
+                                                'Pages.CasePoliceReports.Delete'
+                                            )
+                                        "
+                                    >
+                                        {{ l('Actions') }}
+                                    </th>
+
+                                    <th style="width: 150px" pSortableColumn="ipd">
+                                        {{ l('ReportType') }}
+                                        <p-sortIcon field="casePoliceReport.reportType"></p-sortIcon>
+                                    </th>
+                                    <!-- <th style="width: 150px" pSortableColumn="ipd">
+										{{l('IPD')}}
+										<p-sortIcon field="casePoliceReport.ipd"></p-sortIcon>
+									</th> -->
+                                    <th style="width: 150px" pSortableColumn="policeStation">
+                                        {{ l('PoliceStation') }}
+                                        <p-sortIcon field="casePoliceReport.policeStation"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="officerName">
+                                        {{ l('Officer Name') }}
+                                        <p-sortIcon field="casePoliceReport.officerName"></p-sortIcon>
+                                    </th>
+                                    <!-- <th style="width: 150px" pSortableColumn="serviceNo">
+										{{l('Service No')}}
+										<p-sortIcon field="casePoliceReport.serviceNo"></p-sortIcon>
+									</th> -->
+                                    <!-- <th style="width: 150px" pSortableColumn="officerContact">
+										{{l('Officer Contact')}}
+										<p-sortIcon field="casePoliceReport.officerContact"></p-sortIcon>
+									</th> -->
+                                    <th style="width: 150px" pSortableColumn="vehicleNo">
+                                        {{ l('VehicleNo') }}
+                                        <p-sortIcon field="casePoliceReport.vehicleNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="reportNo">
+                                        {{ l('ReportNo') }}
+                                        <p-sortIcon field="casePoliceReport.reportNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="reportTime">
+                                        {{ l('ReportTime') }}
+                                        <p-sortIcon field="casePoliceReport.reportTime"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="isDataConsistent">
+                                        {{ l('IsDataConsistent') }}
+                                        <p-sortIcon field="casePoliceReport.isDataConsistent"></p-sortIcon>
+                                    </th>
+                                    <!-- <th style="width: 150px" pSortableColumn="lateReport">
+										{{l('LateReport')}}
+										<p-sortIcon field="casePoliceReport.lateReport"></p-sortIcon>
+									</th>
+									<th style="width: 150px" pSortableColumn="lateReason">
+										{{l('LateReason')}}
+										<p-sortIcon field="casePoliceReport.lateReason"></p-sortIcon>
+									</th>
+									<th style="width: 150px" pSortableColumn="type">
+										{{l('Type')}}
+										<p-sortIcon field="casePoliceReport.type"></p-sortIcon>
+									</th>
+									<th style="width: 150px" pSortableColumn="policeFinding">
+										{{l('PoliceFinding')}}
+										<p-sortIcon field="casePoliceReport.policeFinding"></p-sortIcon>
+									</th>
+									<th style="width: 150px" pSortableColumn="policeOutcome">
+										{{l('PoliceOutcome')}}
+										<p-sortIcon field="casePoliceReport.policeOutcome"></p-sortIcon>
+									</th> -->
+                                    <!-- <th style="width: 150px" pSortableColumn="reportFileUpload">
+                                        {{l('ReportFileUpload')}}
+                                        <p-sortIcon field="casePoliceReport.reportFileUpload"></p-sortIcon>
+                                    </th> -->
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <td
+                                        style="width: 130px"
+                                        [hidden]="
+                                            !isGrantedAny('Pages.CaseLawyers.Edit', 'Pages.CaseLawyers.Delete') ||
+                                            isHidden
+                                        "
+                                    >
+                                        <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i>
+                                                <span class="caret"></span>
+                                                {{ l('Actions') }}
+                                            </button>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <li>
+                                                    <a
+                                                        *ngIf="permission.isGranted('Pages.CasePoliceReports')"
+                                                        class="dropdown-item"
+                                                        (click)="viewCasePoliceReportModal.show(record)"
+                                                    >
+                                                        {{ l('View') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        *ngIf="permission.isGranted('Pages.CasePoliceReports.Edit')"
+                                                        class="dropdown-item"
+                                                        (click)="editCasePoliceReport(record.casePoliceReport)"
+                                                    >
+                                                        {{ l('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        class="dropdown-item"
+                                                        href="javascript:;"
+                                                        *ngIf="permission.isGranted('Pages.CasePoliceReports.Delete')"
+                                                        (click)="deleteCasePoliceReport(record.casePoliceReport)"
+                                                    >
+                                                        {{ l('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width: 130px" [hidden]="!isHidden">
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            (click)="editCasePoliceReport(record.casePoliceReport)"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                            {{ l('View') }}
+                                        </button>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('ReportType') }}</span>
+                                        {{ record.casePoliceReport.reportType }}
+                                    </td>
+                                    <!-- <td style="width:150px">
+										<span class="p-column-title"> {{l('IPD')}}</span>
+										{{record.casePoliceReport.ipd}}
+									</td> -->
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('PoliceStation') }}</span>
+                                        {{ record.casePoliceReport.policeStation }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('OfficerName') }}</span>
+                                        {{ record.casePoliceReport.officerName }}
+                                    </td>
+                                    <!-- <td style="width:150px">
+										<span class="p-column-title"> {{l('ServiceNo')}}</span>
+										{{record.casePoliceReport.serviceNo}}
+									</td> -->
+                                    <!-- <td style="width:150px">
+										<span class="p-column-title"> {{l('OfficerContact')}}</span>
+										{{record.casePoliceReport.officerContact}}
+									</td> -->
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('VehicleNo') }}</span>
+                                        {{ record.casePoliceReport.vehicleNo }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('ReportNo') }}</span>
+                                        {{ record.casePoliceReport.reportNo }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('ReportTime') }}</span>
+                                        <span *ngIf="record.casePoliceReport.reportTime">
+                                            {{ record.casePoliceReport.reportTime | luxonFormat: 'F' }}
+                                        </span>
+                                        <span *ngIf="!record.casePoliceReport.reportTime">-</span>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('IsDataConsistent') }}</span>
+                                        <div *ngIf="record.casePoliceReport.isDataConsistent" class="text-left">
+                                            <i class="fa fa-check-circle text-success" title="True"></i>
+                                        </div>
+                                        <div *ngIf="!record.casePoliceReport.isDataConsistent" class="text-left">
+                                            <i class="fa fa-times-circle" title="False"></i>
+                                        </div>
+                                    </td>
+                                    <!-- <td style="width:150px">
+										<span class="p-column-title"> {{l('LateReport')}}</span>
+										{{record.casePoliceReport.lateReport}}
+									</td>
+									<td style="width:150px">
+										<span class="p-column-title"> {{l('LateReason')}}</span>
+										{{record.casePoliceReport.lateReason}}
+									</td>
+									<td style="width:150px">
+										<span class="p-column-title"> {{l('Type')}}</span>
+										{{record.casePoliceReport.type}}
+									</td>
+									<td style="width:150px">
+										<span class="p-column-title"> {{l('PoliceFinding')}}</span>
+										{{record.casePoliceReport.policeFinding}}
+									</td>
+									<td style="width:150px">
+										<span class="p-column-title"> {{l('PoliceOutcome')}}</span>
+										{{record.casePoliceReport.policeOutcome}}
+									</td> -->
+                                    <!-- <td style="width:150px">
+											<span class="p-column-title"> {{l('ReportFileUpload')}}</span>
+											<a href="{{getDownloadUrl(record.casePoliceReport.reportFileUpload)}}" target="_blank">{{record.casePoliceReport.reportFileUploadFileName}}</a>
+										</td> -->
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ l('NoData') }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator
+                                [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                #paginator
+                                (onPageChange)="getCasePoliceReports($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true"
+                                [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "
+                            ></p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-xl-12 mb-5 mt-5 text-end">
+                        <button
+                            (click)="generateCasePoliceReportSummary()"
+                            class="btn btn-primary blue align-items-center justify-content-center float-right"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                            [disabled]="isHidden"
+                        >
+                            <i class="fa fa-file mb-1"></i>
+                            <span>{{ l('Generate Summary') }}</span>
+                        </button>
+                    </div>
+                    <div class="col-xl-12 mb-5 mt-5">
+                        <h1>Report Summary</h1>
+                        <textarea
+                            id="CasePoliceReport_Statement"
+                            #CasePoliceReportSummary_ReportSummary="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="ReportSummary"
+                            [(ngModel)]="casePoliceReportSummary.reportSummary"
+                            rows="7"
+                            [disabled]="!hasReportSummary"
+                        ></textarea>
+                        <!-- {{ casePoliceReportSummary.reportSummary }} -->
+                    </div>
+                    <div class="col-xl-12 mb-5 mt-5">
+                        <h1>Case Discrepancies</h1>
+                        <textarea
+                            id="CasePoliceReport_Inconsistency"
+                            #CasePoliceReport_Inconsistency="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="Inconsistency"
+                            [(ngModel)]="casePoliceReportSummary.reportInconsistency"
+                            rows="7"
+                            [disabled]="!hasReportSummary"
+                        ></textarea>
+                        <!-- {{ casePoliceReportSummary.reportInconsistency }} -->
+                    </div>
+                    <div class="col-xl-12 mb-5 mt-5 text-end">
+                        <button
+                            (click)="saveReportSummary()"
+                            class="btn btn-primary blue align-items-center justify-content-center float-right"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                            [hidden]="!hasReportSummary"
+                        >
+                            <i class="fa fa-save mb-1"></i>
+                            <span>{{ l('Save') }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <casePoliceReportFileUploadModal
+        #casePoliceReportFileUploadModal
+        (modalSave)="addPoliceReport($event)"
+    ></casePoliceReportFileUploadModal>
+    <viewCasePoliceReportModal #viewCasePoliceReportModal></viewCasePoliceReportModal>
+</div>

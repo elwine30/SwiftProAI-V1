@@ -1,0 +1,269 @@
+﻿<div [@routerTransition]>
+    <sub-header [title]="'Invoice Reports' | localize">
+        <div role="actions">
+            <div class="btn-group" placement="button right">
+                <button class="btn btn-primary" (click)="exportToExcel()">
+                    <i class="fa fa-download btn-md-icon"></i>
+                    <span class="d-none d-md-inline-block">{{ 'Export to Excel' | localize }}</span>
+                </button>
+            </div>
+        </div>
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="off">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-12"></div>
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="invoiceType">Date Type</label>
+                                    <select
+                                        id="dateTypeFilter"
+                                        name="dateTypeFilter"
+                                        class="form-select"
+                                        [(ngModel)]="dateTypeFilter"
+                                    >
+                                        <option value="" disabled>{{ 'Select Due' | localize }}</option>
+                                        <option *ngFor="let dateType of dateTypes" value="{{ dateType.id }}">
+                                            {{ dateType.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div> 
+
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="MinReportDateFilter">
+                                        {{ l('DateRange') }}
+                                    </label>
+                                    <div class="input-group">
+                                        <input
+                                            class="form-control"
+                                            name="AssignmentDateRange"
+                                            #drpCreationDateRange="bsDaterangepicker"
+                                            bsDaterangepicker
+                                            dateRangePickerLuxonModifier
+                                            [(date)]="reportDateRangeFilter"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="InsuranceCompanyFilter">
+                                        {{ 'Select Insurance Company' | localize }}
+                                    </label>
+                                    <select
+                                        id="insuranceCompanyFilter"
+                                        name="insuranceCompanyFilter"
+                                        class="form-select"
+                                        [(ngModel)]="insuranceCompanyFilter"
+                                    >
+                                        <option value="" disabled>{{ 'Select Insurance Company' | localize }}</option>
+                                        <option *ngFor="let company of companies" [value]="company.id">
+                                            {{ company.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="AdjusterIdFilter">{{ l('Select Adjuster') }}</label>
+                                    <select
+                                        id="AdjusterIdFilter"
+                                        name="AdjusterIdFilter"
+                                        class="form-select"
+                                        [(ngModel)]="AdjusterIdFilter"
+                                    >
+                                        <option value="" disabled>{{ 'Select Adjuster' | localize }}</option>
+                                        <option *ngFor="let adjuster of adjusters" [value]="adjuster.id">
+                                            {{ adjuster.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="invoiceType">{{ 'Select Invoice Type' | localize }}</label>
+                                    <select
+                                        id="invoiceTypeFilter"
+                                        name="invoiceTypeFilter"
+                                        class="form-select"
+                                        [(ngModel)]="invoiceTypeFilter"
+                                    >
+                                        <option value="" disabled>{{ 'Select Invoice Type' | localize }}</option>
+                                        <option *ngFor="let type of invoiceTypes" value="{{ type.id }}" >
+                                            {{ type.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="my-4">
+                                    <label class="form-label" for="groupFilter">{{ 'Select Group' | localize }}</label>
+                                    <select
+                                        id="groupFilter"
+                                        name="groupFilter"
+                                        class="form-select"
+                                        [(ngModel)]="groupIdFilter"
+                                    >
+                                        <option value="" disabled>{{ 'Select Group' | localize }}</option>
+                                        <option *ngFor="let group of allGroups" value="{{ group.id }}">
+                                            {{ group.displayName }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-8 mb-5 d-flex justify-content-end">
+                                <div class="my-4">
+                                    <button (click)="resetFilters()" class="btn btn-primary" id="btn-reset-filters">
+                                        <i class="fa fa-sync btn-md-icon"></i>
+                                        <span class="d-none d-md-inline-block">{{ 'Reset' | localize }}</span>
+                                    </button>
+                                    <button (click)="getInvoiceReports()" class="btn btn-primary" id="btn-search-report">
+                                        <i class="fa fa-search btn-md-icon"></i>
+                                        <span class="d-none d-md-inline-block">Search</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                        <p-table
+                            #dataTable
+                            (onLazyLoad)="getInvoiceReports($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                            [paginator]="false"
+                            [lazy]="true"
+                            [scrollable]="true"
+                            ScrollWidth="100%"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px">{{ l('Actions') }}</th>
+                                    <th style="width: 100px">
+                                        {{ l('ID') }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l('ReportDate') }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l('Case No') }}
+                                    </th>
+                                    <th style="width: 160px">
+                                        {{ l('InsuranceCompany') }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l('InsurerRef') }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l('Invoice Ref') }}
+                                    </th>
+                                    <th style="width: 130px">
+                                        {{ l('VehicleNo') }}
+                                    </th>
+                                    <th style="width: 130px">
+                                        {{ l('CaseType') }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l('Adjuster') }}
+                                    </th>
+                                    <th style="width: 150px">
+                                        {{ l('Total Amount') }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <td style="width: 130px">
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            (click)="viewInvoiceReportModal.show(record)"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                            {{ l('View') }}
+                                        </button>
+                                    </td>
+                                    <td style="width: 100px">
+                                        <span class="p-column-title">{{ l('ID') }}</span>
+                                        {{ record.invoiceReport.caseInvoiceId }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('ReportDate') }}</span>
+                                        <span *ngIf="record.invoiceReport.reportDate">
+                                            {{ record.invoiceReport.reportDate | luxonFormat: 'dd/MM/yyyy' }}
+                                        </span>
+                                        <span *ngIf="!record.invoiceReport.reportDate">-</span>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('CaseReference') }}</span>
+                                        {{ record.invoiceReport.caseNo }}
+                                    </td>
+                                    <td style="width: 160px">
+                                        <span class="p-column-title">{{ l('InsuranceCompany') }}</span>
+                                        {{ record.invoiceReport.insuranceCompany }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('InsurerRef') }}</span>
+                                        {{ record.invoiceReport.insurerRef }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Invoice Ref') }}</span>
+                                        {{ record.invoiceReport.invoiceRef }}
+                                    </td>
+                                    <td style="width: 130px">
+                                        <span class="p-column-title">{{ l('VehicleNo') }}</span>
+                                        {{ record.invoiceReport.vehicleNo }}
+                                    </td>
+                                    <td style="width: 130px">
+                                        <span class="p-column-title">{{ l('CaseType') }}</span>
+                                        {{ record.invoiceReport.caseType }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Adjuster') }}</span>
+                                        {{ record.invoiceReport.adjusterName }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Total Amount') }}</span>
+                                        RM {{ record.invoiceReport.invTotal | number:'1.2-2' }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data text-center" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            <h1 style="padding: 10px;">No data available</h1>
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator
+                                [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                #paginator
+                                (onPageChange)="getInvoiceReports($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true"
+                                [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "
+                            ></p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <viewInvoiceReportModal #viewInvoiceReportModal></viewInvoiceReportModal>
+</div>

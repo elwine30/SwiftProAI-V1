@@ -1,0 +1,88 @@
+<style>
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+        border-style: dashed;
+        border-left: none;
+        border-right: none;
+    }
+</style>
+
+<div class="modal-header">
+    <h4 class="modal-title">
+        <span>{{ l('Case Expenses') }}</span>
+    </h4>
+    <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="expensessForm">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="form-label">{{ l('Remarks') }}</label>
+                    <input type="text" name="remark" required maxlength="32" class="form-control" formControlName="remark" 
+                        [ngClass]="{'is-invalid': expensessForm.controls.remark.touched && expensessForm.controls.remark.invalid}"/>
+                    <validation-messages [formCtrl]="expensessForm.controls['remark']"></validation-messages>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="form-label">{{ l('Amount') }}</label>
+                    <input type="number" name="amount" required maxlength="32" class="form-control" formControlName="amount" 
+                        [ngClass]="{'is-invalid': expensessForm.controls.amount.touched && expensessForm.controls.amount.invalid}"/>
+                    <validation-messages [formCtrl]="expensessForm.controls['amount']"></validation-messages>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="form-label">{{ l('Expenses Type') }}</label>
+                    <select class="form-select" name="typeId" required formControlName="typeId" [ngClass]="{'is-invalid': expensessForm.controls.typeId.touched && expensessForm.controls.typeId.invalid}">
+                        <option value="">Select Expense Type</option>
+                        <option *ngFor="let expenseType of expenseTypeList" [value]="expenseType.id">
+                            {{ expenseType.description }}
+                        </option>
+                    </select>
+                    <validation-messages [formCtrl]="expensessForm.controls['typeId']"></validation-messages>
+                </div>
+            </div>
+        </div>
+        <div class="text-end mt-2">
+            <button (click)="saveCaseExpense()" class="btn btn-primary blue float-right" [buttonBusy]="saving"
+                [disabled]="!expensessForm.valid"
+                [busyText]="l('SavingWithThreeDot')">
+                <i class="fa fa-save"></i>
+                <span>{{ l('Save') }}</span>
+            </button>
+        </div>
+    </form>
+    <hr *ngIf="showTable" class="my-2" />
+    <table *ngIf="showTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col" style="background: #e4e4e4;font-weight: 500;">{{ l('Remarks') }}</th>
+                <th scope="col" style="background: #e4e4e4;font-weight: 500;">{{ l('Amount') }}</th>
+                <th scope="col" style="background: #e4e4e4;font-weight: 500;">{{ l('Expense Type') }}</th>
+                <th scope="col" style="background: #e4e4e4;font-weight: 500;">{{ l('Created By') }}</th>
+                <th scope="col" style="background: #e4e4e4;font-weight: 500;">{{ l('Created Date') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="!caseExpensesList || caseExpensesList.length === 0">
+                <td colspan="5" class="text-center">No data available</td>
+            </tr>
+            <tr *ngFor="let expense of caseExpensesList">
+                <td>{{ expense.remarks }}</td>
+                <td class="text-end">{{ expense.amount | number: '1.2-2' }}</td>
+                <td>{{ expense.typeOfExpenses }}</td>
+                <td>{{ expense.createdBy }}</td>
+                <td>{{ expense.createdDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

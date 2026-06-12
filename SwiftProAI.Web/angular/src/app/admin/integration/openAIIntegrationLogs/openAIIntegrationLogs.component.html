@@ -1,0 +1,293 @@
+﻿<div [@routerTransition]>
+    <sub-header [title]="'OpenAIIntegrationLogs' | localize"></sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="off">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <!-- Dropdown -->
+                                <label class="form-label" for="organizationUnitList">
+                                    {{ l('Organization Unit') }}
+                                </label>
+
+                                <select
+                                    class="form-control"
+                                    [(ngModel)]="organizationUnitId"
+                                    (change)="onDropdownChange($event)"
+                                    [ngModelOptions]="{ standalone: true }"
+                                >
+                                    <option *ngFor="let unit of organizationUnitList" [value]="unit.id">
+                                        {{ unit.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row" [hidden]="!advancedFiltersAreShown">
+                            <!-- <div class="col-md-12">
+						         
+						     </div> -->
+                            <div class="col-md-3">
+                                <div class="my-3">
+                                    <label class="form-label" for="CaseNoFilter">{{ l('CaseNo') }}</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="CaseNoFilter"
+                                        name="caseNoFilter"
+                                        [(ngModel)]="caseNoFilter"
+                                        (ngModelChange)="getOpenAIIntegrationLogs()"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="my-3">
+                                    <label class="form-label" for="ActionUrlFilter">{{ l('ActionUrl') }}</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="ActionUrlFilter"
+                                        name="actionUrlFilter"
+                                        [(ngModel)]="actionUrlFilter"
+                                        (ngModelChange)="getOpenAIIntegrationLogs()"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="my-3">
+                                    <label class="form-label" for="dateRangePicker">{{ l('Created Date') }}</label>
+                                    <input
+                                        type="text"
+                                        id="dateRangePicker"
+                                        class="form-control"
+                                        bsDaterangepicker
+                                        (ngModelChange)="getOpenAIIntegrationLogs()"
+                                        [(ngModel)]="assignmentDateRange"
+                                        [ngModelOptions]="{ standalone: true }"
+                                        placeholder="Select Date Range"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="RequestFilter">{{l("Request")}}</label>
+									<input type="text" class="form-control" id="RequestFilter" name="requestFilter" [(ngModel)]="requestFilter" (ngModelChange)="getOpenAIIntegrationLogs()">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="ResponseFilter">{{l("Response")}}</label>
+									<input type="text" class="form-control" id="ResponseFilter" name="responseFilter" [(ngModel)]="responseFilter" (ngModelChange)="getOpenAIIntegrationLogs()">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="my-3">
+									<label class="form-label" for="MinPromptTokenFilter">{{l("MinMax")}} {{l("PromptToken")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinPromptTokenFilter" [(ngModel)]="minPromptTokenFilter" placeholder="{{l('MinValue')}}" name="minPromptTokenFilter" (ngModelChange)="getOpenAIIntegrationLogs()"/>
+                                        <input type="number" class="form-control" [(ngModel)]="maxPromptTokenFilter" placeholder="{{l('MaxValue')}}" name="maxPromptTokenFilter" (ngModelChange)="getOpenAIIntegrationLogs()"/>
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="my-3">
+									<label class="form-label" for="MinCompletionTokenFilter">{{l("MinMax")}} {{l("CompletionToken")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinCompletionTokenFilter" [(ngModel)]="minCompletionTokenFilter" placeholder="{{l('MinValue')}}" name="minCompletionTokenFilter" (ngModelChange)="getOpenAIIntegrationLogs()"/>
+                                        <input type="number" class="form-control" [(ngModel)]="maxCompletionTokenFilter" placeholder="{{l('MaxValue')}}" name="maxCompletionTokenFilter" (ngModelChange)="getOpenAIIntegrationLogs()"/>
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="my-3">
+									<label class="form-label" for="MinTotalCostFilter">{{l("MinMax")}} {{l("TotalCost")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinTotalCostFilter" [(ngModel)]="minTotalCostFilter" placeholder="{{l('MinValue')}}" name="minTotalCostFilter" (ngModelChange)="getOpenAIIntegrationLogs()"/>
+                                        <input type="number" class="form-control" [(ngModel)]="maxTotalCostFilter" placeholder="{{l('MaxValue')}}" name="maxTotalCostFilter" (ngModelChange)="getOpenAIIntegrationLogs()"/>
+									</div>
+                                </div>
+                            </div> -->
+                            <div class="col-md-12 mt-5">
+                                <button
+                                    (click)="resetFilters()"
+                                    class="btn btn-secondary btn-sm"
+                                    id="btn-reset-filters"
+                                >
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <div class="col-sm-12">
+                                <span
+                                    class="clickable-item text-muted"
+                                    *ngIf="!advancedFiltersAreShown"
+                                    (click)="advancedFiltersAreShown = !advancedFiltersAreShown"
+                                >
+                                    <i class="fa fa-angle-down"></i>
+                                    {{ l('ShowAdvancedFilters') }}
+                                </span>
+                                <span
+                                    class="clickable-item text-muted"
+                                    *ngIf="advancedFiltersAreShown"
+                                    (click)="advancedFiltersAreShown = !advancedFiltersAreShown"
+                                >
+                                    <i class="fa fa-angle-up"></i>
+                                    {{ l('HideAdvancedFilters') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                        <p-table
+                            #dataTable
+                            (onLazyLoad)="getOpenAIIntegrationLogs($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                            [paginator]="false"
+                            [lazy]="true"
+                            [scrollable]="true"
+                            ScrollWidth="100%"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px">{{ l('Actions') }}</th>
+                                    <th style="width: 150px" pSortableColumn="caseNo">
+                                        {{ l('CaseNo') }}
+                                        <p-sortIcon field="openAIIntegrationLog.caseNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="organizationUnit">
+                                        {{ l('Organization Unit') }}
+                                        <p-sortIcon field="organizationUnitName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="actionUrl">
+                                        {{ l('ActionUrl') }}
+                                        <p-sortIcon field="openAIIntegrationLog.actionUrl"></p-sortIcon>
+                                    </th>
+
+                                    <th style="width: 150px" pSortableColumn="promptToken">
+                                        {{ l('PromptToken') }}
+                                        <p-sortIcon field="openAIIntegrationLog.promptToken"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="completionToken">
+                                        {{ l('CompletionToken') }}
+                                        <p-sortIcon field="openAIIntegrationLog.completionToken"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="totalCost">
+                                        {{ l('TotalCost') }}($)
+                                        <p-sortIcon field="openAIIntegrationLog.totalCost"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="createdDate">
+                                        {{ l('Created Date') }}
+                                        <p-sortIcon field="createdDate"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <!-- <td style="width: 130px"
+                                        [hidden]="!isGrantedAny('Pages.Administration.OpenAIIntegrationLogs.Edit', 'Pages.Administration.OpenAIIntegrationLogs.Delete')">
+                                       <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            </button>
+												<ul class="dropdown-menu"  *dropdownMenu>
+												<li>
+													<a href="javascript:;" class="dropdown-item"
+														(click)="viewOpenAIIntegrationLogModal.show(record)">{{l('View')}}</a>
+												</li>
+												<li>
+                                                <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.OpenAIIntegrationLogs.Edit')" class="dropdown-item"
+														(click)="createOrEditOpenAIIntegrationLogModal.show(record.openAIIntegrationLog.id)">{{l('Edit')}}</a>												
+                                                </li>
+												<li>
+											        <a class="dropdown-item" href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.OpenAIIntegrationLogs.Delete')"
+														(click)="deleteOpenAIIntegrationLog(record.openAIIntegrationLog)">{{l('Delete')}}</a>
+												</li>
+                                            </ul>
+                                        </div>
+                                    </td> -->
+                                    <td style="width: 100px">
+                                        <button
+                                            class="btn btn-sm btn-primary"
+                                            (click)="viewOpenAIIntegrationLogModal.show(record)"
+                                        >
+                                            <i class="fa fa-eye"></i>
+                                            {{ l('View') }}
+                                        </button>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('CaseNo') }}</span>
+                                        {{ record.openAIIntegrationLog.caseNo }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Organization Unit') }}</span>
+                                        {{ record.organizationUnitName }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('ActionUrl') }}</span>
+                                        {{ record.openAIIntegrationLog.actionUrl }}
+                                    </td>
+                                    <!-- <td style="width:150px">
+											<span class="p-column-title"> {{l('Request')}}</span>
+											{{record.openAIIntegrationLog.request}}
+										</td>
+                                    <td style="width:150px">
+											<span class="p-column-title"> {{l('Response')}}</span>
+											{{record.openAIIntegrationLog.response}}
+										</td> -->
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('PromptToken') }}</span>
+                                        {{ record.openAIIntegrationLog.promptToken }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('CompletionToken') }}</span>
+                                        {{ record.openAIIntegrationLog.completionToken }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('TotalCost') }}</span>
+                                        {{ record.openAIIntegrationLog.totalCost }}
+                                    </td>
+
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Created On') }}</span>
+                                        {{ record.createdDate | date: 'dd-MM-yyyy HH:mm' }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ l('NoData') }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator
+                                [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                #paginator
+                                (onPageChange)="getOpenAIIntegrationLogs($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true"
+                                [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "
+                            ></p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <createOrEditOpenAIIntegrationLogModal #createOrEditOpenAIIntegrationLogModal (modalSave)="getOpenAIIntegrationLogs()"></createOrEditOpenAIIntegrationLogModal>     -->
+    <viewOpenAIIntegrationLogModal #viewOpenAIIntegrationLogModal></viewOpenAIIntegrationLogModal>
+</div>

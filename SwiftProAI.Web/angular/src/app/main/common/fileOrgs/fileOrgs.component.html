@@ -1,0 +1,149 @@
+﻿<div [@routerTransition]>
+    <sub-header [title]="'FileOrgs' | localize" [description]="'FileOrgsHeaderInfo' | localize"></sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="off">
+                    <div class="d-flex justify-content-end m-3">
+                        <button [hidden]="isFileViewOnly"
+                        *ngIf="selectedField" class="btn btn-primary" (click)="uploadFile(selectedField)">
+                            <i class="fas fa-upload"></i>
+                            Upload
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-3 sided-bar">
+                            <div class="side-tree">
+                                <ul>
+                                    <li *ngFor="let registration of mainRegistrations">
+                                        <div class="registration-name always-expanded">
+                                            <i class="folder-icon fas fa-folder-open"></i>
+                                            <span>{{ registration.name }}</span>
+                                        </div>
+                                        <ul>
+                                            <li *ngFor="let entity of registration.entities">
+                                                <div
+                                                    class="entity-name"
+                                                    (click)="toggle(entity)"
+                                                    [class.expanded]="entity.expanded"
+                                                >
+                                                    <i
+                                                        class="folder-icon fas"
+                                                        [ngClass]="entity.expanded ? 'fa-folder-open' : 'fa-folder'"
+                                                    ></i>
+                                                    <span>{{ entity.name }}</span>
+                                                    <i
+                                                        class="arrow fas"
+                                                        [ngClass]="
+                                                            entity.expanded ? 'fa-chevron-right' : 'fa-chevron-right'
+                                                        "
+                                                    ></i>
+                                                </div>
+                                                <ul *ngIf="entity.expanded" class="field-list">
+                                                    <li *ngFor="let field of entity.fields">
+                                                        <div (click)="selectField(field)">
+                                                            <i class="file-icon fas fa-file-alt"></i>
+                                                            {{ field.name }}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-9">
+                            <div class="table-responsive" style="padding: 15px">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xl-9">File</th>
+                                            <th class="col-xl-3 file-actions">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let file of filesList">
+                                            <td>
+                                                <div class="file-info d-flex align-items-center">
+                                                    <i
+                                                        class="file-icon fas"
+                                                        [ngClass]="getFileTypeIcon(file.fileType)"
+                                                        [ngStyle]="getFileTypeColor(file.fileType)"
+                                                        style="font-size: 3em"
+                                                    ></i>
+                                                    <span
+                                                        *ngIf="!file.isEditing"
+                                                        class="file-name align-items-center ml-3"
+                                                    >
+                                                        {{ file.fileName }}
+                                                    </span>
+                                                    <input
+                                                        *ngIf="file.isEditing"
+                                                        type="text"
+                                                        [(ngModel)]="file.fileName"
+                                                        class="form-control ml-3"
+                                                        style="margin-left: 5em"
+                                                        name="fileName"
+                                                    />
+                                                </div>
+                                            </td>
+
+                                            <td class="row">
+                                                <div class="d-flex">
+                                                    <!-- Normal Actions -->
+                                                    <button
+                                                        *ngIf="!file.isEditing"
+                                                        class="btn btn-primary btn-sm me-2"
+                                                        (click)="viewFile(file)"
+                                                    >
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button
+                                                        *ngIf="!file.isEditing"
+                                                        class="btn btn-secondary btn-sm me-2"
+                                                        (click)="editFile(file)"
+                                                    >
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button
+                                                        *ngIf="!file.isEditing"
+                                                        class="btn btn-danger btn-sm me-2"
+                                                        (click)="deleteFile(file)"
+                                                    >
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+
+                                                    <!-- Editing Actions -->
+                                                    <button
+                                                        *ngIf="file.isEditing"
+                                                        class="btn btn-success btn-sm me-2"
+                                                        (click)="saveFileName(file)"
+                                                    >
+                                                        <i class="fas fa-save"></i>
+                                                    </button>
+                                                    <button
+                                                        *ngIf="file.isEditing"
+                                                        class="btn btn-secondary btn-sm me-2"
+                                                        (click)="cancelEdit(file)"
+                                                    >
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <file-viewer-modal #fileViewerModal></file-viewer-modal>
+    <file-upload-modal #fileUploadModal></file-upload-modal>
+</div>

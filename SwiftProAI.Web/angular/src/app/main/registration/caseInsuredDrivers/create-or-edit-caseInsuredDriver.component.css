@@ -1,0 +1,9 @@
+.SameWithOwnerDiv{
+    padding: 10px;
+}
+
+.SameWithOwnerLabel{
+    font-size: medium;
+    font-weight: bolder;
+    color: black;
+}

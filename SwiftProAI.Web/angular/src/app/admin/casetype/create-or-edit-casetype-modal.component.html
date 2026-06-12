@@ -1,0 +1,56 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #casetypeForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="casetype.id">{{l("EditCasetype")}}</span>
+                        <span *ngIf="!casetype.id">{{l("CreateNewCaseType")}}</span>
+                    </h4>
+
+
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close"
+                        [disabled]="saving"></button>
+
+                </div>
+                <div class="modal-body">
+
+                    <div class="my-3">
+                        <label class="form-label" for="Casetype_description">{{l("CaseTypeDescription")}}</label>
+                        <input type="text" #Casetype_description="ngModel" id="Casetype_description" class="form-control"
+                            [(ngModel)]="casetype.description" name="Casetype_description" />
+                        <validation-messages [formCtrl]="Casetype_description"></validation-messages>
+                    </div>
+
+                    <div class="my-3">
+                        <label class="form-label" for="Casetype_shortname">{{l("CasetypeShortName")}}</label>
+                        <input type="text" #Casetype_shortname="ngModel" id="Casetype_shortname"
+                            class="form-control" [(ngModel)]="casetype.shortName" name="Casetype_shortname" />
+                        <validation-messages [formCtrl]="Casetype_shortname"></validation-messages>
+                    </div>
+
+                    <br />
+                    <label class="form-check form-check-custom form-check-solid">
+                        <input id="Casetype_IsActive" #Casetype_IsActive="ngModel" name="IsActive"
+                            [(ngModel)]="casetype.isActive" type="checkbox" class="form-check-input" />
+                        <span class="form-check-label">
+                            {{l("IsActive")}}
+                        </span>
+                    </label>
+                    <validation-messages [formCtrl]="Casetype_IsActive"></validation-messages>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold"
+                        (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!casetypeForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

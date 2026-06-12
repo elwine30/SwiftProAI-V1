@@ -1,0 +1,54 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #vehicleForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="vehicle.id">{{l("EditVehicle")}}</span>
+                        <span *ngIf="!vehicle.id">{{l("CreateNewVehicle")}}</span>
+                    </h4>
+
+
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close"
+                        [disabled]="saving"></button>
+
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="my-3">
+                        <label class="form-label" for="Vehicle_Make">{{l("Make")}}</label>
+                        <input type="text" #Vehicle_Make="ngModel" id="Vehicle_Make" class="form-control"
+                            [(ngModel)]="vehicle.make" name="Make" />
+                        <validation-messages [formCtrl]="Vehicle_Make"></validation-messages>
+                    </div>
+
+                    <div class="my-3">
+                        <label class="form-label" for="Vehicle_Model">{{l("Model")}}</label>
+                        <input type="text" #Vehicle_Model="ngModel" id="Vehicle_Model" class="form-control"
+                            [(ngModel)]="vehicle.model" name="Model" />
+                        <validation-messages [formCtrl]="Vehicle_Model"></validation-messages>
+                    </div>
+
+                    <div class="my-3">
+                        <label class="form-label" for="Vehicle_Specification">{{l("Specification")}}</label>
+                        <input type="text" #Vehicle_Specification="ngModel" id="Vehicle_Specification"
+                            class="form-control" [(ngModel)]="vehicle.specification" name="Specification" />
+                        <validation-messages [formCtrl]="Vehicle_Specification"></validation-messages>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default"
+                        (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!vehicleForm.form.valid"
+                        [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i>
+                        <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

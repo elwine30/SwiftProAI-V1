@@ -1,0 +1,46 @@
+<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <sub-header [title]="'INSURER' | localize"></sub-header>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Company') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ companyName }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Reference No') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.referenceNo }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Name') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.name }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Contact') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.contact }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Email') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.email }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

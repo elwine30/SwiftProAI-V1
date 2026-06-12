@@ -1,0 +1,109 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b p-4">
+            <sub-header [title]="'GENERAL' | localize"></sub-header>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Branch Name') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.branchName }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Adjuster Name') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.adjusterName }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Case Type') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.caseTypeName }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Adjuster Contact') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.adjusterContact }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('TAT') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.scopeAssignmentDescription }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Assignment Date') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.assignmentTime.toJSDate() | date: 'dd/MM/yyyy' }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('ExtendedCompletionDate') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ extendedCompletionDateString }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('ExtendCompletionRemark') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ caseAdj.extendCompletionRemark }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Assignment Scope') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.scopeAssignmentDescription }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Status') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ caseAdj.statusName || 'N/A' }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('State') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.stateName }}</span>
+                    </div>
+
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Editor') }}:</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.editorUserName }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <a [routerLink]="['/app/main/dashboard']" class="btn btn-primary blue mr-2">
+                    <i class="fa fa-arrow-left"></i>
+                    <span>{{ l('Back') }}</span>
+                </a>
+
+                <a
+                    [routerLink]="[navigationService.step2Url]"
+                    [queryParams]="{ id: registerId, stepId: 2 }"
+                    class="btn btn-primary green"
+                >
+                    <i class="fa fa-arrow-right"></i>
+                    <span>{{ l('Next') }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

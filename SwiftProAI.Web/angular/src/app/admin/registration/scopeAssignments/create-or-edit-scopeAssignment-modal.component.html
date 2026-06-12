@@ -1,0 +1,89 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #scopeAssignmentForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="scopeAssignment.id">{{ l('EditScopeAssignment') }}</span>
+                        <span *ngIf="!scopeAssignment.id">{{ l('CreateNewScopeAssignment') }}</span>
+                    </h4>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        aria-label="Close"
+                        [disabled]="saving"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="my-3">
+                        <label class="form-label" for="ScopeAssignment_Description">{{ l('Description') }} *</label>
+                        <input
+                            type="text"
+                            #ScopeAssignment_Description="ngModel"
+                            id="ScopeAssignment_Description"
+                            class="form-control"
+                            [(ngModel)]="scopeAssignment.description"
+                            name="Description"
+                            required
+                            [disabled]="scopeAssignment.description == 'Others' && scopeAssignment.id > 0"
+                        />
+                        <validation-messages [formCtrl]="ScopeAssignment_Description"></validation-messages>
+                    </div>
+
+                    <br />
+                    <label class="form-check form-check-custom form-check-solid">
+                        <input
+                            id="ScopeAssignment_isActive"
+                            #ScopeAssignment_isActive="ngModel"
+                            name="isActive"
+                            [(ngModel)]="scopeAssignment.isActive"
+                            type="checkbox"
+                            class="form-check-input"
+                            [disabled]="scopeAssignment.description == 'Others' && scopeAssignment.id > 0"
+                        />
+                        <span class="form-check-label">
+                            {{ l('isActive') }}
+                        </span>
+                    </label>
+                    <validation-messages [formCtrl]="ScopeAssignment_isActive"></validation-messages>
+                    <br />
+                    <div *ngIf="scopeAssignment.description == 'Others' && scopeAssignment.id">
+                        <p style="color: orange">
+                            <b>NOTE:</b>
+                            "Others" cannot be created / edited / deleted as it is a system value
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">
+                        {{ l('Back') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="
+                            !scopeAssignmentForm.form.valid ||
+                            (scopeAssignment.description == 'Others' && scopeAssignment.id)
+                        "
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

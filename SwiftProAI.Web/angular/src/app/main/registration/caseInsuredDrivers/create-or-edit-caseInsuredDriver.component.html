@@ -1,0 +1,983 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="form-group row">
+                <div class="col-xl-10 mb-5">
+                    <sub-header [title]="'InsuredDriver' | localize"></sub-header>
+                </div>
+                <div class="col-xl-2 mb-5 mt-5 text-end">
+                    <button (click)="showModal()" class="btn btn-primary blue"
+                        style="margin-right: 30px;" [hidden] = "isHidden">
+                        <i class="fa-solid fa-wand-magic-sparkles fa-xl" style="font-size: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body" #containerDiv>
+                <form #caseDriverPersonForm="ngForm">
+                    <div class="form-group row">
+                        <div
+                            class="col-xl-6 mb-5 form-check form-check-custom form-check-solid form-check-lg SameWithOwnerDiv"
+                        >
+                            <br />
+                            <input #CaseInsuredDriver_SameWithOwner
+                                class="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="CaseInsuredDriver_SameWithOwner"
+                                name="isSameAsOwner"
+                                (change)="onchange()"
+                                [(ngModel)]="isSameAsOwner"
+                            />
+                            <label class="form-check-label SameWithOwnerLabel" for="CaseInsuredDriver_SameWithOwner">
+                                Information Same As Insured Owner
+                            </label>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <label for="CaseInsuredDriver_Relationship">{{ l('Relationship') }}</label>
+                            <select
+                                id="CaseInsuredDriver_Relationship"
+                                #CaseInsuredDriver_Relationship
+                                *ngIf="!isSameAsOwner"
+                                name="Relationship"
+                                class="form-select"
+                                [(ngModel)]="caseInsuredDriver.relationship"
+                                required
+                            >
+                                <option *ngFor="let item of Relationship" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <select
+                                id="CaseInsuredDriver_Relationship"
+                                #CaseInsuredDriver_Relationship
+                                *ngIf="isSameAsOwner"
+                                name="Relationship"
+                                class="form-select"
+                                [(ngModel)]="caseInsuredDriver.relationship"
+                                required
+                            >
+                                <option *ngFor="let item of SameOwnerRelationship" [value]="item.value">
+                                    {{ item.value }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label for="CaseInsuredDriver_Name">{{ l('Name') }}</label>
+                        <input
+                            type="text"
+                            #CaseInsuredDriver_Name
+                            id="CaseInsuredDriver_Name"
+                            class="form-control"
+                            [(ngModel)]="caseInsuredDriver.name"
+                            name="Name"
+                            minlength="0"
+                            maxlength="200"
+                            required
+                        />
+                        <validation-messages [formCtrl]="CaseInsuredDriver_Name"></validation-messages>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <label for="CaseInsuredDriver_IdenticationType">{{ l('IdenticationType') }}</label>
+                        <select
+                            id="CaseInsuredDriver_IdenticationType"
+                            #CaseInsuredDriver_IdenticationType
+                            name="IdenticationType"
+                            class="form-select"
+                            [(ngModel)]="caseInsuredDriver.identicationType"
+                            required
+                        >
+                            <option *ngFor="let idType of IDType" [value]="idType.description">
+                                {{ idType.description }}
+                            </option>
+                        </select>
+                        <!-- <input type="text" #CaseInsuredDriver_IdenticationType="ngModel" id="CaseInsuredDriver_IdenticationType"
+                            class="form-control" [(ngModel)]="caseInsuredDriver.identicationType" name="IdenticationType" /> -->
+                        <validation-messages [formCtrl]="CaseInsuredDriver_IdenticationType"></validation-messages>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <label for="CaseInsuredDriver_IdenticationNo">{{ l('IdenticationNo') }}</label>
+                        <input
+                            type="text"
+                            #CaseInsuredDriver_IdenticationNo
+                            id="CaseInsuredDriver_IdenticationNo"
+                            class="form-control"
+                            [(ngModel)]="caseInsuredDriver.identicationNo"
+                            name="IdenticationNo"
+                            minlength="0"
+                            maxlength="50"
+                            required
+                        />
+                        <validation-messages [formCtrl]="CaseInsuredDriver_IdenticationNo"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label for="MainRegistrationVehicleNo">{{ l('VehicleNo') }}</label>
+                        <input type="text" name="MainRegistrationVehicleNo" #InsuredDriver_VehicleNo [(ngModel)]="mainRegistrationVehicleNo" 
+                        class="form-control" disabled>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <label for="CaseInsuredDriver_PolicyNo">{{ l('PolicyNo') }}</label>
+                        <input
+                            type="text"
+                            #CaseInsuredDriver_PolicyNo
+                            id="CaseInsuredDriver_PolicyNo"
+                            class="form-control"
+                            [(ngModel)]="caseInsuredDriver.policyNo"
+                            name="PolicyNo"
+                            minlength="0"
+                            maxlength="20"
+                            required
+                        />
+                        <validation-messages [formCtrl]="CaseInsuredDriver_PolicyNo"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6">
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Make">{{ l('Make') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Make
+                                id="CaseInsuredDriver_Make"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.make"
+                                name="Make"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Make"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Model">{{ l('Model') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Model
+                                id="CaseInsuredDriver_Model"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.model"
+                                name="Model"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Model"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Specs">{{ l('Specs') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Specs
+                                id="CaseInsuredDriver_Specs"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.specs"
+                                name="Specs"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Specs"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Year">{{ l('Year') }}</label>
+                            <input
+                                type="number"
+                                #CaseInsuredDriver_Year
+                                id="CaseInsuredDriver_Year"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.year"
+                                name="Year"
+                                required
+                                onlyNumber
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Year"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Valuation">{{ l('Valuation') }}</label>
+                            <input
+                                type="number"
+                                #CaseInsuredDriver_Valuation
+                                id="CaseInsuredDriver_Valuation"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.valuation"
+                                name="Valuation"
+                                required
+                                amount
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Valuation"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_ValuationEquiry">{{ l('ValuationEquiry') }}</label>
+                            <input
+                                type="number"
+                                #CaseInsuredDriver_ValuationEquiry
+                                id="CaseInsuredDriver_ValuationEquiry"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.valuationEquiry"
+                                name="ValuationEquiry"
+                                required
+                                amount
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_ValuationEquiry"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_JpjRegisterNo">{{ l('JpjRegisterNo') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_JpjRegisterNo
+                                id="CaseInsuredDriver_JpjRegisterNo"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.jpjRegisterNo"
+                                name="JpjRegisterNo"
+                                minlength="0"
+                                maxlength="50"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_JpjRegisterNo"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_JpjRegisterDate">{{ l('JpjRegisterDate') }}</label>
+                            <input required class="form-control m-input" #CaseInsuredDriver_JpjRegisterDate
+                                bsDatepicker datePickerLuxonModifier [(ngModel)]="jpjRegisterDateString"
+                                id="CaseInsuredDriver_JpjRegisterDate" name="CaseInsuredDriver_JpjRegisterDate" />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_JpjRegisterDate"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Coverage">{{ l('Coverage') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Coverage 
+                                id="CaseInsuredDriver_Coverage"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.coverage"
+                                name="Coverage"
+                                minlength="0"
+                                maxlength="50"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Coverage"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Contact">{{ l('Contact') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Contact
+                                id="CaseInsuredDriver_Contact"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.contact"
+                                name="Contact"
+                                onlyNumber
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Contact"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Nationality">{{ l('Nationality') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Nationality
+                                id="CaseInsuredDriver_Nationality"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.nationality"
+                                name="Nationality"
+                                minlength="0"
+                                maxlength="50"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Nationality"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Address">{{ l('Address') }}</label>
+                            <textarea
+                                #CaseInsuredDriver_Address
+                                id="CaseInsuredDriver_Address"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.address"
+                                name="Address"
+                                minlength="0"
+                                maxlength="200"
+                                required
+                                aria-label="With textarea"
+                            ></textarea>
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Address"></validation-messages>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Postcode">{{ l('Postcode') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Postcode
+                                id="CaseInsuredDriver_Postcode"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.postcode"
+                                name="Postcode"
+                                minlength="0"
+                                maxlength="20"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Postcode"></validation-messages>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_City">{{ l('City') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_City
+                                id="CaseInsuredDriver_City"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.city"
+                                name="City"
+                                minlength="0"
+                                maxlength="50"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_City"></validation-messages>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="LocationName2">{{ l('State') }}</label>
+                            <select
+                                #CaseInsuredDriver_StateLocationId
+                                name="caseInsuredDriver.stateLocationId"
+                                [(ngModel)]="caseInsuredDriver.stateLocationId"
+                                required
+                                class="form-select"
+                            >
+                                <option value="">{{ l('SelectAState') }}</option>
+                                <option *ngFor="let item of allStateLocations" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="LocationName">{{ l('Country') }}</label>
+                            <select
+                                #CaseInsuredDriver_CountryLocationId
+                                name="caseInsuredDriver.countryLocationId"
+                                [(ngModel)]="caseInsuredDriver.countryLocationId"
+                                required
+                                (ngModelChange)="onCountrySelect($event)"
+                                class="form-select"
+                            >
+                                <option value="">{{ l('SelectACountry') }}</option>
+                                <option *ngFor="let item of allCountryLocations" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6">
+                        <div class="form-group mb-5">
+                            <label for="HospitalName">{{ l('Hospital') }}</label>
+                            <select
+                                #CaseInsuredDriver_HospitalId
+                                name="caseInsuredDriver.hospitalId"
+                                [(ngModel)]="caseInsuredDriver.hospitalId"
+                                (ngModelChange)="updateHospitalAddress($event)"
+                                required
+                                class="form-select"
+                            >
+                                <option value="">{{ l('SelectAHospital') }}</option>
+                                <option *ngFor="let item of allHospitals" value="{{ item.id }}">
+                                    {{ item.displayName }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_HospitalAddress">
+                                {{ l('Hospital') }} {{ l('Address') }}
+                            </label>
+                            <textarea
+                                type="text"
+                                #CaseInsuredDriver_HospitalAddress
+                                id="CaseInsuredDriver_HospitalAddress"
+                                disabled
+                                class="form-control"
+                                [(ngModel)]="hospitalAddress"
+                                name="hospitalAddress"
+                                aria-label="With textarea"
+                            ></textarea>
+                            <validation-messages [formCtrl]="CaseInsuredDriver_HospitalAddress"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_Occupation">{{ l('Occupation') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_Occupation
+                                id="CaseInsuredDriver_Occupation"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.occupation"
+                                name="Occupation"
+                                minlength="0"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_Occupation"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_EmployerName">{{ l('EmployerName') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_EmployerName
+                                id="CaseInsuredDriver_EmployerName"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.employerName"
+                                name="EmployerName"
+                                minlength="0"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_EmployerName"></validation-messages>
+                        </div>
+                        <!-- <div class="form-group m-form__group">
+                    <label for="LocationName3">{{l("EmployerCountry")}}</label>
+                    <select name="caseInsuredDriver.employerCountryId" [(ngModel)]="caseInsuredDriver.employerCountryId"
+                        class="form-select">
+                        <option value="">{{l("SelectALocation")}}</option>
+                        <option *ngFor="let item of allLocations" value="{{item.id}}">{{item.displayName}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group m-form__group">
+                    <label for="LocationName4">{{l("EmployerState")}}</label>
+                    <select name="caseInsuredDriver.employerStateId" [(ngModel)]="caseInsuredDriver.employerStateId"
+                        class="form-select">
+                        <option value="">{{l("SelectALocation")}}</option>
+                        <option *ngFor="let item of allLocations" value="{{item.id}}">{{item.displayName}}</option>
+                    </select>
+                </div>
+
+
+                <div class="my-3">
+                    <label class="form-label" for="CaseInsuredDriver_EmployerPostcode">{{l("EmployerPostcode")}}</label>
+                    <input type="number" #CaseInsuredDriver_EmployerPostcode="ngModel" id="CaseInsuredDriver_EmployerPostcode"
+                        class="form-control" [(ngModel)]="caseInsuredDriver.employerPostcode" name="EmployerPostcode" />
+                    <validation-messages [formCtrl]="CaseInsuredDriver_EmployerPostcode"></validation-messages>
+                </div>
+
+                <div class="form-group">
+                    <label for="CaseInsuredDriver_EmployerCity">{{l("EmployerCity")}}</label>
+                    <input type="text" #CaseInsuredDriver_EmployerCity="ngModel" id="CaseInsuredDriver_EmployerCity"
+                        class="form-control" [(ngModel)]="caseInsuredDriver.employerCity" name="EmployerCity" />
+                    <validation-messages [formCtrl]="CaseInsuredDriver_EmployerCity"></validation-messages>
+                </div> -->
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_EmployerAddress">{{ l('EmployerAddress') }}</label>
+                            <textarea
+                                type="text"
+                                #CaseInsuredDriver_EmployerAddress
+                                aria-label="With textarea"
+                                id="CaseInsuredDriver_EmployerAddress"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.employerAddress"
+                                name="EmployerAddress"
+                                minlength="0"
+                                maxlength="200"
+                            ></textarea>
+                            <validation-messages [formCtrl]="CaseInsuredDriver_EmployerAddress"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_EmployerContact">{{ l('EmployerContact') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_EmployerContact
+                                id="CaseInsuredDriver_EmployerContact"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.employerContact"
+                                name="EmployerContact"
+                                onlyNumber
+                            />
+                            <!-- <validation-messages [formCtrl]="CaseInsuredDriver_EmployerContact"></validation-messages> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xl-6">
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_LicenseClasses">{{ l('LicenseClasses') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_LicenseClasses
+                                id="CaseInsuredDriver_LicenseClasses"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.licenseClasses"
+                                name="LicenseClasses"
+                                minlength="0"
+                                maxlength="20"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_LicenseClasses"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_LicenseNo">{{ l('LicenseNo') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_LicenseNo
+                                id="CaseInsuredDriver_LicenseNo"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.licenseNo"
+                                name="LicenseNo"
+                                minlength="0"
+                                maxlength="20"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_LicenseNo"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_DrivingExperience">{{ l('DrivingExperience') }}</label>
+                            <input
+                                type="text"
+                                #CaseInsuredDriver_DrivingExperience
+                                id="CaseInsuredDriver_DrivingExperience"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.drivingExperience"
+                                name="DrivingExperience"
+                                minlength="0"
+                                maxlength="20"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_DrivingExperience"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_MonthlyIncome">{{ l('MonthlyIncome') }}</label>
+                            <input
+                                type="number"
+                                #CaseInsuredDriver_MonthlyIncome
+                                id="CaseInsuredDriver_MonthlyIncome"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredDriver.monthlyIncome"
+                                name="MonthlyIncome"
+                                amount
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_MonthlyIncome"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_LicenseDateFrom">{{ l('LicenseDateFrom') }}</label>
+                            <input
+                                required
+                                class="form-control m-input"
+                                #CaseInsuredDriver_LicenseDateFrom
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [(ngModel)]="licenseDateFromString"
+                                id="CaseInsuredDriver_LicenseDateFrom"
+                                name="CaseInsuredDriver_LicenseDateFrom"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_LicenseDateFrom"></validation-messages>
+                        </div>
+
+                        <div class="form-group mb-5">
+                            <label for="CaseInsuredDriver_LicenseDateTo">{{ l('LicenseDateTo') }}</label>
+                            <input
+                                required
+                                class="form-control m-input"
+                                #CaseInsuredDriver_LicenseDateTo
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [(ngModel)]="licenseDateToString"
+                                id="CaseInsuredDriver_LicenseDateTo"
+                                name="CaseInsuredDriver_LicenseDateTo"
+                            />
+                            <validation-messages [formCtrl]="CaseInsuredDriver_LicenseDateTo"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="col-lg-12" style="text-align: right">
+                    <a
+                        [routerLink]="[navigationService.step2Url]"
+                        [queryParams]="{ id: registerId, stepId: 2 }"
+                        class="btn btn-primary green float-right"
+                    >
+                        <i class="fa fa-arrow-left"></i>
+                        <span>{{ l('Back') }}</span>
+                    </a>
+
+                    <button
+                        (click)="save()"
+                        class="btn btn-primary blue float-right"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                        [hidden] = "isHidden"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+
+                    <a
+                        [routerLink]="[navigationService.step4Url]"
+                        [queryParams]="{ id: registerId, stepId: 4 }"
+                        class="btn btn-primary green float-right"
+                    >
+                        <i class="fa fa-arrow-right"></i>
+                        <span>{{ l('Next') }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div
+        class="modal fade"
+        bsModal
+        #fileUploadModal="bs-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="fileUploadModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fileUploadModalLabel">Upload File</h5>
+                    <button type="button" class="btn-close" (click)="close()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="my-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="custom-file-label" #CaseInsuredDriver_DriverICFrontLabel
+                                        for="CaseInsuredDriver_DriverICFront">
+                                        {{ l('NRICFrontFile') }} {{ l('Upload') }}
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseInsuredDriver_DriverICFront"
+                                                    required name="CaseInsuredDriver_DriverICFront"
+                                                    aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectDriverICFrontFile($event)"
+                                                    [accept]="driverICFrontFileAcceptedTypes" #CaseInsuredDriver_DriverICFront
+                                                    [(ngModel)]="CaseInsuredDriver_DriverICFront" />
+                
+                                            </div>
+                                            <div *ngIf="driverICFrontFileName || driverICFrontFileUploaded">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverICFrontFileName" style="background-color: #e5e5e5 ; margin-right: 20px;">
+                                        <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverICFront) }}" target="_blank">
+                                                {{ driverICFrontFileName }}
+                                            </a>
+                
+                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverICFrontFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="custom-file-label" #CaseInsuredDriver_DriverLicenseFrontLabel
+                                        for="CaseInsuredDriver_DriverLicenseFront">
+                                        {{ l('LicenseFrontFile') }} {{ l('Upload') }}
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseInsuredDriver_DriverLicenseFront"
+                                                    required name="CaseInsuredDriver_DriverLicenseFront"
+                                                    aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectDriverLicenseFrontFile($event)"
+                                                    [accept]="driverLicenseFrontFileAcceptedTypes" #CaseInsuredDriver_DriverLicenseFront
+                                                    [(ngModel)]="CaseInsuredDriver_DriverLicenseFront" />
+                
+                                            </div>
+                                            <div *ngIf="driverLicenseFrontFileName || driverLicenseFrontUploaded">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverLicenseFrontFileName" style="background-color: #e5e5e5  margin-right: 20px;">
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverLicenseFront) }}" target="_blank">
+                                                {{ driverLicenseFrontFileName }}
+                                            </a>
+                
+                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverLicenseFrontFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="custom-file-label" #CaseInsuredDriver_DriverICBackLabel
+                                        for="CaseInsuredDriver_DriverICBack">
+                                        {{ l('NRICBackFile') }} {{ l('Upload') }}
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseInsuredDriver_DriverICBack"
+                                                    required name="CaseInsuredDriver_DriverICBack"
+                                                    aria-describedby="inputGroupFileAddon01" (change)="onSelectDriverICBackFile($event)"
+                                                    [accept]="driverICBackFileAcceptedTypes" #CaseInsuredDriver_DriverICBack
+                                                    [(ngModel)]="CaseInsuredDriver_DriverICBack" />
+                
+                                            </div>
+                                            <div *ngIf="driverICBackFileName || driverICBackFileUploaded ">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>                
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverICBackFileName" style="background-color: #e5e5e5; margin-right: 20px;">
+                
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverICBack) }}" target="_blank">
+                                                {{ driverICBackFileName }}
+                                            </a>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverICBackFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group mb-3">
+                                        <label class="custom-file-label" #CaseInsuredDriver_DriverLicenseBackLabel
+                                            for="CaseInsuredDriver_DriverLicenseBack">
+                                            {{ l('LicenseBackFile') }} {{ l('Upload') }}
+                                        </label>
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseInsuredDriver_DriverLicenseBack"
+                                                    required name="CaseInsuredDriver_DriverLicenseBack"
+                                                    aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectDriverLicenseBackFile($event)"
+                                                    [accept]="driverLicenseBackFileAcceptedTypes" #CaseInsuredDriver_DriverLicenseBack
+                                                    [(ngModel)]="CaseInsuredDriver_DriverLicenseBack" />
+                
+                                            </div>
+                                            <div *ngIf="driverLicenseBackFileName || driverLicenseBackFileUploaded ">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverLicenseBackFileName" style="background-color: #e5e5e5; margin-right: 20px;">
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                
+                
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverLicenseBack) }}" target="_blank">
+                                                {{ driverLicenseBackFileName }}
+                                            </a>
+                
+                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverLicenseBackFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="custom-file-label" #CaseInsuredDriver_DriverCarGrantLabel
+                                        for="CaseInsuredDriver_DriverCarGrant">
+                                        {{ l('CarGrantFile') }} {{ l('Upload') }}
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseInsuredDriver_DriverCarGrant"
+                                                    #CaseInsuredDriver_DriverCarGrant [(ngModel)]="CaseInsuredDriver_DriverCarGrant"
+                                                    name="CaseInsuredDriver_DriverCarGrant" aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectDriverCarGrantFile($event)"
+                                                    [accept]="driverCarGrantFileAcceptedTypes" />
+                
+                                            </div>
+                                            <div *ngIf="driverCarGrantFileName || driverCarGrantFileUploaded ">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverCarGrantFileName" style="background-color: #e5e5e5; margin-right: 20px;">
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                
+                
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverCarGrant) }}" target="_blank">
+                                                {{ driverCarGrantFileName }}
+                                            </a>
+                
+                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverCarGrantFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="custom-file-label" #CaseInsuredDriver_DriverHospitalDetailLabel
+                                        for="CaseInsuredDriver_DriverHospitalDetail">
+                                        {{ l('HospitalDetailFile') }} {{ l('Upload') }}
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseInsuredDriver_DriverHospitalDetail"
+                                                    required name="CaseInsuredDriver_DriverHospitalDetail"
+                                                    aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectDriverHospitalDetailFile($event)"
+                                                    [accept]="driverHospitalDetailFileAcceptedTypes"
+                                                    #CaseInsuredDriver_DriverHospitalDetail
+                                                    [(ngModel)]="CaseInsuredDriver_DriverHospitalDetail" />
+                
+                                            </div>
+                                            <div *ngIf="driverHospitalDetailFileName || driverHospitalDetailFileUploaded ">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverHospitalDetailFileName" style="background-color: #e5e5e5; margin-right: 20px;">
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                
+                
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverHospitalDetail) }}" target="_blank">
+                                                {{ driverHospitalDetailFileName }}
+                                            </a>
+                
+                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverHospitalDetailFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                
+                                        </div>
+                                    </div>
+                
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="custom-file-label" #CaseInsuredDriver_DriverEmploymentDetailLabel
+                                        for="CaseInsuredDriver_DriverEmploymentDetail">
+                                        {{ l('EmploymentDetailFile') }} {{ l('Upload') }}
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text w-100" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" required
+                                                    id="CaseInsuredDriver_DriverEmploymentDetail"
+                                                    name="CaseInsuredDriver_DriverEmploymentDetail"
+                                                    aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectDriverEmploymentDetailFile($event)"
+                                                    [accept]="driverEmploymentDetailFileAcceptedTypes"
+                                                    #CaseInsuredDriver_DriverEmploymentDetail
+                                                    [(ngModel)]="CaseInsuredDriver_DriverEmploymentDetail" />
+                
+                                            </div>
+                                            <div *ngIf="driverEmploymentDetailFileName || driverEmploymentDetailFileuploaded ">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                                        </span>
+                
+                                    </div>
+                
+                                    <div *ngIf="driverEmploymentDetailFileName" style="background-color: #e5e5e5; margin-right: 20px;">
+                                        <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                
+                                            <a href="{{ getDownloadUrl(caseInsuredDriver.driverEmploymentDetail) }}" target="_blank">
+                                                {{ driverEmploymentDetailFileName }}
+                                            </a>
+                
+                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeDriverEmploymentDetailFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                
+                                        </div>
+                                    </div>
+                
+                                </div>
+                
+                            </div>
+                
+                        </div>
+                
+                        <div class="col-12 mb-3">
+                            <div class="alert alert-warning" role="alert">
+                                <h5 class="alert-heading">
+                                    <b>NOTE:</b>
+                                    {{ l('OCRDisclaimer') }}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-primary" (click)="uploadFile()">Upload</button> -->
+                    <button type="button" class="btn btn-light-primary fw-bold" (click)="close()">Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

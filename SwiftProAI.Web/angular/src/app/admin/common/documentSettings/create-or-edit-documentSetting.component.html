@@ -1,0 +1,291 @@
+﻿<div [@routerTransition]>
+    <sub-header [title]="'companySettings' | localize" [description]="'companySettingsDetails' | localize"></sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <label class="form-label" for="DocumentSetting_businessRegistrationNo">
+                            {{ l('businessRegistrationNo') }}
+                        </label>
+                        <input
+                            type="text"
+                            #DocumentSetting_businessRegistrationNo="ngModel"
+                            id="DocumentSetting_businessRegistrationNo"
+                            class="form-control"
+                            [(ngModel)]="documentSetting.businessRegistrationNo"
+                            name="businessRegistrationNo"
+                            minlength="1"
+                            maxlength="50"
+                        />
+                        <validation-messages [formCtrl]="DocumentSetting_businessRegistrationNo"></validation-messages>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label" for="DocumentSetting_companyLegalName">
+                            {{ l('companyLegalName') }}
+                        </label>
+                        <input
+                            type="text"
+                            #DocumentSetting_companyLegalName="ngModel"
+                            id="DocumentSetting_companyLegalName"
+                            class="form-control"
+                            [(ngModel)]="documentSetting.companyLegalName"
+                            name="companyLegalName"
+                            minlength="1"
+                            maxlength="100"
+                        />
+                        <validation-messages [formCtrl]="DocumentSetting_companyLegalName"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <label class="form-label" for="DocumentSetting_address">{{ l('companyAddress') }}</label>
+                        <input
+                            type="text"
+                            #DocumentSetting_address="ngModel"
+                            id="DocumentSetting_address"
+                            class="form-control"
+                            [(ngModel)]="documentSetting.address"
+                            name="address"
+                            minlength="1"
+                            maxlength="150"
+                        />
+                        <validation-messages [formCtrl]="DocumentSetting_address"></validation-messages>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label" for="DocumentSetting_taxNo">{{ l('taxNo') }}</label>
+                        <input
+                            type="text"
+                            #DocumentSetting_taxNo="ngModel"
+                            id="DocumentSetting_taxNo"
+                            class="form-control"
+                            [(ngModel)]="documentSetting.taxNo"
+                            name="taxNo"
+                            minlength="1"
+                            maxlength="20"
+                        />
+                        <validation-messages [formCtrl]="DocumentSetting_taxNo"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <label class="form-label" for="DocumentSetting_telNo">{{ l('telNo') }}</label>
+                        <input
+                            type="text"
+                            #DocumentSetting_telNo="ngModel"
+                            id="DocumentSetting_telNo"
+                            class="form-control"
+                            [(ngModel)]="documentSetting.telNo"
+                            name="telNo"
+                            minlength="1"
+                            maxlength="15"
+                        />
+                        <validation-messages [formCtrl]="DocumentSetting_telNo"></validation-messages>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label" for="DocumentSetting_companyType">{{ l('companyType') }}</label>
+                        <input
+                            type="text"
+                            #DocumentSetting_companyType="ngModel"
+                            id="DocumentSetting_companyType"
+                            class="form-control"
+                            [(ngModel)]="documentSetting.companyType"
+                            name="companyType"
+                            disabled
+                        />
+                        <validation-messages [formCtrl]="DocumentSetting_companyType"></validation-messages>
+                    </div>
+                </div>
+
+                <tabset>
+                    <tab class="p-5" heading="{{ 'Invoice' | localize }}" [active]="true">
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_invoiceRefNoPrefix">
+                                    {{ l('invoiceRefNoPrefix') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #DocumentSetting_invoiceRefNoPrefix="ngModel"
+                                    id="DocumentSetting_invoiceRefNoPrefix"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.invoiceRefNoPrefix"
+                                    name="invoiceRefNoPrefix"
+                                    minlength="1"
+                                    maxlength="10"
+                                />
+                                <validation-messages
+                                    [formCtrl]="DocumentSetting_invoiceRefNoPrefix"
+                                ></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_invoiceRefNoLength">
+                                    {{ l('invoiceRefNoLength') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #DocumentSetting_invoiceRefNoLength="ngModel"
+                                    id="DocumentSetting_invoiceRefNoLength"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.invoiceRefNoLength"
+                                    name="invoiceRefNoLength"
+                                    min="3"
+                                    max="10"
+                                />
+                                <validation-messages
+                                    [formCtrl]="DocumentSetting_invoiceRefNoLength"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab class="p-5" heading="{{ 'Debit Note' | localize }}" [active]="true">
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_debitRefNoPrefix">
+                                    {{ l('debitRefNoPrefix') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #DocumentSetting_debitRefNoPrefix="ngModel"
+                                    id="DocumentSetting_debitRefNoPrefix"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.debitRefNoPrefix"
+                                    name="debitRefNoPrefix"
+                                    minlength="1"
+                                    maxlength="10"
+                                />
+                                <validation-messages
+                                    [formCtrl]="DocumentSetting_debitRefNoPrefix"
+                                ></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_debitRefNoLength">
+                                    {{ l('debitRefNoLength') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #DocumentSetting_debitRefNoLength="ngModel"
+                                    id="DocumentSetting_debitRefNoLength"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.debitRefNoLength"
+                                    name="debitRefNoLength"
+                                    min="3"
+                                    max="10"
+                                />
+                                <validation-messages
+                                    [formCtrl]="DocumentSetting_debitRefNoLength"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </tab>
+
+                    <tab class="p-5" heading="{{ 'Debit Note' | localize }}" [active]="true">
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_creditRefNoPrefix">
+                                    {{ l('creditRefNoPrefix') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #DocumentSetting_creditRefNoPrefix="ngModel"
+                                    id="DocumentSetting_creditRefNoPrefix"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.creditRefNoPrefix"
+                                    name="creditRefNoPrefix"
+                                    minlength="1"
+                                    maxlength="10"
+                                />
+                                <validation-messages
+                                    [formCtrl]="DocumentSetting_creditRefNoPrefix"
+                                ></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_creditRefNoLength">
+                                    {{ l('creditRefNoLength') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #DocumentSetting_creditRefNoLength="ngModel"
+                                    id="DocumentSetting_creditRefNoLength"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.creditRefNoLength"
+                                    name="creditRefNoLength"
+                                    min="3"
+                                    max="10"
+                                />
+                                <validation-messages
+                                    [formCtrl]="DocumentSetting_creditRefNoLength"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab class="p-5" heading="{{ 'Case Ref No' | localize }}" [active]="true">
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_caseRefNoPrefix">
+                                    {{ l('caseRefNoPrefix') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #DocumentSetting_caseRefNoPrefix="ngModel"
+                                    id="DocumentSetting_caseRefNoPrefix"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.caseRefNoPrefix"
+                                    name="caseRefNoPrefix"
+                                    minlength="1"
+                                    maxlength="10"
+                                />
+                                <validation-messages [formCtrl]="DocumentSetting_caseRefNoPrefix"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="DocumentSetting_caseRefNoLength">
+                                    {{ l('caseRefNoLength') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #DocumentSetting_caseRefNoLength="ngModel"
+                                    id="DocumentSetting_caseRefNoLength"
+                                    class="form-control"
+                                    [(ngModel)]="documentSetting.caseRefNoLength"
+                                    name="caseRefNoLength"
+                                    min="3"
+                                    max="10"
+                                />
+                                <validation-messages [formCtrl]="DocumentSetting_caseRefNoLength"></validation-messages>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+
+            <div class="card-footer">
+                <div class="col-lg-12">
+                    <button
+                        (click)="save()"
+                        class="btn btn-primary blue float-right"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+/* General styling for the sidebar */
+.sided-bar {
+    background-color: #ffffff;
+    border-right: 1px solid #dee2e6;
+    padding: 15px;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+}
+
+.file-info .file-icon {
+    margin-right: 10px;
+}
+
+.file-info .file-name,
+.file-info .form-control {
+    flex-grow: 1;
+}
+
+/* Styling for the tree container */
+.side-tree {
+    font-size: 16px;
+    color: #333;
+}
+
+th {
+    font-size: 16px;
+}
+
+.file-name {
+    font-size: 16px;
+    padding-left: 5em;
+}
+
+/* Styling for the unordered lists */
+.side-tree ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.side-tree ul ul {
+    padding-left: 20px;
+}
+
+/* Styling for clickable divs */
+.side-tree div {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 4px;
+    transition:
+        background-color 0.3s,
+        color 0.3s;
+}
+
+.side-tree div:hover {
+    background-color: #f0f0f0;
+}
+
+.side-tree li {
+    padding: 5px 0;
+}
+
+.side-tree .entity-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.side-tree .registration-name i,
+.side-tree .entity-name i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.side-tree .folder-icon {
+    font-size: 16px;
+    color: #ffcc00; /* Yellow color for folders */
+}
+
+.side-tree .file-icon {
+    font-size: 14px;
+    margin-right: 5px;
+    color: #74beff;
+}
+
+.side-tree .arrow {
+    font-size: 12px;
+    transition: transform 0.3s;
+}
+
+.side-tree .expanded .arrow {
+    transform: rotate(90deg);
+}
+
+.always-expanded {
+    cursor: default;
+    background-color: #e9ecef;
+}
+
+.entity-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.entity-name span {
+    flex-grow: 1;
+    padding: 0 10px;
+    text-align: left;
+}

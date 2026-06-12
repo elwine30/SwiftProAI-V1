@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common.props"></Import>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AssemblyName>ThinknInsurTech.Application</AssemblyName>
+    <PackageId>ThinknInsurTech.Application</PackageId>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>ThinknInsurTech</RootNamespace>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Registration\Exporting\**" />
+    <EmbeddedResource Remove="Registration\Exporting\**" />
+    <None Remove="Registration\Exporting\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="DataExporting\Docx\Templates\RegistrationTemplate.docx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataExporting\Docx\Templates\RegistrationTemplate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Abp.EntityFrameworkCore.EFPlus" Version="9.1.3" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
+    <PackageReference Include="MiniExcel" Version="1.31.3" />
+    <PackageReference Include="PdfiumViewer" Version="2.13.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThinknInsurTech.Application.Shared\ThinknInsurTech.Application.Shared.csproj" />
+    <ProjectReference Include="..\ThinknInsurTech.Core\ThinknInsurTech.Core.csproj" />
+    <ProjectReference Include="..\ThinknInsurTech.EntityFrameworkCore\ThinknInsurTech.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+</Project>

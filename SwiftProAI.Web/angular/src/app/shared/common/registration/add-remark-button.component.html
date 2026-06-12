@@ -1,0 +1,11 @@
+<div class="row mb-4 justify-content-end" style="margin-right: 20px; margin-top: 10px;">
+    <div class="col-xl-4 text-end">
+        <button class="btn btn-primary" (click)="createNewRemark()">
+            <i class="fa fa-plus btn-md-icon"></i>
+            <span class="d-none d-md-inline-block">{{ 'Create New Remark' | localize
+                }}</span>
+        </button>
+    </div>
+</div>
+
+<createRemarkModal #createRemarkModal></createRemarkModal>

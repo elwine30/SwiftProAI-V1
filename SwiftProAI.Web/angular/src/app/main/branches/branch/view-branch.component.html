@@ -1,0 +1,20 @@
+﻿<div [@routerTransition]>
+    <sub-header [title]="'Branches' | localize" [breadcrumbs]="breadcrumbs"></sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Name') }} :</h6>
+                        {{ item.branch.name }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('ShortName') }} :</h6>
+                        {{ item.branch.shortName }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

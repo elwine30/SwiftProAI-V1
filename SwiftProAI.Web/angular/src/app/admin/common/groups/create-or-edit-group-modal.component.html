@@ -1,0 +1,88 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #groupForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="group.id">{{ l('EditGroup') }}</span>
+                        <span *ngIf="!group.id">{{ l('CreateNewGroup') }}</span>
+                    </h4>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        aria-label="Close"
+                        [disabled]="saving"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="my-3">
+                        <label class="form-label" for="BranchName">{{ l('Branch') }}</label>
+                        <select name="group.branchId" [(ngModel)]="group.branchId" class="form-select" required>
+                            <option value="" disabled>{{ l('SelectABranch') }}</option>
+                            <option *ngFor="let item of allBranchs" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="my-3">
+                        <label class="form-label" for="Group_Name">{{ l('Name') }} *</label>
+                        <input
+                            type="text"
+                            #Group_Name="ngModel"
+                            id="Group_Name"
+                            class="form-control"
+                            [(ngModel)]="group.name"
+                            name="Name"
+                            minlength="1"
+                            maxlength="50"
+                            required
+                        />
+                        <validation-messages [formCtrl]="Group_Name"></validation-messages>
+                    </div>
+                    <br />
+                    <label class="form-check form-check-custom form-check-solid">
+                        <input
+                            id="Group_IsActive"
+                            #Group_IsActive="ngModel"
+                            name="IsActive"
+                            [(ngModel)]="group.isActive"
+                            type="checkbox"
+                            class="form-check-input"
+                        />
+                        <span class="form-check-label">
+                            {{ l('IsActive') }}
+                        </span>
+                    </label>
+                    <validation-messages [formCtrl]="Group_IsActive"></validation-messages>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">
+                        {{ l('Back') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!groupForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

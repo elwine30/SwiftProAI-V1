@@ -1,0 +1,170 @@
+﻿<div [@routerTransition]>
+  
+  
+   <sub-header [title]="'Vehicles' | localize" [description]="'VehiclesHeaderInfo' | localize">
+             <div role="actions">
+                  
+                 <button id="btn_create_vehicle" *ngIf="isGranted('Pages.Administration.Vehicles.Create')" (click)="createVehicle()" 
+                                        class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewVehicle")}}</button>
+             </div>
+            </sub-header>
+    
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="off">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                
+                                
+        	<div class="my-3">                
+                <div class="input-group mb-3">
+                  <input [(ngModel)]="filterText" (ngModelChange)="getVehicles()" name="filterText" autoFocus type="text" class="form-control" [placeholder]="l('SearchWithThreeDot')">
+                  <button class="btn btn-primary" type="submit" (click)="getVehicles()"><i class="flaticon-search-1"></i></button>
+                </div>
+            </div>
+        	
+                            </div>
+                        </div>
+						 <div class="row" [hidden]="!advancedFiltersAreShown">
+						 	<div class="col-md-12">
+						         
+						     </div>
+
+
+
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="MakeFilter">{{l("Make")}}</label>
+									<input type="text" class="form-control" id="MakeFilter" name="makeFilter" [(ngModel)]="makeFilter" (ngModelChange)="getVehicles()">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="ModelFilter">{{l("Model")}}</label>
+									<input type="text" class="form-control" id="ModelFilter" name="modelFilter" [(ngModel)]="modelFilter" (ngModelChange)="getVehicles()">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="my-3">
+									<label class="form-label" for="SpecificationFilter">{{l("Specification")}}</label>
+									<input type="text" class="form-control" id="SpecificationFilter" name="specificationFilter" [(ngModel)]="specificationFilter" (ngModelChange)="getVehicles()">
+								</div>
+                            </div>
+
+
+                            <div class="col-md-12 mt-5">
+                                <button (click)="resetFilters()" class="btn btn-secondary btn-sm" id="btn-reset-filters">Reset</button>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12"
+                         [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable
+                                     (onLazyLoad)="getVehicles($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     [scrollable]="true"
+                                     ScrollWidth="100%"
+                                     [tableStyle]="{'min-width': '50rem'}"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Administration.Vehicles.Edit', 'Pages.Administration.Vehicles.Delete')">{{l('Actions')}}</th>
+                                    <th style="width: 150px" pSortableColumn="make">
+                                        {{l('Make')}}
+                                        <p-sortIcon field="vehicle.make"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="model">
+                                        {{l('Model')}}
+                                        <p-sortIcon field="vehicle.model"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="specification">
+                                        {{l('Specification')}}
+                                        <p-sortIcon field="vehicle.specification"></p-sortIcon>
+                                    </th>
+
+                                </tr>
+                            </ng-template>                           
+							<ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <td style="width: 130px"
+                                        [hidden]="!isGrantedAny('Pages.Administration.Vehicles.Edit', 'Pages.Administration.Vehicles.Delete')">
+                                       <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            </button>
+												<ul class="dropdown-menu"  *dropdownMenu>
+												<li>
+													<a href="javascript:;" class="dropdown-item"
+														(click)="viewVehicleModal.show(record)">{{l('View')}}</a>
+												</li>
+												<li>
+                                                <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Vehicles.Edit')" class="dropdown-item"
+														(click)="createOrEditVehicleModal.show(record.vehicle.id)">{{l('Edit')}}</a>												
+                                                </li>
+												<li>
+											        <a class="dropdown-item" href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Vehicles.Delete')"
+														(click)="deleteVehicle(record.vehicle)">{{l('Delete')}}</a>
+												</li>
+                                                <li>
+                                                    <a href="javascript:;" *ngIf="entityHistoryEnabled" class="dropdown-item" 
+                                                       (click)="showHistory(record.vehicle)">{{l('History')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width:150px">
+											<span class="p-column-title"> {{l('Make')}}</span>
+											{{record.vehicle.make}}
+										</td>
+                                    <td style="width:150px">
+											<span class="p-column-title"> {{l('Model')}}</span>
+											{{record.vehicle.model}}
+										</td>
+                                    <td style="width:150px">
+											<span class="p-column-title"> {{l('Specification')}}</span>
+											{{record.vehicle.specification}}
+										</td>
+
+                                </tr>
+                               
+                            </ng-template>
+                        </p-table>
+						<div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                         #paginator
+                                         (onPageChange)="getVehicles($event)"
+                                         [totalRecords]="primengTableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                         [showCurrentPageReport]="true"
+                                         [currentPageReportTemplate]="'TotalRecordsCount' | localize:primengTableHelper.totalRecordsCount"    
+                            >
+                            </p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <createOrEditVehicleModal #createOrEditVehicleModal (modalSave)="getVehicles()"></createOrEditVehicleModal>    
+    <viewVehicleModal #viewVehicleModal></viewVehicleModal>
+     <entityTypeHistoryModal #entityTypeHistoryModal></entityTypeHistoryModal>
+  </div>

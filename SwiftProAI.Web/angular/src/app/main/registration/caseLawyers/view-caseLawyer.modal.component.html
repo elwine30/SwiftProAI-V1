@@ -1,0 +1,79 @@
+<div bsModal #viewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Details")}}</span>
+                </h4>
+
+
+                <button type="button" class="btn-close" (click)="close()" aria-label="Close"
+                    [disabled]="saving"></button>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Name') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.lawFirmName }}</span>
+                    </div>
+                
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Hearing Date') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>
+                            {{ item.caseLawyer.hearingDate ? (item.caseLawyer.hearingDate.toJSDate() | date: 'dd/MM/yyyy') : '-' }}
+                        </span>
+                    </div>
+                
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Reference No') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.caseLawyer.referenceNo }}</span>
+                    </div>
+                
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Contact No') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.caseLawyer.contactNo }}</span>
+                    </div>
+                
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Contact Name') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.caseLawyer.contactName }}</span>
+                    </div>
+                
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Email') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.caseLawyer.email }}</span>
+                    </div>
+                
+                    <div class="col-3 mb-3">
+                        <h6 class="font-weight-bold">{{ l('Type') }} :</h6>
+                    </div>
+                    <div class="col-3 mb-3">
+                        <span>{{ item.caseLawyer.type }}</span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue"
+                    (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+
+</div>

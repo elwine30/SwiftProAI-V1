@@ -1,0 +1,33 @@
+<div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroupFileAddon01">
+        <div class="custom-file">
+            <input
+                #tpiFileInput
+                type="file"
+                class="custom-file-input"
+                id="TPI_FileUpload"
+                name="TPI_FileUpload"
+                aria-describedby="inputGroupFileAddon01"
+                (change)="onSelectTPIFile($event)"
+                [accept]="TpiFileUploadFileAcceptedTypes"
+            />
+        </div>
+        <div *ngIf="isTPIFileSuccessfullyUploaded">
+            <i class="fa fa-check-circle text-success" style="font-size: 15px"></i>
+        </div>
+    </span>
+</div>
+
+<div *ngIf="TpiFileUploadFileName" style="background-color: #e5e5e5; margin-right: 20px">
+    <div class="alert alert-custom alert-white alert-bold" role="alert">
+        <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+        <a href="{{ getDownloadUrl(TpiFileUploadFileToken) }}" target="_blank">
+            {{ TpiFileUploadFileName }}
+        </a>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true" (click)="removeFileUploadFile()">
+                <i class="la la-close fa-1x"></i>
+            </span>
+        </button>
+    </div>
+</div>

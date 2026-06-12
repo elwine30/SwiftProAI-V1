@@ -1,0 +1,575 @@
+﻿using Abp.MultiTenancy;
+using Abp.Zero.Configuration;
+using System.Collections.Generic;
+
+namespace ThinknInsurTech.Authorization.Roles
+{
+    public static class AppRoleConfig
+    {
+        public static void Configure(IRoleManagementConfig roleManagementConfig)
+        {
+            //Static host roles
+
+            roleManagementConfig.StaticRoles.Add(
+                new StaticRoleDefinition(
+                    StaticRoleNames.Host.Admin,
+                    MultiTenancySides.Host,
+                    grantAllPermissionsByDefault: true)
+                );
+
+            //Static tenant roles
+            // Admin role with predefined permissions
+            var adminRole = new StaticRoleDefinition(
+                StaticRoleNames.Tenants.Admin,
+                MultiTenancySides.Tenant);
+            roleManagementConfig.StaticRoles.Add(adminRole);
+            AdminPermissions.ForEach(x => adminRole.GrantedPermissions.Add(x));
+
+            roleManagementConfig.StaticRoles.Add(
+                new StaticRoleDefinition(
+                    StaticRoleNames.Tenants.User,
+                    MultiTenancySides.Tenant)
+                );
+
+            // Super Admin role with predefined permissions
+            var superAdminRole = new StaticRoleDefinition(
+                StaticRoleNames.Tenants.SuperAdmin,
+                MultiTenancySides.Tenant);
+            roleManagementConfig.StaticRoles.Add(superAdminRole);
+            SuperAdminPermissions.ForEach(x => superAdminRole.GrantedPermissions.Add(x));
+
+            // Adjuster role with predefined permissions
+            var adjusterRole = new StaticRoleDefinition(
+                    StaticRoleNames.Tenants.Adjuster,
+                    MultiTenancySides.Tenant);
+            roleManagementConfig.StaticRoles.Add(adjusterRole);
+            AdjusterPermissions.ForEach(x => adjusterRole.GrantedPermissions.Add(x));
+
+            // Finance role with predefined permissions
+            var financeRole = new StaticRoleDefinition(
+                StaticRoleNames.Tenants.Finance,
+                MultiTenancySides.Tenant
+                );
+            roleManagementConfig.StaticRoles.Add(financeRole);
+            FinancePermissions.ForEach(x => financeRole.GrantedPermissions.Add(x));
+
+            // Insurer role with predefined permissions
+            var insurerRole = new StaticRoleDefinition(
+                StaticRoleNames.Tenants.Insurer,
+                MultiTenancySides.Tenant
+                );
+            roleManagementConfig.StaticRoles.Add(insurerRole);
+            InsurerPermissions.ForEach(x => insurerRole.GrantedPermissions.Add(x));
+
+            // Lawyer role with predefined permissions
+            var lawyerRole = new StaticRoleDefinition(
+                StaticRoleNames.Tenants.Lawyer,
+                MultiTenancySides.Tenant
+                );
+            roleManagementConfig.StaticRoles.Add(lawyerRole);
+            LawyerPermissions.ForEach(x => lawyerRole.GrantedPermissions.Add(x));
+
+            // Workshop role with predefined permissions
+            var workshopRole = new StaticRoleDefinition(
+                StaticRoleNames.Tenants.Workshop,
+                MultiTenancySides.Tenant
+                );
+            var permissions = workshopRole.GrantedPermissions;
+            if (permissions.Count != WorkshopPermissions.Count)
+            {
+                workshopRole.GrantedPermissions.Clear();
+            }
+            roleManagementConfig.StaticRoles.Add(workshopRole);
+            WorkshopPermissions.ForEach(x => workshopRole.GrantedPermissions.Add(x));
+        }
+
+        private static List<string> SuperAdminPermissions = new List<string>
+        {
+           AppPermissions.Pages_Administration_OrganizationUnits,
+           AppPermissions.Pages_Administration_OrganizationUnits_ManageOrganizationTree,
+           AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers,
+           AppPermissions.Pages_Administration_OrganizationUnits_ManageRoles,
+           AppPermissions.Pages_Administration_Onboarding,
+           AppPermissions.Pages_Administration_Onboarding_Create,
+           AppPermissions.Pages_Administration_Roles,
+           AppPermissions.Pages_Administration_Roles_Create,
+           AppPermissions.Pages_Administration_Roles_Edit,
+           AppPermissions.Pages_Administration_Roles_Delete,
+           AppPermissions.Pages_Administration_Prompts,
+           AppPermissions.Pages_Administration_Prompts_Edit,
+           AppPermissions.Pages_Hospitals,
+           AppPermissions.Pages_Hospitals_Create,
+           AppPermissions.Pages_Hospitals_Edit,
+           AppPermissions.Pages_Hospitals_Delete,
+           AppPermissions.Pages_Administration_ScopeAssignments,
+           AppPermissions.Pages_Administration_ScopeAssignments_Create,
+           AppPermissions.Pages_Administration_ScopeAssignments_Edit,
+           AppPermissions.Pages_Administration_ScopeAssignments_Delete,
+           AppPermissions.Pages_Administration_CaseType,
+           AppPermissions.Pages_Administration_CaseType_Create,
+           AppPermissions.Pages_Administration_CaseType_Edit,
+           AppPermissions.Pages_Administration_CaseType_Delete,
+           AppPermissions.Pages_Administration_AuditTrails,
+           AppPermissions.Pages_Administration_AuditTrails_Create,
+           AppPermissions.Pages_Administration_AuditTrails_Edit,
+           AppPermissions.Pages_Administration_AuditTrails_Delete,
+           AppPermissions.Pages_Administration_Tenant_Settings,
+           AppPermissions.Pages_Administration_DocumentSettings_Create,
+           AppPermissions.Pages_Administration_AuditEntries,
+           AppPermissions.Pages_Administration_AuditEntries_Create,
+           AppPermissions.Pages_Administration_AuditEntries_Edit,
+           AppPermissions.Pages_Administration_AuditEntries_Delete,
+           AppPermissions.Pages_Administration_Users,
+           AppPermissions.Pages_Administration_Users_Create,
+           AppPermissions.Pages_Administration_Users_Edit,
+           AppPermissions.Pages_Administration_Users_Delete,
+           AppPermissions.Pages_Administration_Users_ChangePermissions,
+           AppPermissions.Pages_Administration_Users_Impersonation,
+           AppPermissions.Pages_Administration_Users_Unlock,
+           AppPermissions.Pages_Administration_Users_ChangeProfilePicture,
+           AppPermissions.Pages_Administration_Users_Roles,
+           AppPermissions.Pages_Administration_Vehicles,
+           AppPermissions.Pages_Administration_Vehicles_Create,
+           AppPermissions.Pages_Administration_Vehicles_Edit,
+           AppPermissions.Pages_Administration_Vehicles_Delete,
+           AppPermissions.Pages_Administration_AuditLogs,
+           AppPermissions.Pages_Tenant_Dashboard,
+           AppPermissions.Pages_Administration_OpenAIIntegrationLogs,
+           AppPermissions.Pages_Administration_ThirdPartyViewApproval,
+           AppPermissions.Pages_Branch,
+           AppPermissions.Pages_Branch_Create,
+           AppPermissions.Pages_Branch_Edit,
+           AppPermissions.Pages_Branch_Delete,
+           AppPermissions.Pages_Administration_Groups,
+           AppPermissions.Pages_Administration_Groups_Create,
+           AppPermissions.Pages_Administration_Groups_Edit,
+           AppPermissions.Pages_Administration_Groups_Delete,
+           AppPermissions.Pages_Administration_Companies,
+           AppPermissions.Pages_Administration_Companies_Create,
+           AppPermissions.Pages_Administration_Companies_Edit,
+           AppPermissions.Pages_Administration_Companies_Delete,
+           AppPermissions.Pages_Administration_Workshops,
+           AppPermissions.Pages_Administration_Workshops_Create,
+           AppPermissions.Pages_Administration_Workshops_Edit,
+           AppPermissions.Pages_Administration_Workshops_Delete,
+           AppPermissions.Pages_Administration_LawFirms,
+           AppPermissions.Pages_Administration_LawFirms_Create,
+           AppPermissions.Pages_Administration_LawFirms_Edit,
+           AppPermissions.Pages_Administration_LawFirms_Delete,
+           AppPermissions.Pages_Locations,
+           AppPermissions.Pages_Locations_Create,
+           AppPermissions.Pages_Locations_Edit,
+           AppPermissions.Pages_Locations_Delete,
+           AppPermissions.Pages_Administration_Staffs,
+           AppPermissions.Pages_Administration_Staffs_Create,
+           AppPermissions.Pages_Administration_Staffs_Edit,
+           AppPermissions.Pages_Administration_Staffs_Delete,
+
+        };
+
+        private static List<string> AdminPermissions = new List<string>()
+        {
+           AppPermissions.Pages_Administration_Users,
+           AppPermissions.Pages_Administration_Users_Create,
+           AppPermissions.Pages_Administration_Users_Edit,
+           AppPermissions.Pages_Administration_Users_Delete,
+           AppPermissions.Pages_Administration_Users_Impersonation,
+           AppPermissions.Pages_Administration_Users_Unlock,
+           AppPermissions.Pages_Administration_Users_ChangeProfilePicture,
+           AppPermissions.Pages_Branch,
+           AppPermissions.Pages_Branch_Create,
+           AppPermissions.Pages_Branch_Edit,
+           AppPermissions.Pages_Branch_Delete,
+           AppPermissions.Pages_Administration_Groups,
+           AppPermissions.Pages_Administration_Groups_Create,
+           AppPermissions.Pages_Administration_Groups_Edit,
+           AppPermissions.Pages_Administration_Groups_Delete,
+           AppPermissions.Pages_Administration_Companies,
+           AppPermissions.Pages_Administration_Companies_Create,
+           AppPermissions.Pages_Administration_Companies_Edit,
+           AppPermissions.Pages_Administration_Companies_Delete,
+           AppPermissions.Pages_Administration_Workshops,
+           AppPermissions.Pages_Administration_Workshops_Create,
+           AppPermissions.Pages_Administration_Workshops_Edit,
+           AppPermissions.Pages_Administration_Workshops_Delete,
+           AppPermissions.Pages_Administration_LawFirms,
+           AppPermissions.Pages_Administration_LawFirms_Create,
+           AppPermissions.Pages_Administration_LawFirms_Edit,
+           AppPermissions.Pages_Administration_LawFirms_Delete,
+           AppPermissions.Pages_Administration_DeclarationQuestions,
+           AppPermissions.Pages_Administration_DeclarationQuestions_Create,
+           AppPermissions.Pages_Administration_DeclarationQuestions_Edit,
+           AppPermissions.Pages_Administration_DeclarationQuestions_Delete,
+           AppPermissions.Pages_InvoiceReports,
+           AppPermissions.Pages_InvoiceReports_Create,
+           AppPermissions.Pages_InvoiceReports_Edit,
+           AppPermissions.Pages_InvoiceReports_Delete,
+           AppPermissions.Pages_AdjusterReports,
+           AppPermissions.Pages_AdjusterReports_Create,
+           AppPermissions.Pages_AdjusterReports_Edit,
+           AppPermissions.Pages_AdjusterReports_Delete,
+           AppPermissions.Pages_WIPReports,
+           AppPermissions.Pages_WIPReports_Create,
+           AppPermissions.Pages_WIPReports_Edit,
+           AppPermissions.Pages_WIPReports_Delete,
+           AppPermissions.Pages_WIPSummaryReports,
+           AppPermissions.Pages_WIPSummaryReports_Create,
+           AppPermissions.Pages_WIPSummaryReports_Edit,
+           AppPermissions.Pages_WIPSummaryReports_Delete,
+           AppPermissions.Pages_Administration_ExpensesClaimsApproval,
+           AppPermissions.Pages_Administration_ExpensesClaimsApproval_Create,
+           AppPermissions.Pages_Administration_ExpensesClaimsApproval_Edit,
+           AppPermissions.Pages_Administration_ExpensesClaimsApproval_Delete,
+           AppPermissions.Pages_Administration_DocumentSettings,
+           AppPermissions.Pages_Administration_DocumentSettings_Create,
+           AppPermissions.Pages_Administration_DocumentSettings_Edit,
+           AppPermissions.Pages_Administration_DocumentSettings_Delete,
+           AppPermissions.Pages_Administration_Staffs,
+           AppPermissions.Pages_Administration_Staffs_Create,
+           AppPermissions.Pages_Administration_Staffs_Edit,
+           AppPermissions.Pages_Administration_Staffs_Delete,
+           AppPermissions.Pages_Lookups,
+           AppPermissions.Pages_Manage_CaseClaims,
+           AppPermissions.Pages_Tenant_Dashboard,
+           AppPermissions.Pages_CaseClaims,
+           AppPermissions.Pages_CaseClaims_Create,
+           AppPermissions.Pages_CaseClaims_Edit,
+           AppPermissions.Pages_CaseClaims_Delete,
+           AppPermissions.Pages_CaseSearchFees,
+           AppPermissions.Pages_CaseSearchFees_Create,
+           AppPermissions.Pages_CaseSearchFees_Edit,
+           AppPermissions.Pages_CaseSearchFees_Delete,
+           AppPermissions.Pages_CasePoliceReportSummaries,
+           AppPermissions.Pages_CasePoliceReportSummaries_Create,
+           AppPermissions.Pages_CasePoliceReportSummaries_Edit,
+           AppPermissions.Pages_CasePoliceReportSummaries_Delete,
+           // TSN-592 Admin allowed to view and update Invoice,credit, debit
+           AppPermissions.Pages_CaseInvoices,
+           AppPermissions.Pages_CaseInvoices_Create,
+           AppPermissions.Pages_CaseInvoices_Edit,
+           AppPermissions.Pages_CaseInvoices_Delete,
+           AppPermissions.Pages_InvoiceItems,
+           AppPermissions.Pages_CaseDebitNotes,
+           AppPermissions.Pages_CaseDebitNotes_Create,
+           AppPermissions.Pages_CaseDebitNotes_Edit,
+           AppPermissions.Pages_CaseDebitNotes_Delete,
+           AppPermissions.Pages_CaseCreditNotes,
+           AppPermissions.Pages_CaseCreditNotes_Create,
+           AppPermissions.Pages_CaseCreditNotes_Edit,
+           AppPermissions.Pages_CaseCreditNotes_Delete,
+           AppPermissions.Pages_CaseAdjusters_ExtendCompletion,
+           AppPermissions.Pages_CreditNoteItems_Create_Admin,
+           AppPermissions.Pages_DebitNoteItems_Create_Admin,
+           AppPermissions.Pages_InvoiceItems_Create_Admin,
+           // TSN-608 Global admin cannot access cases (Global admin will have the permissions same as adjuster role)
+           AppPermissions.Pages_CaseReports,
+            AppPermissions.Pages_CaseReports_Create,
+            AppPermissions.Pages_AdjusterReports,
+            AppPermissions.Pages_CaseAdjusters,
+            AppPermissions.Pages_CaseAdjusters_Create,
+            AppPermissions.Pages_CaseAdjusters_Edit,
+            AppPermissions.Pages_CaseAdjusters_Delete,
+            AppPermissions.Pages_CaseExpenses,
+            AppPermissions.Pages_CaseExpenses_Create,
+            AppPermissions.Pages_CaseExpenses_Edit,
+            AppPermissions.Pages_CaseExpenses_Delete,
+            AppPermissions.Pages_CaseIncidentDetails,
+            AppPermissions.Pages_CaseIncidentDetails_Create,
+            AppPermissions.Pages_CaseIncidentDetails_Edit,
+            AppPermissions.Pages_CaseIncidentDetails_Delete,
+            AppPermissions.Pages_CaseInsurers,
+            AppPermissions.Pages_CaseInsurers_Create,
+            AppPermissions.Pages_CaseInsurers_Edit,
+            AppPermissions.Pages_CaseInsurers_Delete,
+            AppPermissions.Pages_CaseLawyers,
+            AppPermissions.Pages_CaseLawyers_Create,
+            AppPermissions.Pages_CaseLawyers_Edit,
+            AppPermissions.Pages_CaseLawyers_Delete,
+            AppPermissions.Pages_CasePoliceReports,
+            AppPermissions.Pages_CasePoliceReports_Create,
+            AppPermissions.Pages_CasePoliceReports_Edit,
+            AppPermissions.Pages_CasePoliceReports_Delete,
+            AppPermissions.Pages_CaseSearchFees,
+            AppPermissions.Pages_CaseSearchFees_Create,
+            AppPermissions.Pages_CaseSearchFees_Edit,
+            AppPermissions.Pages_CaseSearchFees_Delete,
+            AppPermissions.Pages_CaseThirdPartyVehicles,
+            AppPermissions.Pages_CaseThirdPartyVehicles_Create,
+            AppPermissions.Pages_CaseThirdPartyVehicles_Edit,
+            AppPermissions.Pages_CaseThirdPartyVehicles_Delete,
+            AppPermissions.Pages_Administration_Workshops,
+            AppPermissions.Pages_CaseWorkshops,
+            AppPermissions.Pages_CaseWorkshops_Create,
+            AppPermissions.Pages_CaseWorkshops_Edit,
+            AppPermissions.Pages_CaseWorkshops_Delete,
+            AppPermissions.Pages_CaseClaims,
+            AppPermissions.Pages_CaseClaims_Create,
+            AppPermissions.Pages_CaseClaims_Edit,
+            AppPermissions.Pages_CaseClaims_Delete,
+            AppPermissions.Pages_CreditNoteItems,
+            AppPermissions.Pages_Tenant_Dashboard,
+            AppPermissions.Pages_DebitNoteItems,
+            AppPermissions.Pages_CaseDeclarationAnswers,
+            AppPermissions.Pages_CaseDeclarationAnswers_Create,
+            AppPermissions.Pages_CaseDeclarationAnswers_Edit,
+            AppPermissions.Pages_CaseDeclarationAnswers_Delete,
+            AppPermissions.Pages_FileOrgs,
+            AppPermissions.Pages_FileOrgs_Create,
+            AppPermissions.Pages_FileOrgs_Edit,
+            AppPermissions.Pages_FileOrgs_Delete,
+            AppPermissions.Pages_InsuredPersons,
+            AppPermissions.Pages_InsuredPersons_Create,
+            AppPermissions.Pages_InsuredPersons_Edit,
+            AppPermissions.Pages_InsuredPersons_Delete,
+            AppPermissions.Pages_InvoiceReports,
+            AppPermissions.Pages_CaseThirdPartyInfos,
+            AppPermissions.Pages_CaseThirdPartyInfos_Create,
+            AppPermissions.Pages_CaseThirdPartyInfos_Edit,
+            AppPermissions.Pages_CaseThirdPartyInfos_Delete,
+            AppPermissions.Pages_WIPReports,
+            AppPermissions.Pages_WIPSummaryReports,
+            AppPermissions.Pages_Case_Reassign_Adjuster,
+            AppPermissions.Pages_Case_Reassign_Company,
+            AppPermissions.Pages_Lookups,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_CasePoliceReportSummaries,
+            AppPermissions.Pages_CasePoliceReportSummaries_Create,
+            AppPermissions.Pages_CasePoliceReportSummaries_Edit,
+            AppPermissions.Pages_CasePoliceReportSummaries_Delete,
+            AppPermissions.Pages_DebitNoteItems_Create_Adjuster,
+            AppPermissions.Pages_CreditNoteItems_Create_Adjuster,
+            AppPermissions.Pages_InvoiceItems_Create_Adjuster,
+            AppPermissions.Pages_InvoiceItems_Edit,
+            AppPermissions.Pages_InvoiceItems_Delete,
+            AppPermissions.Pages_DebitNoteItems_Edit,
+            AppPermissions.Pages_DebitNoteItems_Delete,
+            AppPermissions.Pages_CreditNoteItems_Edit,
+            AppPermissions.Pages_CreditNoteItems_Delete,
+
+        };
+
+        // todo: clean up after permissions are all finalized
+        private static List<string> AdjusterPermissions = new List<string>()
+        {
+            AppPermissions.Pages_CaseReports_Create,
+            AppPermissions.Pages_CaseAdjusters,
+            AppPermissions.Pages_CaseAdjusters_Create,
+            AppPermissions.Pages_CaseAdjusters_Edit,
+            AppPermissions.Pages_CaseAdjusters_Delete,
+            AppPermissions.Pages_CaseExpenses,
+            AppPermissions.Pages_CaseExpenses_Create,
+            AppPermissions.Pages_CaseExpenses_Edit,
+            AppPermissions.Pages_CaseExpenses_Delete,
+            AppPermissions.Pages_CaseIncidentDetails,
+            AppPermissions.Pages_CaseIncidentDetails_Create,
+            AppPermissions.Pages_CaseIncidentDetails_Edit,
+            AppPermissions.Pages_CaseIncidentDetails_Delete,
+            AppPermissions.Pages_CaseInsurers,
+            AppPermissions.Pages_CaseInsurers_Create,
+            AppPermissions.Pages_CaseInsurers_Edit,
+            AppPermissions.Pages_CaseInsurers_Delete,
+            AppPermissions.Pages_CaseLawyers,
+            AppPermissions.Pages_CaseLawyers_Create,
+            AppPermissions.Pages_CaseLawyers_Edit,
+            AppPermissions.Pages_CaseLawyers_Delete,
+            AppPermissions.Pages_CasePoliceReports,
+            AppPermissions.Pages_CasePoliceReports_Create,
+            AppPermissions.Pages_CasePoliceReports_Edit,
+            AppPermissions.Pages_CasePoliceReports_Delete,
+            AppPermissions.Pages_CaseSearchFees,
+            AppPermissions.Pages_CaseSearchFees_Create,
+            AppPermissions.Pages_CaseSearchFees_Edit,
+            AppPermissions.Pages_CaseSearchFees_Delete,
+            AppPermissions.Pages_CaseThirdPartyVehicles,
+            AppPermissions.Pages_CaseThirdPartyVehicles_Create,
+            AppPermissions.Pages_CaseThirdPartyVehicles_Edit,
+            AppPermissions.Pages_CaseThirdPartyVehicles_Delete,
+            AppPermissions.Pages_CaseWorkshops,
+            AppPermissions.Pages_CaseWorkshops_Create,
+            AppPermissions.Pages_CaseWorkshops_Edit,
+            AppPermissions.Pages_CaseWorkshops_Delete,
+            AppPermissions.Pages_CaseClaims,
+            AppPermissions.Pages_CaseClaims_Create,
+            AppPermissions.Pages_CaseClaims_Edit,
+            AppPermissions.Pages_CaseClaims_Delete,
+            AppPermissions.Pages_CreditNoteItems,
+            AppPermissions.Pages_Tenant_Dashboard,
+            AppPermissions.Pages_DebitNoteItems,
+            AppPermissions.Pages_CaseDeclarationAnswers,
+            AppPermissions.Pages_CaseDeclarationAnswers_Create,
+            AppPermissions.Pages_CaseDeclarationAnswers_Edit,
+            AppPermissions.Pages_CaseDeclarationAnswers_Delete,
+            AppPermissions.Pages_FileOrgs,
+            AppPermissions.Pages_FileOrgs_Create,
+            AppPermissions.Pages_FileOrgs_Edit,
+            AppPermissions.Pages_FileOrgs_Delete,
+            AppPermissions.Pages_InsuredPersons,
+            AppPermissions.Pages_InsuredPersons_Create,
+            AppPermissions.Pages_InsuredPersons_Edit,
+            AppPermissions.Pages_InsuredPersons_Delete,
+            AppPermissions.Pages_CaseThirdPartyInfos,
+            AppPermissions.Pages_CaseThirdPartyInfos_Create,
+            AppPermissions.Pages_CaseThirdPartyInfos_Edit,
+            AppPermissions.Pages_CaseThirdPartyInfos_Delete,
+            AppPermissions.Pages_Case_Reassign_Adjuster,
+            AppPermissions.Pages_Case_Reassign_Company,
+            AppPermissions.Pages_Lookups,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_CasePoliceReportSummaries,
+            AppPermissions.Pages_CasePoliceReportSummaries_Create,
+            AppPermissions.Pages_CasePoliceReportSummaries_Edit,
+            AppPermissions.Pages_CasePoliceReportSummaries_Delete,
+            AppPermissions.Pages_DebitNoteItems_Create_Adjuster,
+            AppPermissions.Pages_CreditNoteItems_Create_Adjuster,
+            AppPermissions.Pages_InvoiceItems_Create_Adjuster,
+
+
+        };
+
+        private static List<string> FinancePermissions = new List<string>()
+        {
+            AppPermissions.Pages_CreditNoteItems,
+            AppPermissions.Pages_CreditNoteItems_Create,
+            AppPermissions.Pages_CreditNoteItems_Edit,
+            AppPermissions.Pages_CreditNoteItems_Delete,
+            AppPermissions.Pages_CaseDebitNotes,
+            AppPermissions.Pages_CaseDebitNotes_Create,
+            AppPermissions.Pages_CaseDebitNotes_Edit,
+            AppPermissions.Pages_CaseDebitNotes_Delete,
+            AppPermissions.Pages_DebitNoteItems,
+            AppPermissions.Pages_DebitNoteItems_Create,
+            AppPermissions.Pages_DebitNoteItems_Edit,
+            AppPermissions.Pages_DebitNoteItems_Delete,
+            AppPermissions.Pages_InvoiceItems,
+            AppPermissions.Pages_InvoiceItems_Create,
+            AppPermissions.Pages_InvoiceItems_Edit,
+            AppPermissions.Pages_InvoiceItems_Delete,
+            AppPermissions.Pages_InvoiceReports,
+            AppPermissions.Pages_InvoiceReports_Create,
+            AppPermissions.Pages_InvoiceReports_Edit,
+            AppPermissions.Pages_InvoiceReports_Delete,
+            AppPermissions.Pages_Administration_DocumentSettings,
+            AppPermissions.Pages_Administration_DocumentSettings_Create,
+            AppPermissions.Pages_Administration_DocumentSettings_Edit,
+            AppPermissions.Pages_Administration_DocumentSettings_Delete,
+            AppPermissions.Pages_Administration_OrganizationUnits,
+            AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_Manage_CaseClaims,
+        };
+
+        private static List<string> InsurerPermissions = new List<string>()
+        {
+            AppPermissions.Pages_CaseReports,
+            AppPermissions.Pages_CaseAdjusters,
+            AppPermissions.Pages_CaseCreditNotes,
+            AppPermissions.Pages_CaseInsurers,
+            AppPermissions.Pages_CaseInvoices,
+            AppPermissions.Pages_CaseLawyers,
+            AppPermissions.Pages_CasePoliceReports,
+            AppPermissions.Pages_CaseSearchFees,
+            AppPermissions.Pages_CaseThirdPartyVehicles,
+            AppPermissions.Pages_CaseWorkshops,
+            AppPermissions.Pages_CreditNoteItems,
+            AppPermissions.Pages_Tenant_Dashboard,
+            AppPermissions.Pages_DebitNoteItems,
+            AppPermissions.Pages_CaseDebitNotes,
+            AppPermissions.Pages_CaseDeclarationAnswers,
+            AppPermissions.Pages_CaseDeclarationAnswers_Create,
+            AppPermissions.Pages_CaseDeclarationAnswers_Edit,
+            AppPermissions.Pages_CaseDeclarationAnswers_Delete,
+            AppPermissions.Pages_FileOrgs,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_InvoiceItems,
+            AppPermissions.Pages_InvoiceReports,
+            AppPermissions.Pages_CaseThirdPartyInfos,
+            AppPermissions.Pages_WIPReports,
+            AppPermissions.Pages_WIPSummaryReports,
+            AppPermissions.Pages_Administration_DocumentSettings,
+            AppPermissions.Pages_Administration_DocumentSettings_Create,
+            AppPermissions.Pages_Administration_DocumentSettings_Edit,
+            AppPermissions.Pages_Administration_DocumentSettings_Delete,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_InsuredPersons,
+            AppPermissions.Pages_CaseIncidentDetails
+        };
+
+        private static List<string> LawyerPermissions = new List<string>()
+        {
+            AppPermissions.Pages_CaseReports,
+            AppPermissions.Pages_CaseAdjusters,
+            AppPermissions.Pages_CaseCreditNotes,
+            AppPermissions.Pages_CaseInsurers,
+            AppPermissions.Pages_CaseInvoices,
+            AppPermissions.Pages_CaseLawyers,
+            AppPermissions.Pages_CasePoliceReports,
+            AppPermissions.Pages_CaseSearchFees,
+            AppPermissions.Pages_CaseThirdPartyVehicles,
+            AppPermissions.Pages_CaseWorkshops,
+            AppPermissions.Pages_CreditNoteItems,
+            AppPermissions.Pages_Tenant_Dashboard,
+            AppPermissions.Pages_DebitNoteItems,
+            AppPermissions.Pages_CaseDebitNotes,
+            AppPermissions.Pages_CaseDeclarationAnswers,
+            AppPermissions.Pages_CaseDeclarationAnswers_Create,
+            AppPermissions.Pages_CaseDeclarationAnswers_Edit,
+            AppPermissions.Pages_CaseDeclarationAnswers_Delete,
+            AppPermissions.Pages_FileOrgs,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_InvoiceItems,
+            AppPermissions.Pages_InvoiceReports,
+            AppPermissions.Pages_CaseThirdPartyInfos,
+            AppPermissions.Pages_WIPReports,
+            AppPermissions.Pages_WIPSummaryReports,
+            AppPermissions.Pages_Administration_DocumentSettings,
+            AppPermissions.Pages_Administration_DocumentSettings_Create,
+            AppPermissions.Pages_Administration_DocumentSettings_Edit,
+            AppPermissions.Pages_Administration_DocumentSettings_Delete,
+            AppPermissions.Pages_Administration_OrganizationUnits,
+            AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers,
+            AppPermissions.Pages_CaseLawyers,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_InsuredPersons,
+            AppPermissions.Pages_CaseIncidentDetails
+        };
+
+        private static List<string> WorkshopPermissions = new List<string>()
+        {
+            AppPermissions.Pages_CaseReports,
+            AppPermissions.Pages_CaseAdjusters,
+            AppPermissions.Pages_CaseCreditNotes,
+            AppPermissions.Pages_CaseInsurers,
+            AppPermissions.Pages_CaseInvoices,
+            AppPermissions.Pages_CaseLawyers,
+            AppPermissions.Pages_CasePoliceReports,
+            AppPermissions.Pages_CaseSearchFees,
+            AppPermissions.Pages_CaseThirdPartyVehicles,
+            AppPermissions.Pages_CaseWorkshops,
+            AppPermissions.Pages_CreditNoteItems,
+            AppPermissions.Pages_Tenant_Dashboard,
+            AppPermissions.Pages_DebitNoteItems,
+            AppPermissions.Pages_CaseDebitNotes,
+            AppPermissions.Pages_CaseDeclarationAnswers,
+            AppPermissions.Pages_CaseDeclarationAnswers_Create,
+            AppPermissions.Pages_CaseDeclarationAnswers_Edit,
+            AppPermissions.Pages_CaseDeclarationAnswers_Delete,
+            AppPermissions.Pages_FileOrgs,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_InvoiceItems,
+            AppPermissions.Pages_InvoiceReports,
+            AppPermissions.Pages_CaseThirdPartyInfos,
+            AppPermissions.Pages_WIPReports,
+            AppPermissions.Pages_WIPSummaryReports,
+            AppPermissions.Pages_Administration_DocumentSettings,
+            AppPermissions.Pages_Administration_DocumentSettings_Create,
+            AppPermissions.Pages_Administration_DocumentSettings_Edit,
+            AppPermissions.Pages_Administration_DocumentSettings_Delete,
+            AppPermissions.Pages_Administration_OrganizationUnits,
+            AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers,
+            AppPermissions.Pages_CaseWorkshops,
+            AppPermissions.Pages_Folders,
+            AppPermissions.Pages_InsuredPersons,
+            AppPermissions.Pages_CaseIncidentDetails
+        };
+    }
+}

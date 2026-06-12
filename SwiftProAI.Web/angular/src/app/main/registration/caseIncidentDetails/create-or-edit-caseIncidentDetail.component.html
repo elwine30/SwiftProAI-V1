@@ -1,0 +1,722 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <form #caseIncidentDetailForm="ngForm">
+                <div class="row">
+                    <div class="col-xl-10">
+                        <sub-header [title]="'INCIDENT DETAILS' | localize"></sub-header>
+                    </div>
+                    <div class="col-xl-2 mb-5 mt-5 text-end">
+                        <!-- <external-file-upload-modal
+                        #circumstanceUpload
+                        [registerId]="this.registerId"
+                        [fieldName]="'INC-DET'"
+                        style="margin-right: 30px"
+                    ></external-file-upload-modal> -->
+                        <button
+                            (click)="showModal()"
+                            class="btn btn-primary blue"
+                            style="margin-right: 30px"
+                            [hidden]="isHidden"
+                        >
+                            <span>{{ l('Upload File') }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label">{{ l('TimeFrom') }} *</label>
+                            <input
+                                required
+                                class="form-control m-input"
+                                #CaseIncidentDetail_TimeFrom
+                                type="datetime"
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [maxDate]="today"
+                                [withTimepicker]="true"
+                                id="CaseIncidentDetail_TimeFrom"
+                                [(ngModel)]="timeFrom"
+                                [(date)]="timeFrom"
+                                name="CaseIncidentDetail_TimeFrom"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_TimeFrom"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label">{{ l('TimeTo') }} *</label>
+                            <input
+                                required
+                                class="form-control m-input"
+                                #CaseIncidentDetail_TimeTo
+                                type="datetime"
+                                bsDatepicker
+                                datePickerLuxonModifier
+                                [maxDate]="today"
+                                [withTimepicker]="true"
+                                [(ngModel)]="timeTo"
+                                [(date)]="timeTo"
+                                id="CaseIncidentDetail_TimeTo"
+                                name="CaseIncidentDetail_TimeTo"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_TimeTo"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_Country">{{ l('Country') }}</label>
+                            <select
+                                id="CaseIncidentDetail_Country"
+                                #CaseIncidentDetail_Country="ngModel"
+                                name="Country"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.country"
+                                (ngModelChange)="onCountrySelect($event)"
+                            >
+                                <option *ngFor="let country of countries" [value]="country.id">
+                                    {{ country.displayName }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_Country"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_Postcode">{{ l('Postcode') }}</label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_Postcode="ngModel"
+                                id="CaseIncidentDetail_Postcode"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.postcode"
+                                name="Postcode"
+                                minlength="4"
+                                maxlength="10"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_Postcode"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_State">{{ l('State') }}</label>
+                            <select
+                                id="CaseIncidentDetail_State"
+                                #CaseIncidentDetail_State="ngModel"
+                                name="State"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.state"
+                                required
+                            >
+                                <option *ngFor="let state of states" [value]="state.id">
+                                    {{ state.displayName }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_State"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_Address1">{{ l('Address1') }}</label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_Address1="ngModel"
+                                id="CaseIncidentDetail_Address1"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.address1"
+                                name="Address1"
+                                minlength="1"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_Address1"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_City">{{ l('City') }}</label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_City="ngModel"
+                                id="CaseIncidentDetail_City"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.city"
+                                name="City"
+                                minlength="1"
+                                maxlength="60"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_City"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_Address2">{{ l('Address2') }}</label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_Address2="ngModel"
+                                id="CaseIncidentDetail_Address2"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.address2"
+                                name="Address2"
+                                minlength="1"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_Address2"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5"></div>
+                    </div>
+                </div>
+
+                <sub-header [title]="'TRAVEL DIRECTION FOR INSURED / PARTICIPANT' | localize"></sub-header>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_DirectionTo">
+                                {{ l('DirectionTo') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_DirectionTo="ngModel"
+                                id="CaseIncidentDetail_DirectionTo"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.directionTo"
+                                name="DirectionTo"
+                                minlength="1"
+                                maxlength="60"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_DirectionTo"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_DriverDrivingWith">
+                                {{ l('DriverDrivingWith') }}
+                            </label>
+                            <select
+                                id="CaseIncidentDetail_DriverDrivingWith"
+                                #CaseIncidentDetail_DriverDrivingWith="ngModel"
+                                name="DriverDrivingWith"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.driverDrivingWith"
+                            >
+                                <option *ngFor="let item of drivingWith" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages
+                                [formCtrl]="CaseIncidentDetail_DriverDrivingWith"
+                            ></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_DirectionVia">
+                                {{ l('DirectionVia') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_DirectionVia="ngModel"
+                                id="CaseIncidentDetail_DirectionVia"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.directionVia"
+                                name="DirectionVia"
+                                minlength="1"
+                                maxlength="60"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_DirectionVia"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_PassengerNo">
+                                {{ l('PassengerNo') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseIncidentDetail_PassengerNo="ngModel"
+                                id="CaseIncidentDetail_PassengerNo"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.passengerNo"
+                                name="PassengerNo"
+                                min="0"
+                                max="100"
+                                [disabled]="caseIncidentDetail.driverDrivingWith == 'Alone'"
+                                (ngModelChange)="
+                                    caseIncidentDetail.driverDrivingWith === 'Alone'
+                                        ? (caseIncidentDetail.passengerNo = 0)
+                                        : null
+                                "
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_PassengerNo"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_DirectionFrom">
+                                {{ l('DirectionFrom') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_DirectionFrom="ngModel"
+                                id="CaseIncidentDetail_DirectionFrom"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.directionFrom"
+                                name="DirectionFrom"
+                                minlength="1"
+                                maxlength="60"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_DirectionFrom"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_PassengerRemarks">
+                                {{ l('PassengerRemarks') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_PassengerRemarks="ngModel"
+                                id="CaseIncidentDetail_PassengerRemarks"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.passengerRemarks"
+                                name="PassengerRemarks"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_PassengerRemarks"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5"></div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_SpeedPrior">
+                                {{ l('SpeedPrior') }} (km/h)
+                            </label>
+                            <input
+                                type="number"
+                                #CaseIncidentDetail_SpeedPrior="ngModel"
+                                id="CaseIncidentDetail_SpeedPrior"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.speedPrior"
+                                name="SpeedPrior"
+                                min="0"
+                                max="1000"
+                                amount
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_SpeedPrior"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5"></div>
+                    </div>
+                </div>
+
+                <sub-header [title]="'SCENE OF ACCIDENT' | localize"></sub-header>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_SiteOfAccident">
+                                {{ l('SiteOfAccident') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_SiteOfAccident="ngModel"
+                                id="CaseIncidentDetail_SiteOfAccident"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.siteOfAccident"
+                                name="SiteOfAccident"
+                                minlength="0"
+                                maxlength="60"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_SiteOfAccident"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_ViewOfRoad">{{ l('ViewOfRoad') }}</label>
+                            <select
+                                id="CaseIncidentDetail_ViewOfRoad"
+                                #CaseIncidentDetail_ViewOfRoad="ngModel"
+                                name="ViewOfRoad"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.viewOfRoad"
+                            >
+                                <option *ngFor="let item of viewsFromEitherDirection" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_ViewOfRoad"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_TypeOfRoad">{{ l('TypeOfRoad') }}</label>
+                            <select
+                                id="CaseIncidentDetail_TypeOfRoad"
+                                #CaseIncidentDetail_TypeOfRoad="ngModel"
+                                name="TypeOfRoad"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.typeOfRoad"
+                            >
+                                <option *ngFor="let item of typesOfRoad" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_TypeOfRoad"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_ViewDueTo">{{ l('ViewDueTo') }}</label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_ViewDueTo="ngModel"
+                                id="CaseIncidentDetail_ViewDueTo"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.viewDueTo"
+                                name="ViewDueTo"
+                                minlength="0"
+                                maxlength="100"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_ViewDueTo"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_WidthOfRoad">
+                                {{ l('WidthOfRoad') }} (ft)
+                            </label>
+                            <input
+                                type="number"
+                                #CaseIncidentDetail_WidthOfRoad="ngModel"
+                                id="CaseIncidentDetail_WidthOfRoad"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.widthOfRoad"
+                                name="WidthOfRoad"
+                                amount
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_WidthOfRoad"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_Visibility">{{ l('Visibility') }}</label>
+
+                            <select
+                                id="CaseIncidentDetail_Visibility"
+                                #CaseIncidentDetail_Visibility="ngModel"
+                                name="Visibility"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.visibility"
+                            >
+                                <option *ngFor="let item of visibilities" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_Visibility"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_CenterDemarcation">
+                                {{ l('CenterDemarcation') }}
+                            </label>
+
+                            <select
+                                id="CaseIncidentDetail_CenterDemarcation"
+                                #CaseIncidentDetail_CenterDemarcation="ngModel"
+                                name="CenterDemarcation"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.centerDemarcation"
+                            >
+                                <option *ngFor="let item of centerDemarcations" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages
+                                [formCtrl]="CaseIncidentDetail_CenterDemarcation"
+                            ></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_VisibilityDueTo">
+                                {{ l('VisibilityDueTo') }}
+                            </label>
+                            <select
+                                id="CaseIncidentDetail_VisibilityDueTo"
+                                #CaseIncidentDetail_VisibilityDueTo="ngModel"
+                                name="VisibilityDueTo"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.visibilityDueTo"
+                            >
+                                <option *ngFor="let item of visibilityReasons" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_VisibilityDueTo"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_DriverPathLeft">
+                                {{ l('DriverPathLeft') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_DriverPathLeft="ngModel"
+                                id="CaseIncidentDetail_DriverPathLeft"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.driverPathLeft"
+                                name="DriverPathLeft"
+                                minlength="0"
+                                maxlength="50"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_DriverPathLeft"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_SurroundingArea">
+                                {{ l('SurroundingArea') }}
+                            </label>
+                            <select
+                                id="CaseIncidentDetail_SurroundingArea"
+                                #CaseIncidentDetail_SurroundingArea="ngModel"
+                                name="surroundingArea"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.surroundingArea"
+                            >
+                                <option *ngFor="let item of surroundingAreas" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_SurroundingArea"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_DriverPathRight">
+                                {{ l('DriverPathRight') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_DriverPathRight="ngModel"
+                                id="CaseIncidentDetail_DriverPathRight"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.driverPathRight"
+                                name="DriverPathRight"
+                                minlength="0"
+                                maxlength="50"
+                            />
+                            <validation-messages [formCtrl]="CaseIncidentDetail_DriverPathRight"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_SurroundingLocality">
+                                {{ l('SurroundingLocality') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseIncidentDetail_SurroundingLocality="ngModel"
+                                id="CaseIncidentDetail_SurroundingLocality"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.surroundingLocality"
+                                name="SurroundingLocality"
+                                minlength="0"
+                                maxlength="60"
+                            />
+                            <validation-messages
+                                [formCtrl]="CaseIncidentDetail_SurroundingLocality"
+                            ></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5"></div>
+
+                        <div class="col-xl-6">
+                            <label class="form-label" for="CaseIncidentDetail_RoadCondition">
+                                {{ l('RoadCondition') }}
+                            </label>
+
+                            <select
+                                id="CaseIncidentDetail_RoadCondition"
+                                #CaseIncidentDetail_RoadCondition="ngModel"
+                                name="RoadCondition"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.roadCondition"
+                            >
+                                <option *ngFor="let item of roadConditions" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_RoadCondition"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6"></div>
+
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_WeatherCondition">
+                                {{ l('WeatherCondition') }}
+                            </label>
+
+                            <select
+                                id="CaseIncidentDetail_WeatherCondition"
+                                #CaseIncidentDetail_WeatherCondition="ngModel"
+                                name="WeatherCondition"
+                                class="form-select"
+                                [(ngModel)]="caseIncidentDetail.weatherCondition"
+                            >
+                                <option *ngFor="let item of weatherConditions" [value]="item.description">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_WeatherCondition"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5"></div>
+                    </div>
+                </div>
+
+                <sub-header [title]="'CIRCUMSTANCES LEADING TO ACCIDENT' | localize"></sub-header>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-10 mb-5">
+                            <label class="form-label" for="CaseIncidentDetail_Circumstances">
+                                {{ l('Circumstances') }}
+                            </label>
+                            <textarea
+                                #CaseIncidentDetail_Circumstances="ngModel"
+                                id="CaseIncidentDetail_Circumstances"
+                                class="form-control"
+                                [(ngModel)]="caseIncidentDetail.circumstances"
+                                name="Circumstances"
+                            ></textarea>
+                            <validation-messages [formCtrl]="CaseIncidentDetail_Circumstances"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="col-lg-12" style="text-align: right">
+                        <a
+                            [routerLink]="[navigationService.step4Url]"
+                            [queryParams]="{ id: registerId, stepId: 4 }"
+                            class="btn btn-primary green float-right"
+                        >
+                            <i class="fa fa-arrow-left"></i>
+                            <span>{{ l('Back') }}</span>
+                        </a>
+
+                        <button
+                            (click)="save()"
+                            class="btn btn-primary blue float-right"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                            [hidden]="isHidden"
+                        >
+                            <i class="fa fa-save"></i>
+                            <span>{{ l('Save') }}</span>
+                        </button>
+
+                        <a
+                            [routerLink]="[navigationService.step6Url]"
+                            [queryParams]="{ id: registerId, stepId: 6 }"
+                            class="btn btn-primary green float-right"
+                        >
+                            <i class="fa fa-arrow-right"></i>
+                            <span>{{ l('Next') }}</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div
+        class="modal fade"
+        bsModal
+        #fileUploadModal="bs-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="fileUploadModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fileUploadModalLabel">Upload File</h5>
+                    <button type="button" class="btn-close" (click)="close()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="my-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ l('CircumstancesFileUpload') }}</label>
+                        
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="inputGroupFileAddon01" style="margin-right: 20px;">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="CaseIncidentDetail_CircumstancesFileUpload"
+                                                    name="CaseIncidentDetail_CircumstancesFileUpload" aria-describedby="inputGroupFileAddon01"
+                                                    (change)="onSelectCircumstancesFileUploadFile($event)"
+                                                    [accept]="circumstancesFileUploadFileAcceptedTypes" />
+                                                <!-- <label class="custom-file-label" #CaseIncidentDetail_CircumstancesFileUploadLabel for="CaseIncidentDetail_CircumstancesFileUpload">{{ l('ChooseAFile') }}</label> -->
+                                            </div>
+                                            <div *ngIf="circumstancesFileUploadFileName || circumstancesFileUploadFileUploaded ">
+                                                <i class="fa fa-check-circle text-success" style="font-size: 15px;"></i>
+                                            </div>
+                                        </span>
+                                    </div>
+                                
+                                    <div *ngIf="circumstancesFileUploadFileName" style="background-color: #e5e5e5; margin-right: 20px;">
+        
+                                        <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                                
+                                
+                                            <a href="{{ getDownloadUrl(caseIncidentDetail.circumstancesFileUpload) }}" target="_blank">
+                                                {{ circumstancesFileUploadFileName }}
+                                            </a>
+                                
+                                
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true" (click)="removeCircumstancesFileUploadFile()">
+                                                    <i class="la la-close fa-1x"></i>
+                                                </span>
+                                            </button>
+                                
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="alert alert-warning" role="alert">
+                                <h5 class="alert-heading">
+                                    <b>NOTE:</b>
+                                    {{ l('OCRDisclaimer') }}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-primary" (click)="uploadFile()">Upload</button> -->
+                    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

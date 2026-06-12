@@ -1,0 +1,59 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #hospitalForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="hospital.id">{{l("EditHospital")}}</span>
+                        <span *ngIf="!hospital.id">{{l("CreateNewHospital")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+					<div class="my-3">
+						<label class="form-label" for="LocationName">{{l("Country")}}</label>
+						<select name="hospital.countryLocationId" [(ngModel)]="hospital.countryLocationId" (ngModelChange) ="onCountrySelect($event)" class="form-select" >
+							<option value="">{{l("SelectACountry")}}</option>
+							<option *ngFor="let item of allCountryLocations" value="{{item.id}}">{{item.displayName}}</option>
+						</select>
+					</div>
+					 
+					<div class="my-3">
+						<label class="form-label" for="LocationName2">{{l("State")}}</label>
+						<select name="hospital.stateLocationId" [(ngModel)]="hospital.stateLocationId" class="form-select" >
+							<option value="">{{l("SelectAState")}}</option>
+							<option *ngFor="let item of allStateLocations" value="{{item.id}}">{{item.displayName}}</option>
+						</select>
+					</div>
+					 
+
+
+								<div class="my-3">
+									<label class="form-label" for="Hospital_Name">{{l("Name")}}</label>
+									<input type="text" #Hospital_Name="ngModel" id="Hospital_Name" class="form-control" [(ngModel)]="hospital.name" name="Name"    />
+								    <validation-messages [formCtrl]="Hospital_Name"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="Hospital_Address">{{l("Address")}}</label>
+									<input type="text" #Hospital_Address="ngModel" id="Hospital_Address" class="form-control" [(ngModel)]="hospital.address" name="Address"    />
+								    <validation-messages [formCtrl]="Hospital_Address"></validation-messages>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!hospitalForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

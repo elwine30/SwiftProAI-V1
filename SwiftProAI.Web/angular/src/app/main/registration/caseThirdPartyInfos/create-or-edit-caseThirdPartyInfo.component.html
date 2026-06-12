@@ -1,0 +1,1521 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="row">
+                <div class="col-xl-10">
+                    <sub-header [title]="'CaseThirdPartyInfos' | localize"></sub-header>
+                </div>
+                <div class="col-xl-2 mb-5 mt-5 text-end">
+                    <button (click)="showModal()" class="btn btn-primary blue" style="margin-right: 30px">
+                        <span>{{ l('Upload File') }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <form #caseThirdPartyInfoForm="ngForm">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label for="CaseThirdPartyInfo_Name">{{ l('Name') }}</label>
+                            <input
+                                type="text"
+                                #CaseThirdPartyInfo_Name="ngModel"
+                                id="CaseThirdPartyInfo_Name"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredPerson.name"
+                                name="Name"
+                                minlength="0"
+                                maxlength="200"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseThirdPartyInfo_Name"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <label for="CaseThirdPartyInfo_IdenticationType">{{ l('IdenticationType') }}</label>
+                            <select
+                                id="CaseThirdPartyInfo_IdenticationType"
+                                #CaseThirdPartyInfo_IdenticationType="ngModel"
+                                name="IdenticationType"
+                                class="form-select"
+                                [(ngModel)]="caseInsuredPerson.identicationType"
+                                required
+                            >
+                                <option *ngFor="let idType of IDType" [value]="idType.description">
+                                    {{ idType.description }}
+                                </option>
+                            </select>
+                            <validation-messages [formCtrl]="CaseThirdPartyInfo_IdenticationType"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-4">
+                            <label for="CaseThirdPartyInfo_IdenticationNo">{{ l('IdenticationNo') }}</label>
+                            <input
+                                type="text"
+                                #CaseThirdPartyInfo_IdenticationNo="ngModel"
+                                id="CaseThirdPartyInfo_IdenticationNo"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredPerson.identicationNo"
+                                name="IdenticationNo"
+                                minlength="0"
+                                maxlength="50"
+                                required
+                            />
+                            <validation-messages [formCtrl]="CaseThirdPartyInfo_IdenticationNo"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <div class="form-group m-form__group">
+                                <label for="CaseThirdPartyInfo_VehicleNo">{{ l('VehicleNo') }}</label>
+                                <select
+                                    id="CaseThirdPartyInfo_VehicleNo"
+                                    #CaseThirdPartyInfo_VehicleNo="ngModel"
+                                    name="VehicleNo"
+                                    class="form-select"
+                                    [(ngModel)]="caseThirdPartyInfo.vehicleNo"
+                                    required
+                                >
+                                    <option *ngFor="let vehicle of thirdPartyVehicles" [value]="vehicle.displayName">
+                                        {{ vehicle.displayName }}
+                                    </option>
+                                </select>
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_VehicleNo"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label for="CaseThirdPartyInfo_PolicyNo">{{ l('PolicyNo') }}</label>
+                            <input
+                                type="text"
+                                #CaseThirdPartyInfo_PolicyNo="ngModel"
+                                id="CaseThirdPartyInfo_PolicyNo"
+                                class="form-control"
+                                [(ngModel)]="caseInsuredPerson.policyNo"
+                                name="PolicyNo"
+                                minlength="0"
+                                maxlength="20"
+                            />
+                            <validation-messages [formCtrl]="CaseThirdPartyInfo_PolicyNo"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Occupation">{{ l('Occupation') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_Occupation="ngModel"
+                                    id="CaseThirdPartyInfo_Occupation"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.occupation"
+                                    name="Occupation"
+                                    minlength="0"
+                                    maxlength="100"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_Occupation"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_EmployerPrior">{{ l('EmployerPrior') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_EmployerPrior="ngModel"
+                                    id="CaseThirdPartyInfo_EmployerPrior"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.employerPrior"
+                                    name="EmployerPrior"
+                                    minlength="0"
+                                    maxlength="200"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_EmployerPrior"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_EmployerContact">{{ l('EmployerContact') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_EmployerContact="ngModel"
+                                    id="CaseThirdPartyInfo_EmployerContact"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.employerContact"
+                                    name="EmployerContact"
+                                    onlyNumber
+                                />
+                                <!-- <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_EmployerContact"
+                                ></validation-messages> -->
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_EmployerAddress">{{ l('EmployerAddress') }}</label>
+                                <textarea
+                                    type="text"
+                                    #CaseThirdPartyInfo_EmployerAddress="ngModel"
+                                    aria-label="With textarea"
+                                    id="CaseThirdPartyInfo_EmployerAddress"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.employerAddress"
+                                    name="EmployerAddress"
+                                    minlength="0"
+                                    maxlength="200"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_EmployerAddress"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Coverage">{{ l('Coverage') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_Coverage="ngModel"
+                                    id="CaseThirdPartyInfo_Coverage"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.coverage"
+                                    name="Coverage"
+                                    minlength="0"
+                                    maxlength="50"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_Coverage"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_ThirdPartyType">{{ l('ThirdPartyType') }}</label>
+                                <!-- <input type="text" #CaseThirdPartyInfo_ThirdPartyType="ngModel"
+                                    id="CaseThirdPartyInfo_ThirdPartyType" class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.thirdPartyType" name="ThirdPartyType" minlength="0"
+                                    maxlength="50" /> -->
+
+                                <select
+                                    name="ThirdPartyType"
+                                    #CaseThirdPartyInfo_ThirdPartyType="ngModel"
+                                    [(ngModel)]="caseThirdPartyInfo.thirdPartyType"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('Select') }}</option>
+                                    <option *ngFor="let item of ThirdPartyType" value="{{ item.description }}">
+                                        {{ item.description }}
+                                    </option>
+                                </select>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_ThirdPartyType"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Nationality">{{ l('Nationality') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_Nationality="ngModel"
+                                    id="CaseThirdPartyInfo_Nationality"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.nationality"
+                                    name="Nationality"
+                                    minlength="0"
+                                    maxlength="50"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_Nationality"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Contact">{{ l('Contact') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_Contact="ngModel"
+                                    id="CaseThirdPartyInfo_Contact"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.contact"
+                                    name="Contact"
+                                    onlyNumber
+                                />
+                                <!-- <validation-messages [formCtrl]="CaseThirdPartyInfo_Contact"></validation-messages> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_MonthlyIncome">{{ l('MonthlyIncome') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_MonthlyIncome="ngModel"
+                                    id="CaseThirdPartyInfo_MonthlyIncome"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.monthlyIncome"
+                                    name="MonthlyIncome"
+                                    amount
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_MonthlyIncome"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_LicenseNo">{{ l('LicenseNo') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_LicenseNo="ngModel"
+                                    id="CaseThirdPartyInfo_LicenseNo"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.licenseNo"
+                                    name="LicenseNo"
+                                    minlength="0"
+                                    maxlength="20"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_LicenseNo"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_LicenseClasses">{{ l('LicenseClasses') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_LicenseClasses="ngModel"
+                                    id="CaseThirdPartyInfo_LicenseClasses"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.licenseClasses"
+                                    name="LicenseClasses"
+                                    minlength="0"
+                                    maxlength="20"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_LicenseClasses"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_LicenseDateFrom">{{ l('LicenseDateFrom') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_LicenseDateFrom
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(ngModel)]="licenseDateFromString"
+                                    id="CaseThirdPartyInfo_LicenseDateFrom"
+                                    name="CaseThirdPartyInfo_LicenseDateFrom"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_LicenseDateFrom"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_LicenseDateTo">{{ l('LicenseDateTo') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_LicenseDateTo
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(ngModel)]="licenseDateToString"
+                                    id="CaseThirdPartyInfo_LicenseDateTo"
+                                    name="CaseThirdPartyInfo_LicenseDateTo"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_LicenseDateTo"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_DrivingExperience">{{ l('DrivingExperience') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_DrivingExperience="ngModel"
+                                    id="CaseThirdPartyInfo_DrivingExperience"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.drivingExperience"
+                                    name="DrivingExperience"
+                                    minlength="0"
+                                    maxlength="20"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_DrivingExperience"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Relationship">{{ l('Relationship') }}</label>
+                                <select
+                                    id="CaseThirdPartyInfo_Relationship"
+                                    #CaseThirdPartyInfo_Relationship="ngModel"
+                                    name="Relationship"
+                                    class="form-select"
+                                    [(ngModel)]="caseInsuredPerson.relationship"
+                                    required
+                                >
+                                    <option *ngFor="let item of Relationship" [value]="item.description">
+                                        {{ item.description }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_EmployedDateFrom">
+                                    {{ l('EmployedDateFrom') }}
+                                </label>
+                                <input
+                                    required
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_EmployedDateFrom
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.employedDateFrom"
+                                    [(ngModel)]="CaseThirdPartyInfo_EmployedDateFrom"
+                                    id="CaseThirdPartyInfo_EmployedDateFrom"
+                                    name="CaseThirdPartyInfo_EmployedDateFrom"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_EmployedDateFrom"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_EmployedDateTo">
+                                    {{ l('EmployedDateTo') }}
+                                </label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_EmployedDateTo
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.employedDateTo"
+                                    [(ngModel)]="CaseThirdPartyInfo_EmployedDateTo"
+                                    id="CaseThirdPartyInfo_EmployedDateTo"
+                                    name="CaseThirdPartyInfo_EmployedDateTo"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_EmployedDateTo"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_EPF">{{ l('EPF') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_EPF="ngModel"
+                                    id="CaseThirdPartyInfo_EPF"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.epf"
+                                    name="EPF"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_EPF"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_SOCSO">{{ l('SOCSO') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_SOCSO="ngModel"
+                                    id="CaseThirdPartyInfo_SOCSO"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.socso"
+                                    name="SOCSO"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_SOCSO"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_age">{{ l('Age') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_age="ngModel"
+                                    id="CaseThirdPartyInfo_age"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.age"
+                                    name="age"
+                                    onlyNumber
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_age"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Sex">{{ l('Sex') }}</label>
+                                <!-- <input type="text" #CaseThirdPartyInfo_Sex="ngModel" id="CaseThirdPartyInfo_Sex"
+                                    class="form-control" [(ngModel)]="caseThirdPartyInfo.sex" name="Sex" minlength="0"
+                                    maxlength="10" /> -->
+
+                                <select
+                                    name="Sex"
+                                    #CaseThirdPartyInfo_Sex="ngModel"
+                                    [(ngModel)]="caseThirdPartyInfo.sex"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('Select') }}</option>
+                                    <option *ngFor="let item of Sex" value="{{ item.description }}">
+                                        {{ item.description }}
+                                    </option>
+                                </select>
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_Sex"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_MaritalStatus">{{ l('MaritalStatus') }}</label>
+                                <!-- <input type="text" #CaseThirdPartyInfo_MaritalStatus="ngModel"
+                                    id="CaseThirdPartyInfo_MaritalStatus" class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.maritalStatus" name="MaritalStatus" minlength="0"
+                                    maxlength="50" /> -->
+
+                                <select
+                                    name="MaritalStatus"
+                                    #CaseThirdPartyInfo_MaritalStatus="ngModel"
+                                    [(ngModel)]="caseThirdPartyInfo.maritalStatus"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('Select') }}</option>
+                                    <option *ngFor="let item of MaritalStatus" value="{{ item.description }}">
+                                        {{ item.description }}
+                                    </option>
+                                </select>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_MaritalStatus"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Address">{{ l('Address') }}</label>
+                                <textarea
+                                    #CaseThirdPartyInfo_Address="ngModel"
+                                    id="CaseThirdPartyInfo_Address"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.address"
+                                    name="Address"
+                                    minlength="0"
+                                    maxlength="200"
+                                    aria-label="With textarea"
+                                ></textarea>
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_Address"></validation-messages>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_Postcode">{{ l('Postcode') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_Postcode="ngModel"
+                                    id="CaseThirdPartyInfo_Postcode"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.postcode"
+                                    name="Postcode"
+                                    minlength="0"
+                                    maxlength="20"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_Postcode"></validation-messages>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_City">{{ l('City') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_City="ngModel"
+                                    id="CaseThirdPartyInfo_City"
+                                    class="form-control"
+                                    [(ngModel)]="caseInsuredPerson.city"
+                                    name="City"
+                                    minlength="0"
+                                    maxlength="50"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_City"></validation-messages>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="LocationName2">{{ l('State') }}</label>
+                                <select
+                                    name="caseInsuredPerson.stateLocationId"
+                                    [(ngModel)]="caseInsuredPerson.stateLocationId"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('SelectAState') }}</option>
+                                    <option *ngFor="let item of allStateLocations" value="{{ item.id }}">
+                                        {{ item.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="LocationName">{{ l('Country') }}</label>
+                                <select
+                                    name="caseInsuredPerson.countryLocationId"
+                                    [(ngModel)]="caseInsuredPerson.countryLocationId"
+                                    (ngModelChange)="onCountrySelect($event)"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('SelectACountry') }}</option>
+                                    <option *ngFor="let item of allCountryLocations" value="{{ item.id }}">
+                                        {{ item.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_MedicalBenefit">{{ l('MedicalBenefit') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_MedicalBenefit="ngModel"
+                                    id="CaseThirdPartyInfo_MedicalBenefit"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.medicalBenefit"
+                                    name="MedicalBenefit"
+                                    minlength="0"
+                                    maxlength="200"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_MedicalBenefit"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_EmployerAdministrative">
+                                    {{ l('EmployerAdministrative') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_EmployerAdministrative="ngModel"
+                                    id="CaseThirdPartyInfo_EmployerAdministrative"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.employerAdministrative"
+                                    name="EmployerAdministrative"
+                                    minlength="0"
+                                    maxlength="200"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_EmployerAdministrative"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_IncomeLoss">
+                                    {{ l('IncomeLoss') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_IncomeLoss="ngModel"
+                                    id="CaseThirdPartyInfo_IncomeLoss"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.incomeLoss"
+                                    name="IncomeLoss"
+                                    amount
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_IncomeLoss"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-check form-check-custom form-check-solid">
+                                    <input
+                                        id="CaseThirdPartyInfo_FatalCaseCheck"
+                                        #CaseThirdPartyInfo_FatalCaseCheck="ngModel"
+                                        name="FatalCaseCheck"
+                                        [(ngModel)]="caseThirdPartyInfo.fatalCaseCheck"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                    />
+                                    <span class="form-check-label">
+                                        {{ l('FatalCaseCheck') }}
+                                    </span>
+                                </label>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_FatalCaseCheck"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="card-title"><u>OCCUPATION AFTER ACCIDENT</u></h2>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_AfterAccidentEmployerName">
+                                    {{ l('AfterAccidentEmployerName') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_AfterAccidentEmployerName="ngModel"
+                                    id="CaseThirdPartyInfo_AfterAccidentEmployerName"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.afterAccidentEmployerName"
+                                    name="AfterAccidentEmployerName"
+                                    minlength="0"
+                                    maxlength="100"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AfterAccidentEmployerName"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_AfterAccidentEmployerIncomeReduction">
+                                    {{ l('AfterAccidentEmployerIncomeReduction') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_AfterAccidentEmployerIncomeReduction="ngModel"
+                                    id="CaseThirdPartyInfo_AfterAccidentEmployerIncomeReduction"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.afterAccidentEmployerIncomeReduction"
+                                    name="AfterAccidentEmployerIncomeReduction"
+                                    amount
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AfterAccidentEmployerIncomeReduction"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="form-label" for="CaseThirdPartyInfo_AfterAccidentEmployerIncome">
+                                    {{ l('AfterAccidentEmployerIncome') }}
+                                </label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_AfterAccidentEmployerIncome="ngModel"
+                                    id="CaseThirdPartyInfo_AfterAccidentEmployerIncome"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.afterAccidentEmployerIncome"
+                                    name="AfterAccidentEmployerIncome"
+                                    amount
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AfterAccidentEmployerIncome"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_AfterAccidentEmployerJob">
+                                    {{ l('AfterAccidentEmployerJob') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_AfterAccidentEmployerJob="ngModel"
+                                    id="CaseThirdPartyInfo_AfterAccidentEmployerJob"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.afterAccidentEmployerJob"
+                                    name="AfterAccidentEmployerJob"
+                                    minlength="0"
+                                    maxlength="50"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AfterAccidentEmployerJob"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_AfterAccidentEmployerAddress">
+                                    {{ l('AfterAccidentEmployerAddress') }}
+                                </label>
+                                <textarea
+                                    type="text"
+                                    #CaseThirdPartyInfo_AfterAccidentEmployerAddress="ngModel"
+                                    id="CaseThirdPartyInfo_AfterAccidentEmployerAddress"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.afterAccidentEmployerAddress"
+                                    name="AfterAccidentEmployerAddress"
+                                    minlength="0"
+                                    maxlength="200"
+                                    aria-label="With textarea"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AfterAccidentEmployerAddress"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="card-title"><u>NATURE OF INJURIES</u></h2>
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_InjuriesSustained">{{ l('InjuriesSustained') }}</label>
+                                <textarea
+                                    type="text"
+                                    #CaseThirdPartyInfo_InjuriesSustained="ngModel"
+                                    id="CaseThirdPartyInfo_InjuriesSustained"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.injuriesSustained"
+                                    name="InjuriesSustained"
+                                    minlength="0"
+                                    maxlength="200"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_InjuriesSustained"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_DisablementPeriodFrom">
+                                    {{ l('DisablementPeriodFrom') }}
+                                </label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_DisablementPeriodFrom
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(ngModel)]="CaseThirdPartyInfo_DisablementPeriodFrom"
+                                    [(date)]="caseThirdPartyInfo.disablementPeriodFrom"
+                                    id="CaseThirdPartyInfo_DisablementPeriodFrom"
+                                    name="CaseThirdPartyInfo_DisablementPeriodFrom"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_DisablementPeriodFrom"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_DisablementPeriodTo">
+                                    {{ l('DisablementPeriodTo') }}
+                                </label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_DisablementPeriodTo
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(ngModel)]="CaseThirdPartyInfo_DisablementPeriodTo"
+                                    [(date)]="caseThirdPartyInfo.disablementPeriodTo"
+                                    id="CaseThirdPartyInfo_DisablementPeriodTo"
+                                    name="CaseThirdPartyInfo_DisablementPeriodTo"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_DisablementPeriodTo"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <div class="form-group">
+                                <label for="CaseThirdPartyInfo_MedicalLeave">{{ l('MedicalLeave') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_MedicalLeave="ngModel"
+                                    id="CaseThirdPartyInfo_MedicalLeave"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.medicalLeave"
+                                    name="MedicalLeave"
+                                    minlength="0"
+                                    maxlength="200"
+                                />
+                                <validation-messages [formCtrl]="CaseThirdPartyInfo_MedicalLeave"></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_PresentCondition">{{ l('PresentCondition') }}</label>
+                                <textarea
+                                    type="text"
+                                    #CaseThirdPartyInfo_PresentCondition="ngModel"
+                                    id="CaseThirdPartyInfo_PresentCondition"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.presentCondition"
+                                    name="PresentCondition"
+                                    minlength="0"
+                                    maxlength="200"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_PresentCondition"
+                                ></validation-messages>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_CurrentDisabilities">
+                                    {{ l('CurrentDisabilities') }}
+                                </label>
+                                <textarea
+                                    type="text"
+                                    #CaseThirdPartyInfo_CurrentDisabilities="ngModel"
+                                    id="CaseThirdPartyInfo_CurrentDisabilities"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.currentDisabilities"
+                                    name="CurrentDisabilities"
+                                    minlength="0"
+                                    maxlength="200"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_CurrentDisabilities"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="card-title"><u>THIRD PARTY HOSPITAL</u></h2>
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="HospitalName">{{ l('Hospital') }}</label>
+                                <select
+                                    name="caseThirdPartyInfo.hospitalId1"
+                                    [(ngModel)]="caseThirdPartyInfo.hospitalId1"
+                                    (ngModelChange)="updateHospitalAddress($event, 1)"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('SelectAHospital') }}</option>
+                                    <option *ngFor="let item of allHospitals" value="{{ item.id }}">
+                                        {{ item.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_HospitalAddress">
+                                    {{ l('Hospital') }} {{ l('Address') }}
+                                </label>
+                                <textarea
+                                    type="text"
+                                    #CaseThirdPartyInfo_HospitalAddress="ngModel"
+                                    id="CaseThirdPartyInfo_HospitalAddress"
+                                    disabled
+                                    class="form-control"
+                                    [(ngModel)]="hospitalAddress"
+                                    name="hospitalAddress"
+                                    aria-label="With textarea"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseInsuredDriver_HospitalAddress"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_AdmittedDate1">{{ l('AdmittedDate1') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_AdmittedDate1
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.admittedDate1"
+                                    [(ngModel)]="CaseThirdPartyInfo_AdmittedDate1"
+                                    id="CaseThirdPartyInfo_AdmittedDate1"
+                                    name="CaseThirdPartyInfo_AdmittedDate1"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AdmittedDate1"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_DischargeDate1">{{ l('DischargeDate1') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_DischargeDate1
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.dischargeDate1"
+                                    [(ngModel)]="CaseThirdPartyInfo_DischargeDate1"
+                                    id="CaseThirdPartyInfo_DischargeDate1"
+                                    name="CaseThirdPartyInfo_DischargeDate1"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_DischargeDate1"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="HospitalName2">{{ l('Hospital') }}</label>
+                                <select
+                                    name="caseThirdPartyInfo.hospitalId2"
+                                    [(ngModel)]="caseThirdPartyInfo.hospitalId2"
+                                    (ngModelChange)="updateHospitalAddress($event, 2)"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('SelectAHospital') }}</option>
+                                    <option *ngFor="let item of allHospitals" value="{{ item.id }}">
+                                        {{ item.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseInsuredDriver_HospitalAddress">
+                                    {{ l('Hospital') }} {{ l('Address') }}
+                                </label>
+                                <textarea
+                                    type="text"
+                                    #CaseInsuredDriver_HospitalAddress="ngModel"
+                                    id="CaseInsuredDriver_HospitalAddress"
+                                    disabled
+                                    class="form-control"
+                                    [(ngModel)]="hospitalAddress2"
+                                    name="hospitalAddress2"
+                                    aria-label="With textarea"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseInsuredDriver_HospitalAddress"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_AdmittedDate2">{{ l('AdmittedDate2') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_AdmittedDate2
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.admittedDate2"
+                                    [(ngModel)]="CaseThirdPartyInfo_AdmittedDate2"
+                                    id="CaseThirdPartyInfo_AdmittedDate2"
+                                    name="CaseThirdPartyInfo_AdmittedDate2"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AdmittedDate2"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label for="CaseThirdPartyInfo_DischargeDate2">{{ l('DischargeDate2') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_DischargeDate2
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.dischargeDate2"
+                                    [(ngModel)]="CaseThirdPartyInfo_DischargeDate2"
+                                    id="CaseThirdPartyInfo_DischargeDate2"
+                                    name="CaseThirdPartyInfo_DischargeDate2"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_DischargeDate2"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group m-form__group">
+                                <label for="HospitalName3">{{ l('Hospital') }}</label>
+                                <select
+                                    name="caseThirdPartyInfo.hospitalId3"
+                                    [(ngModel)]="caseThirdPartyInfo.hospitalId3"
+                                    (ngModelChange)="updateHospitalAddress($event, 3)"
+                                    class="form-select"
+                                >
+                                    <option value="">{{ l('SelectAHospital') }}</option>
+                                    <option *ngFor="let item of allHospitals" value="{{ item.id }}">
+                                        {{ item.displayName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="CaseInsuredDriver_HospitalAddress">
+                                    {{ l('Hospital') }} {{ l('Address') }}
+                                </label>
+                                <textarea
+                                    type="text"
+                                    #CaseInsuredDriver_HospitalAddress="ngModel"
+                                    id="CaseInsuredDriver_HospitalAddress"
+                                    disabled
+                                    class="form-control"
+                                    [(ngModel)]="hospitalAddress3"
+                                    name="hospitalAddress3"
+                                    aria-label="With textarea"
+                                ></textarea>
+                                <validation-messages
+                                    [formCtrl]="CaseInsuredDriver_HospitalAddress"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="my-3">
+                                <label for="CaseThirdPartyInfo_AdmittedDate3">{{ l('AdmittedDate3') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_AdmittedDate3
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.admittedDate3"
+                                    [(ngModel)]="CaseThirdPartyInfo_AdmittedDate3"
+                                    id="CaseThirdPartyInfo_AdmittedDate3"
+                                    name="CaseThirdPartyInfo_AdmittedDate3"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_AdmittedDate3"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="my-3">
+                                <label for="CaseThirdPartyInfo_DischargeDate3">{{ l('DischargeDate3') }}</label>
+                                <input
+                                    class="form-control m-input"
+                                    #CaseThirdPartyInfo_DischargeDate3
+                                    type="datetime"
+                                    bsDatepicker
+                                    datePickerLuxonModifier
+                                    [(date)]="caseThirdPartyInfo.dischargeDate3"
+                                    [(ngModel)]="CaseThirdPartyInfo_DischargeDate3"
+                                    id="CaseThirdPartyInfo_DischargeDate3"
+                                    name="CaseThirdPartyInfo_DischargeDate3"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_DischargeDate3"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="card-title"><u>Solicitor</u></h2>
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="CaseThirdPartyInfo_SolicitorName">{{ l('SolicitorName') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_SolicitorName="ngModel"
+                                    id="CaseThirdPartyInfo_SolicitorName"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.solicitorName"
+                                    name="SolicitorName"
+                                    minlength="0"
+                                    maxlength="100"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_SolicitorName"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CaseThirdPartyInfo_SolicitorAddress">{{ l('SolicitorAddress') }}</label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_SolicitorAddress="ngModel"
+                                    id="CaseThirdPartyInfo_SolicitorAddress"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.solicitorAddress"
+                                    name="SolicitorAddress"
+                                    minlength="0"
+                                    maxlength="200"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_SolicitorAddress"
+                                ></validation-messages>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CaseThirdPartyInfo_OtherMedicalBenefit">
+                                    {{ l('OtherMedicalBenefit') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_OtherMedicalBenefit="ngModel"
+                                    id="CaseThirdPartyInfo_OtherMedicalBenefit"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.otherMedicalBenefit"
+                                    name="OtherMedicalBenefit"
+                                    minlength="0"
+                                    maxlength="200"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_OtherMedicalBenefit"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="CaseThirdPartyInfo_SolicitorContact">{{ l('SolicitorContact') }}</label>
+                                <input
+                                    type="number"
+                                    #CaseThirdPartyInfo_SolicitorContact="ngModel"
+                                    id="CaseThirdPartyInfo_SolicitorContact"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.solicitorContact"
+                                    name="SolicitorContact"
+                                    onlyNumber
+                                />
+                                <!-- <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_SolicitorContact"
+                                ></validation-messages> -->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CaseThirdPartyInfo_SolicitorReferenceNo">
+                                    {{ l('SolicitorReferenceNo') }}
+                                </label>
+                                <input
+                                    type="text"
+                                    #CaseThirdPartyInfo_SolicitorReferenceNo="ngModel"
+                                    id="CaseThirdPartyInfo_SolicitorReferenceNo"
+                                    class="form-control"
+                                    [(ngModel)]="caseThirdPartyInfo.solicitorReferenceNo"
+                                    name="SolicitorReferenceNo"
+                                    minlength="0"
+                                    maxlength="100"
+                                />
+                                <validation-messages
+                                    [formCtrl]="CaseThirdPartyInfo_SolicitorReferenceNo"
+                                ></validation-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </form>
+            <div class="card-footer">
+                <div class="col-lg-12" style="text-align: right">
+                    <a
+                        [routerLink]="[navigationService.step7Url]"
+                        [queryParams]="{ id: registerId, stepId: 7 }"
+                        class="btn btn-primary blue float-right"
+                    >
+                        <i class="fa fa-arrow-left"></i>
+                        <span>{{ l('Back') }}</span>
+                    </a>
+                    <button
+                        *ngIf="this.caseThirdPartyInfo.id"
+                        (click)="saveAndNew()"
+                        class="btn btn-primary blue float-right"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                        [hidden]="isHidden"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                    <button
+                        *ngIf="!this.caseThirdPartyInfo.id"
+                        (click)="saveAndNew()"
+                        class="btn btn-primary blue float-right"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                        [hidden]="isHidden"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Add') }}</span>
+                    </button>
+                    <button disabled class="btn btn-primary blue float-right">
+                        <i class="fa fa-arrow-right"></i>
+                        <span>{{ l('Next') }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                        <p-table
+                            #dataTable
+                            (onLazyLoad)="getCaseThirdPartyInfos($event)"
+                            [value]="primengTableHelper.records"
+                            rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                            [paginator]="false"
+                            [lazy]="true"
+                            [scrollable]="true"
+                            ScrollWidth="100%"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            [resizableColumns]="primengTableHelper.resizableColumns"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th
+                                        style="width: 130px"
+                                        [hidden]="
+                                            !isGrantedAny(
+                                                'Pages.CaseThirdPartyInfos.Edit',
+                                                'Pages.CaseThirdPartyInfos.Delete'
+                                            )
+                                        "
+                                    >
+                                        {{ l('Actions') }}
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="vehicleNo">
+                                        {{ l('VehicleNo') }}
+                                        <p-sortIcon field="caseThirdPartyInfo.vehicleNo"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="hospitalId1Fk.name">
+                                        {{ l('Hospital') }}
+                                        <p-sortIcon field="hospitalName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="caseInsuredPersonFk.name">
+                                        {{ l('Name') }}
+                                        <p-sortIcon field="caseInsuredPersonName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="age">
+                                        {{ l('Age') }}
+                                        <p-sortIcon field="caseThirdPartyInfo.age"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="sex">
+                                        {{ l('Sex') }}
+                                        <p-sortIcon field="caseThirdPartyInfo.sex"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="maritalStatus">
+                                        {{ l('MaritalStatus') }}
+                                        <p-sortIcon field="caseThirdPartyInfo.maritalStatus"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                <tr>
+                                    <td
+                                        style="width: 130px"
+                                        [hidden]="
+                                            !isGrantedAny(
+                                                'Pages.CaseThirdPartyInfos.Edit',
+                                                'Pages.CaseThirdPartyInfos.Delete'
+                                            ) || isHidden
+                                        "
+                                    >
+                                        <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i>
+                                                <span class="caret"></span>
+                                                {{ l('Actions') }}
+                                            </button>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <li>
+                                                    <a
+                                                        *ngIf="permission.isGranted('Pages.CaseThirdPartyInfos.Edit')"
+                                                        class="dropdown-item"
+                                                        (click)="show(record.caseThirdPartyInfo.id)"
+                                                    >
+                                                        {{ l('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        class="dropdown-item"
+                                                        href="javascript:;"
+                                                        *ngIf="permission.isGranted('Pages.CaseThirdPartyInfos.Delete')"
+                                                        (click)="deleteCaseThirdPartyInfo(record.caseThirdPartyInfo)"
+                                                    >
+                                                        {{ l('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width: 130px" [hidden]="!isHidden">
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            (click)="show(record.caseThirdPartyInfo.id)"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                            {{ l('View') }}
+                                        </button>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('VehicleNo') }}</span>
+                                        {{ record.caseThirdPartyInfo.vehicleNo }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Name') }}</span>
+                                        {{ record.hospitalName }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Name') }}</span>
+                                        {{ record.caseInsuredPersonName }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('age') }}</span>
+                                        {{ record.caseThirdPartyInfo.age }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('Sex') }}</span>
+                                        {{ record.caseThirdPartyInfo.sex }}
+                                    </td>
+                                    <td style="width: 150px">
+                                        <span class="p-column-title">{{ l('MaritalStatus') }}</span>
+                                        {{ record.caseThirdPartyInfo.maritalStatus }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{ l('NoData') }}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator
+                                [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                #paginator
+                                (onPageChange)="getCaseThirdPartyInfos($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                [showCurrentPageReport]="true"
+                                [currentPageReportTemplate]="
+                                    'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount
+                                "
+                            ></p-paginator>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12" style="text-align: right; padding: 10px 30px">
+        <button
+            *ngIf="showSubmitToAdjusterButton"
+            (click)="submitToAdjuster()"
+            class="btn btn-success"
+            id="submitToAdjusterButton"
+            [hidden]="isHidden"
+        >
+            <span>{{ l('Submit To Adjuster >>') }}</span>
+        </button>
+        <button
+            *ngIf="showSubmitForInvoicingButton"
+            (click)="submitForInvoicing()"
+            class="btn btn-success"
+            id="submitForInvoicingButton"
+            [hidden]="isHidden"
+        >
+            <span>{{ l('Submit For Invoicing >>') }}</span>
+        </button>
+    </div>
+    <div
+        class="modal fade"
+        bsModal
+        #fileUploadModal="bs-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="fileUploadModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fileUploadModalLabel">Upload File</h5>
+                    <button type="button" class="btn-close" (click)="close()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="my-3">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label>{{ l('NRIC Front File Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #nricFrontUpload
+                                        [isTPIFileSuccessfullyUploaded]="isNRICFrontFileUploaded"
+                                        fileUploadType="ICFront"
+                                        (fileTokenEmitter)="handleNRICDetFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.nricDetFrontFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.nricDetFrontReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{{ l('NRIC Back File Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #nricBackUpload
+                                        [isTPIFileSuccessfullyUploaded]="isNRICBackFileUploaded"
+                                        (fileTokenEmitter)="handleNRICBackFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.dlNricBackFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.dlNricBackReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{{ l('LicenseFrontFile') }} {{ l('Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #licenseFrontUpload
+                                        [isTPIFileSuccessfullyUploaded]="isLicenseFrontFileUploaded"
+                                        fileUploadType="LicenseFront"
+                                        (fileTokenEmitter)="handleDLFrontFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.dlDetFrontFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.dlDetFrontReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <label>{{ l('LicenseBackFile') }} {{ l('Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #licenseBackUpload
+                                        [isTPIFileSuccessfullyUploaded]="isLicenseBackFileUploaded"
+                                        fileUploadType="LicenseBack"
+                                        (fileTokenEmitter)="handleDLBackFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.dlDetBackFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.dlDetBackReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{{ l('Detail File Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #detailUpload
+                                        [isTPIFileSuccessfullyUploaded]="isDetailFileUploaded"
+                                        (fileTokenEmitter)="handleDetailFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.detFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.detReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{{ l('Hospital File Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #hospitalUpload
+                                        [isTPIFileSuccessfullyUploaded]="isHospitalFileUploaded"
+                                        (fileTokenEmitter)="handleHospitalFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.hospFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.hospReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{{ l('Employment Detail File Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #employmentDetailUpload
+                                        [isTPIFileSuccessfullyUploaded]="isEmploymentDetailFileUploaded"
+                                        fileUploadType="EmploymentDetail"
+                                        (fileTokenEmitter)="handleEmployerFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.empFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.empReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>{{ l('NOI File Upload') }}</label>
+                                    <caseThirdPartyUpload
+                                        #noiUpload
+                                        [isTPIFileSuccessfullyUploaded]="isNOIFileUploaded"
+                                        (fileTokenEmitter)="handleNOIFileToken($event)"
+                                        [registerId]="registerId"
+                                        [TpiFileUploadFileName]="caseThirdPartyInfo.noiFileName"
+                                        [TpiFileUploadFileToken]="caseThirdPartyInfo.noiReferenceNo"
+                                        [ThirdPartyInfoId]="caseThirdPartyInfo.id"
+                                    ></caseThirdPartyUpload>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="alert alert-warning" role="alert">
+                                <h5 class="alert-heading">
+                                    <b>NOTE:</b>
+                                    {{ l('OCRDisclaimer') }}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

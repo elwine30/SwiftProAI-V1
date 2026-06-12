@@ -1,0 +1,1579 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <sub-header [title]="'CreditNoteGenerator' | localize"></sub-header>
+            <form #caseCreditNoteForm="ngForm">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-xl-12 text-center">
+                            <h2>{{ tenantCompanyName }}</h2>
+                        </div>
+                        <!-- <div class="col-md-6 text-md-right">
+						  <h3>(Company No: {{ companyNumber }})</h3>
+					  </div> -->
+                    </div>
+
+                    <div class="row mb-5">
+                        <!-- <div class="col-xl-12">
+						  <p>File Reference: {{ fileReference }}</p>
+					  </div> -->
+                        <!-- <div class="col-xl-12 text-center">
+						<h4>Date: &lt;{{l("CreditNoteGeneratedDate")}}&gt; </h4>
+					</div> -->
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <h5 class="card-title bg-light p-2 text-center">{{ l('Item') }}</h5>
+                        </div>
+                        <div class="col-xl-2">
+                            <h5 class="card-title bg-light p-2 text-center">{{ l('Amount') }}</h5>
+                        </div>
+                        <div class="col-xl-2">
+                            <h5 class="card-title bg-light p-2 text-center">{{ l('SST') }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5"></div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_ServiceRemark">{{ l('Service') }}</label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_ServiceRemark="ngModel"
+                                id="CaseCreditNote_ServiceRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.serviceRemark"
+                                name="ServiceRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_ServiceRemark"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_ServiceAmount">
+                                {{ l('ServiceAmount') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_ServiceAmount="ngModel"
+                                id="CaseCreditNote_ServiceAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.serviceAmount"
+                                name="ServiceAmount"
+                                (change)="onItemAmountChange({ amount: 'serviceAmount', sst: 'serviceSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_ServiceAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_ServiceSST">{{ l('ServiceSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['serviceSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'serviceAmount', sst: 'serviceSST' })"
+                                    [checked]="sstCheckboxStates['serviceSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_ServiceSST="ngModel"
+                                id="CaseCreditNote_ServiceSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.serviceSST)"
+                                name="ServiceSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_ServiceSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-3 mb-5">
+                            <label class="form-label" for="CaseCreditNote_MileageKM">{{ l('MileageKM') }}</label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_MileageKM="ngModel"
+                                id="CaseCreditNote_MileageKM"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.mileageKM"
+                                name="MileageKM"
+                                (change)="onMileageKMChange()"
+                                step="0.001"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MileageKM"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_MileageUnitPrice">
+                                {{ l('MileageUnitPrice') }} (RM/KM)
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_MileageUnitPrice="ngModel"
+                                id="CaseCreditNote_MileageUnitPrice"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.mileageUnitPrice)"
+                                name="MileageUnitPrice"
+                                step="0.01"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MileageUnitPrice"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_MileageAmount">
+                                {{ l('MileageAmount') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_MileageAmount="ngModel"
+                                id="CaseCreditNote_MileageAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.mileageAmount)"
+                                name="MileageAmount"
+                                (change)="onItemAmountChange({ amount: 'mileageAmount', sst: 'mileageSST' })"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MileageAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_MileageSST">{{ l('MileageSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['mileageSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'mileageAmount', sst: 'mileageSST' })"
+                                    [checked]="sstCheckboxStates['mileageSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_MileageSST="ngModel"
+                                id="CaseCreditNote_MileageSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.mileageSST)"
+                                name="MileageSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MileageSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_MileageRemark">
+                                {{ l('MileageRemark') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_MileageRemark="ngModel"
+                                id="CaseCreditNote_MileageRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.mileageRemark"
+                                name="MileageRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MileageRemark"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-3 mb-5">
+                            <label class="form-label" for="CaseCreditNote_PhotographQty">
+                                {{ l('PhotographQty') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_PhotographQty="ngModel"
+                                id="CaseCreditNote_PhotographQty"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.photographQty"
+                                name="PhotographQty"
+                                (change)="onPhotographQtyChange()"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PhotographQty"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_PhotographCharge">
+                                {{ l('PhotographCharge') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_PhotographCharge="ngModel"
+                                id="CaseCreditNote_PhotographCharge"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.photographCharge)"
+                                name="PhotographCharge"
+                                step="0.01"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PhotographCharge"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_PhotographTotalPrice">
+                                {{ l('PhotographTotalPrice') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_PhotographTotalPrice="ngModel"
+                                id="CaseCreditNote_PhotographTotalPrice"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.photographTotalPrice)"
+                                name="PhotographTotalPrice"
+                                (change)="onItemAmountChange({ amount: 'photographTotalPrice', sst: 'photographSST' })"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PhotographTotalPrice"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_PhotographSST">
+                                    {{ l('PhotographSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['photographSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'photographTotalPrice', sst: 'photographSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['photographSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_PhotographSST="ngModel"
+                                id="CaseCreditNote_PhotographSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.photographSST)"
+                                name="PhotographSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PhotographSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_PhotographRemark">
+                                {{ l('PhotographRemark') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_PhotographRemark="ngModel"
+                                id="CaseCreditNote_PhotographRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.photographRemark"
+                                name="PhotographRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PhotographRemark"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-6"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_TollRemark">{{ l('Toll') }}</label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_TollRemark="ngModel"
+                                id="CaseCreditNote_TollRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.tollRemark"
+                                name="TollRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TollRemark"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_TollAmount">{{ l('TollAmount') }}</label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_TollAmount="ngModel"
+                                id="CaseCreditNote_TollAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.tollAmount"
+                                name="TollAmount"
+                                (change)="onItemAmountChange({ amount: 'tollAmount', sst: 'tollSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TollAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_TollSST">{{ l('TollSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['tollSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'tollAmount', sst: 'tollSST' })"
+                                    [checked]="sstCheckboxStates['tollSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_TollSST="ngModel"
+                                id="CaseCreditNote_TollSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.tollSST)"
+                                name="TollSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TollSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_BridgeTollRemark">
+                                {{ l('BridgeToll') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_BridgeTollRemark="ngModel"
+                                id="CaseCreditNote_BridgeTollRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.bridgeTollRemark"
+                                name="BridgeTollRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_BridgeTollRemark"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_BridgeTollAmount">
+                                {{ l('BridgeTollAmount') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_BridgeTollAmount="ngModel"
+                                id="CaseCreditNote_BridgeTollAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.bridgeTollAmount"
+                                name="BridgeTollAmount"
+                                (change)="onItemAmountChange({ amount: 'bridgeTollAmount', sst: 'bridgeTollSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_BridgeTollAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_BridgeTollSST">
+                                    {{ l('BridgeTollSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['bridgeTollSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'bridgeTollAmount', sst: 'bridgeTollSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['bridgeTollSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_BridgeTollSST="ngModel"
+                                id="CaseCreditNote_BridgeTollSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.bridgeTollSST)"
+                                name="BridgeTollSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_BridgeTollSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_Police">{{ l('Police') }}</label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_PoliceAmount">{{ l('PoliceAmount') }}</label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_PoliceAmount="ngModel"
+                                id="CaseCreditNote_PoliceAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.policeAmount"
+                                name="PoliceAmount"
+                                (change)="onItemAmountChange({ amount: 'policeAmount', sst: 'policeSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PoliceAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_PoliceSST">{{ l('PoliceSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['policeSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'policeAmount', sst: 'policeSST' })"
+                                    [checked]="sstCheckboxStates['policeSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_PoliceSST="ngModel"
+                                id="CaseCreditNote_PoliceSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.policeSST)"
+                                name="PoliceSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_PoliceSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_StatutoryDeclaration">
+                                {{ l('StatutoryDeclaration') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_StatutoryDeclarationAmount">
+                                {{ l('StatutoryDeclarationAmount') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_StatutoryDeclarationAmount="ngModel"
+                                id="CaseCreditNote_StatutoryDeclarationAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.statutoryDeclarationAmount"
+                                name="StatutoryDeclarationAmount"
+                                (change)="
+                                    onItemAmountChange({
+                                        amount: 'statutoryDeclarationAmount',
+                                        sst: 'statutoryDeclarationSST'
+                                    })
+                                "
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages
+                                [formCtrl]="CaseCreditNote_StatutoryDeclarationAmount"
+                            ></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_StatutoryDeclarationSST">
+                                    {{ l('StatutoryDeclarationSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['statutoryDeclarationSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({
+                                            amount: 'statutoryDeclarationAmount',
+                                            sst: 'statutoryDeclarationSST'
+                                        })
+                                    "
+                                    [checked]="sstCheckboxStates['statutoryDeclarationSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_StatutoryDeclarationSST="ngModel"
+                                id="CaseCreditNote_StatutoryDeclarationSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.statutoryDeclarationSST)"
+                                name="StatutoryDeclarationSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages
+                                [formCtrl]="CaseCreditNote_StatutoryDeclarationSST"
+                            ></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_SurveillanceRemark">
+                                {{ l('Surveillance') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_SurveillanceRemark="ngModel"
+                                id="CaseCreditNote_SurveillanceRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.surveillanceRemark"
+                                name="SurveillanceRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_SurveillanceRemark"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_SurveillanceAmount">
+                                {{ l('SurveillanceAmount') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_SurveillanceAmount="ngModel"
+                                id="CaseCreditNote_SurveillanceAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.surveillanceAmount"
+                                name="SurveillanceAmount"
+                                (change)="onItemAmountChange({ amount: 'surveillanceAmount', sst: 'surveillanceSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_SurveillanceAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_SurveillanceSST">
+                                    {{ l('SurveillanceSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['surveillanceSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'surveillanceAmount', sst: 'surveillanceSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['surveillanceSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_SurveillanceSST="ngModel"
+                                id="CaseCreditNote_SurveillanceSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.surveillanceSST)"
+                                name="SurveillanceSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_SurveillanceSST"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_TelcoAmount">{{ l('Telco') }}</label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_TelcoAmount">{{ l('TelcoAmount') }}</label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_TelcoAmount="ngModel"
+                                id="CaseCreditNote_TelcoAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.telcoAmount"
+                                name="TelcoAmount"
+                                (change)="onItemAmountChange({ amount: 'telcoAmount', sst: 'telcoSST' })"
+                                step="0.01"
+                                style="text-align: right"
+                                amount
+                                decimal
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TelcoAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_TelcoSST">{{ l('TelcoSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['telcoSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'telcoAmount', sst: 'telcoSST' })"
+                                    [checked]="sstCheckboxStates['telcoSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_TelcoSST="ngModel"
+                                id="CaseCreditNote_TelcoSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.telcoSST)"
+                                name="TelcoSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TelcoSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_ThirdPartyAmount">
+                                {{ l('ThirdParty') }}
+                            </label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="createCreditNoteItem(createOrEditCreditNoteItemModalThirdParty, 'ThirdParty')"
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddThirdPartyAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_ThirdPartyAmount">
+                                {{ l('ThirdPartyAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_ThirdPartySST">
+                                    {{ l('ThirdPartySST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['thirdPartySST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'thirdPartyAmount', sst: 'thirdPartySST' })
+                                    "
+                                    [checked]="sstCheckboxStates['thirdPartySST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableThirdParty
+                                [itemType]="'ThirdParty'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_ThirdPartyAmount="ngModel"
+                                id="CaseCreditNote_ThirdPartyAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.thirdPartyAmount)"
+                                name="ThirdPartyAmount"
+                                (change)="onItemAmountChange({ amount: 'thirdPartyAmount', sst: 'thirdPartySST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_ThirdPartyAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_ThirdPartySST="ngModel"
+                                id="CaseCreditNote_ThirdPartySST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.thirdPartySST)"
+                                name="ThirdPartySST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_ThirdPartySST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_CourtAttendanceRemark">
+                                {{ l('CourtAttendance') }}
+                            </label>
+                            <input
+                                type="text"
+                                #CaseCreditNote_CourtAttendanceRemark="ngModel"
+                                id="CaseCreditNote_CourtAttendanceRemark"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.courtAttendanceRemark"
+                                name="CourtAttendanceRemark"
+                                minlength="1"
+                                maxlength="100"
+                                placeholder="Type a Remark"
+                            />
+                            <validation-messages
+                                [formCtrl]="CaseCreditNote_CourtAttendanceRemark"
+                            ></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_CourtAttendanceAmount">
+                                {{ l('CourtAttendanceAmount') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_CourtAttendanceAmount="ngModel"
+                                id="CaseCreditNote_CourtAttendanceAmount"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.courtAttendanceAmount"
+                                name="CourtAttendanceAmount"
+                                (change)="
+                                    onItemAmountChange({ amount: 'courtAttendanceAmount', sst: 'courtAttendanceSST' })
+                                "
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                decimal
+                            />
+                            <validation-messages
+                                [formCtrl]="CaseCreditNote_CourtAttendanceAmount"
+                            ></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_CourtAttendanceSST">
+                                    {{ l('CourtAttendanceSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['courtAttendanceSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({
+                                            amount: 'courtAttendanceAmount',
+                                            sst: 'courtAttendanceSST'
+                                        })
+                                    "
+                                    [checked]="sstCheckboxStates['courtAttendanceSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                #CaseCreditNote_CourtAttendanceSST="ngModel"
+                                id="CaseCreditNote_CourtAttendanceSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.courtAttendanceSST)"
+                                name="CourtAttendanceSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_CourtAttendanceSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_SearchFeeAmount">{{ l('SearchFee') }}</label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="createCreditNoteItem(createOrEditCreditNoteItemModalSearchFee, 'SearchFee')"
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddSearchFee') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_SearchFeeAmount">
+                                {{ l('SearchFeeAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_SearchFeeSST">
+                                    {{ l('SearchFeeSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['searchFeeSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'searchFeeAmount', sst: 'searchFeeSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['searchFeeSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableSearchFee
+                                [itemType]="'SearchFee'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_SearchFeeAmount="ngModel"
+                                id="CaseCreditNote_SearchFeeAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.searchFeeAmount)"
+                                name="SearchFeeAmount"
+                                (change)="onItemAmountChange({ amount: 'searchFeeAmount', sst: 'searchFeeSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_SearchFeeAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_SearchFeeSST="ngModel"
+                                id="CaseCreditNote_SearchFeeSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.searchFeeSST)"
+                                name="SearchFeeSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_SearchFeeSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_AirFareAmount">{{ l('AirFare') }}</label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="createCreditNoteItem(createOrEditCreditNoteItemModalAirFare, 'AirFare')"
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddAirFare') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_AirFareAmount">
+                                {{ l('AirFareAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_AirFareSST">{{ l('AirFareSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['airFareSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'airFareAmount', sst: 'airFareSST' })"
+                                    [checked]="sstCheckboxStates['airFareSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableAirFare
+                                [itemType]="'AirFare'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_AirFareAmount="ngModel"
+                                id="CaseCreditNote_AirFareAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.airFareAmount)"
+                                name="AirFareAmount"
+                                (change)="onItemAmountChange({ amount: 'airFareAmount', sst: 'airFareSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_AirFareAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_AirFareSST="ngModel"
+                                id="CaseCreditNote_AirFareSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.airFareSST)"
+                                name="AirFareSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_AirFareSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_CharteredAmount">
+                                {{ l('CharteredTransport') }}
+                            </label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="
+                                    createCreditNoteItem(
+                                        createOrEditCreditNoteItemModalCharteredTransport,
+                                        'CharteredTransport'
+                                    )
+                                "
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddCharteredAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_CharteredAmount">
+                                {{ l('CharteredAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_CharteredSST">
+                                    {{ l('CharteredSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['charteredSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'charteredAmount', sst: 'charteredSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['charteredSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableCharteredTransport
+                                [itemType]="'CharteredTransport'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_CharteredAmount="ngModel"
+                                id="CaseCreditNote_CharteredAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.charteredAmount)"
+                                name="CharteredAmount"
+                                (change)="onItemAmountChange({ amount: 'charteredAmount', sst: 'charteredSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_CharteredAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_CharteredSST="ngModel"
+                                id="CaseCreditNote_CharteredSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.charteredSST)"
+                                name="CharteredSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_CharteredSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_TaxiFareAmount">{{ l('TaxiFare') }}</label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="createCreditNoteItem(createOrEditCreditNoteItemModalTaxiFare, 'TaxiFare')"
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddTaxiFare') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_TaxiFareAmount">
+                                {{ l('TaxiFareAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_TaxiFareSST">
+                                    {{ l('TaxiFareSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['taxiFareSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'taxiFareAmount', sst: 'taxiFareSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['taxiFareSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableTaxiFare
+                                [itemType]="'TaxiFare'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_TaxiFareAmount="ngModel"
+                                id="CaseCreditNote_TaxiFareAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.taxiFareAmount)"
+                                name="TaxiFareAmount"
+                                (change)="onItemAmountChange({ amount: 'taxiFareAmount', sst: 'taxiFareSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TaxiFareAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_TaxiFareSST="ngModel"
+                                id="CaseCreditNote_TaxiFareSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.taxiFareSST)"
+                                name="TaxiFareSST"
+                                step="0.01"
+                                style="text-align: right"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TaxiFareSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_AccommodationAmount">
+                                {{ l('Accommodation') }}
+                            </label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="
+                                    createCreditNoteItem(createOrEditCreditNoteItemModalAccommodation, 'Accommodation')
+                                "
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddAccommodationFee') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_AccommodationAmount">
+                                {{ l('AccommodationAmount') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_AccommodationSST">
+                                    {{ l('AccommodationSST') }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['accommodationSST']"
+                                    (ngModelChange)="
+                                        onItemAmountChange({ amount: 'accommodationAmount', sst: 'accommodationSST' })
+                                    "
+                                    [checked]="sstCheckboxStates['accommodationSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableAccommodation
+                                [itemType]="'Accommodation'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_AccommodationAmount="ngModel"
+                                id="CaseCreditNote_AccommodationAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.accommodationAmount)"
+                                name="AccommodationAmount"
+                                (change)="
+                                    onItemAmountChange({ amount: 'accommodationAmount', sst: 'accommodationSST' })
+                                "
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_AccommodationAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_AccommodationSST="ngModel"
+                                id="CaseCreditNote_AccommodationSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.accommodationSST)"
+                                name="AccommodationSST"
+                                style="text-align: right"
+                                step="0.01"
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_AccommodationSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-5 d-flex justify-content-between">
+                            <label class="form-label" for="CaseCreditNote_MiscAmount">{{ l('Miscellaneous') }}</label>
+                            <label
+                                id="btn_create_creditNoteItem"
+                                *ngIf="
+                                    isGranted('Pages.CreditNoteItems.Create') ||
+                                    (isGranted('Pages.CreditNoteItems.Create.Admin') &&
+                                        isGranted('Pages.CreditNoteItems.Create.Adjuster'))
+                                "
+                                (click)="
+                                    createCreditNoteItem(createOrEditCreditNoteItemModalMiscellaneous, 'Miscellaneous')
+                                "
+                                class="form-label"
+                                style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                            >
+                                <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                                {{ l('AddMiscellaneousFee') }}
+                            </label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2">
+                            <label class="form-label" for="CaseCreditNote_MiscAmount">{{ l('MiscAmount') }}</label>
+                        </div>
+
+                        <div class="col-xl-2">
+                            <div class="col-xl-12 d-flex justify-content-between">
+                                <label class="form-label" for="CaseCreditNote_MiscSST">{{ l('MiscSST') }}</label>
+                                <input
+                                    type="checkbox"
+                                    [(ngModel)]="sstCheckboxStates['miscSST']"
+                                    (ngModelChange)="onItemAmountChange({ amount: 'miscAmount', sst: 'miscSST' })"
+                                    [checked]="sstCheckboxStates['miscSST']"
+                                    style="margin-right: 3px"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <creditNoteItemsTable
+                                #creditNoteItemsTableMiscellaneous
+                                [itemType]="'Miscellaneous'"
+                                (tableChange)="updateCreditNoteItemTotal()"
+                            ></creditNoteItemsTable>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_MiscAmount="ngModel"
+                                id="CaseCreditNote_MiscAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.miscAmount)"
+                                name="MiscAmount"
+                                (change)="onItemAmountChange({ amount: 'miscAmount', sst: 'miscSST' })"
+                                style="text-align: right"
+                                step="0.01"
+                                amount
+                                disabled
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MiscAmount"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <input
+                                type="number"
+                                #CaseCreditNote_MiscSST="ngModel"
+                                id="CaseCreditNote_MiscSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.miscSST)"
+                                name="MiscSST"
+                                pattern="0.01"
+                                disabled
+                                style="text-align: right"
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_MiscSST"></validation-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group"></div>
+
+                <div class="my-3"></div>
+
+                <div class="card-footer">
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label">{{ l('Subtotal:') }}</label>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="CaseCreditNote_AmountExcludeSST">
+                                {{ l('AmountExcludeSST') }}
+                            </label>
+                            <input
+                                type="number"
+                                #CaseCreditNote_AmountExcludeSST="ngModel"
+                                id="CaseCreditNote_AmountExcludeSST"
+                                class="form-control"
+                                [ngModel]="formatNumber(caseCreditNote.amountExcludeSST)"
+                                name="AmountExcludeSST"
+                                style="text-align: right"
+                                step="0.01"
+                                readonly
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_AmountExcludeSST"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-2 mb-5">
+                            <label class="form-label" for="sstAmount">{{ l('SSTAmount') }}</label>
+                            <input
+                                type="number"
+                                #SstAmount="ngModel"
+                                id="SstAmount"
+                                class="form-control"
+                                [ngModel]="formatNumber(this.sstAmount)"
+                                name="sstAmount"
+                                style="text-align: right"
+                                step="0.01"
+                                readonly
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="SstAmount">{{ l('IncludeSSTRateAmount') }}</label>
+                            <input
+                                type="checkbox"
+                                #CaseCreditNote_IncludeSST="ngModel"
+                                id="CaseCreditNote_IncludeSST"
+                                id="includeSST"
+                                [(ngModel)]="caseCreditNote.includeSST"
+                                (change)="toggleSST($event)"
+                                checked
+                                style="text-align: right; margin-left: 25px"
+                            />
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-2 mb-5"></div>
+
+                        <div class="col-xl-2 mb-5"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xl-5 mb-5">
+                            <label class="form-label" for="CaseCreditNote_TotalInTextForm">
+                                {{ l('TotalInTextForm') }}
+                            </label>
+                            <input
+                                type="text-field"
+                                #CaseCreditNote_TotalInTextForm="ngModel"
+                                id="CaseCreditNote_TotalInTextForm"
+                                class="form-control"
+                                [(ngModel)]="caseCreditNote.totalInTextForm"
+                                name="TotalInTextForm"
+                                readonly
+                            />
+                            <validation-messages [formCtrl]="CaseCreditNote_TotalInTextForm"></validation-messages>
+                        </div>
+
+                        <div class="col-xl-1"></div>
+
+                        <div class="col-xl-4 mb-5">
+                            <label class="form-label" for="CaseCreditNote_TotalAmount">{{ l('TotalAmount') }}</label>
+                            <div class="input-group">
+                                <input
+                                    type="number"
+                                    #CaseCreditNote_TotalAmount="ngModel"
+                                    id="CaseCreditNote_TotalAmount"
+                                    class="form-control"
+                                    [ngModel]="formatNumber(caseCreditNote.totalAmount)"
+                                    name="TotalAmount"
+                                    step="0.01"
+                                    style="text-align: right"
+                                    readonly
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="form-group row">
+                        <div class="col-xl-7 mb-5"></div>
+
+                        <div class="col-xl-3 d-flex justify-content-end">
+                            <button (click)="goBack()" class="btn btn-light-primary fw-bold flex-grow-1">
+                                <span>{{ l('Back') }}</span>
+                            </button>
+                            <button
+                                (click)="save()"
+                                class="btn btn-primary blue float-right"
+                                [buttonBusy]="saving"
+                                [busyText]="l('SavingWithThreeDot')"
+                            >
+                                <i class="fa fa-save"></i>
+                                <span>{{ l('Save') }}</span>
+                            </button>
+                            <button
+                                (click)="preview()"
+                                class="btn btn-success blue float-right flex-grow-1"
+                                [buttonBusy]="saving"
+                                [busyText]="l('SavingWithThreeDot')"
+                            >
+                                <i class="fa fa-paper-plane"></i>
+                                <span>{{ l('Preview') }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalThirdParty
+    (modalSave)="creditNoteItemsTableThirdParty.getCreditNoteItems(); updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalSearchFee
+    (modalSave)="creditNoteItemsTableSearchFee.getCreditNoteItems(); updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalAirFare
+    (modalSave)="creditNoteItemsTableAirFare.getCreditNoteItems(); updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalCharteredTransport
+    (modalSave)="creditNoteItemsTableCharteredTransport.getCreditNoteItems(); this.updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalTaxiFare
+    (modalSave)="creditNoteItemsTableTaxiFare.getCreditNoteItems(); updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalAccommodation
+    (modalSave)="creditNoteItemsTableAccommodation.getCreditNoteItems(); updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>
+<createOrEditCreditNoteItemModal
+    #createOrEditCreditNoteItemModalMiscellaneous
+    (modalSave)="creditNoteItemsTableMiscellaneous.getCreditNoteItems(); updateCreditNoteItemTotal()"
+></createOrEditCreditNoteItemModal>

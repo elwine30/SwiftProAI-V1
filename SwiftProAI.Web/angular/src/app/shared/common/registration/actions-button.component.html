@@ -1,0 +1,35 @@
+<div class="row mb-4 justify-content-end">
+    <div class="col-xl-10" style="font-size: x-large;font-weight: bold;padding: 0 20px;">
+        Registration Form <span style="font-size: medium;font-weight: bold;padding: 10px 0;">{{fileRefNo}}</span> 
+    </div>
+    <div class="col-xl-2 d-flex justify-content-end">
+        <div class="btn-group">
+            <button class="btn btn-primary me-2" (click)="createNewRemark()">
+                Remarks
+            </button>
+        </div>
+        <div class="btn-group dropdown" dropdown container="body" >
+            <button class="dropdown-toggle btn btn-primary" dropdownToggle>
+                <i class="fa fa-plus btn-md-icon"></i>
+                <span class="d-none d-md-inline-block"></span>
+                {{ l('Actions') }}
+            </button>
+            <ul class="dropdown-menu" *dropdownMenu>
+                <li [hidden]="!isGrantedAny('Pages.CaseExpenses')">
+                    <a class="dropdown-item" (click)="goToAddExpense()">{{ l('Add Expense') }}</a>
+                </li>
+                <li [hidden]="!isGrantedAny('Pages.CaseClaims')">
+                    <a class="dropdown-item" (click)="goToAddClaims()">{{ l('Add Claims') }}</a>
+                </li>
+                <li><a class="dropdown-item" (click)="openDeclarationForm()">{{ l('Declaration Form') }}</a></li>
+                <li><a class="dropdown-item" (click)="downloadRegistration()">{{ l('Export Registration') }}</a></li>
+                <li><a class="dropdown-item" (click)="goToFileOrganizer()">{{ l('Manage Files') }}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<createOrEditCaseDeclarationAnswerModal #createOrEditCaseDeclarationAnswerModal></createOrEditCaseDeclarationAnswerModal>
+<createAndViewExpensesModal #createAndViewExpensesModal></createAndViewExpensesModal>
+<createRemarkModal #createRemarkModal></createRemarkModal>
+<viewCaseDeclarationAnswerModal #viewCaseDeclarationAnswerModal></viewCaseDeclarationAnswerModal>

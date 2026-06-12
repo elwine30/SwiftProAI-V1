@@ -1,0 +1,584 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <sub-header [title]="'CaseClaims' | localize"></sub-header>
+            <form #caseClaimForm="ngForm">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-xl-6">
+                            <h5 class="card-title bg-light p-2 text-center">{{ l('Item') }}</h5>
+                        </div>
+                        <div class="col-xl-5">
+                            <h5 class="card-title bg-light p-2 text-center">{{ l('Amount') }}</h5>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-check form-check-custom form-check-solid">
+                                <input
+                                [disabled]="
+                                    this.caseClaim.statusId !== this.EXP001Id &&
+                                    this.caseClaim.statusId !== this.EXP002Id &&
+                                    this.caseClaim.statusId !== null
+                                "
+                                    id="CaseClaim_Fraud"
+                                    #CaseClaim_Fraud="ngModel"
+                                    name="Fraud"
+                                    [(ngModel)]="caseClaim.fraud"
+                                    type="checkbox"
+                                    class="form-check-input"
+                                />
+                                <span class="form-check-label">
+                                    {{ l('Fraud') }}
+                                </span>
+                            </label>
+                            <validation-messages [formCtrl]="CaseClaim_Fraud"></validation-messages>
+                        </div>
+    
+                        <div class="col-xl-1"></div>
+    
+                        <div class="col-xl-3 mb-5" *ngIf="caseClaim.fraud == true">
+                            <label class="form-label" for="CaseClaim_FraudAmount">{{ l('FraudAmount') }}</label>
+                            <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_FraudAmount="ngModel"
+                            id="CaseClaim_FraudAmount"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.fraudAmount"
+                            (ngModelChange)="updateTotal()"
+                            name="FraudAmount"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_FraudAmount"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label class="form-label" for="CaseClaim_FileChargesRemark">{{ l('FileChargesRemark') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="text"
+                            #CaseClaim_FileChargesRemark="ngModel"
+                            id="CaseClaim_FileChargesRemark"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.fileChargesRemark"
+                            name="fileChargesRemark"
+                            minlength="1"
+                            maxlength="100"
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_FileChargesRemark"></validation-messages>
+                    </div>
+
+                    <div class="col-xl-1"></div>
+
+                    <div class="col-xl-3 mb-5">
+                        <label class="form-label" for="CaseClaim_FileCharges">{{ l('FileCharges') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_FileCharges="ngModel"
+                            id="CaseClaim_FileCharges"
+                            class="form-control"
+                            [(ngModel)]="this.caseClaim.fileCharges"
+                            (ngModelChange)="updateTotal()"
+                            name="fileCharges"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_FileCharges"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-3 mb-5">
+                        <label class="form-label" for="CaseClaim_MileageKM">{{ l('MileageKM') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_MileageKM="ngModel"
+                            id="CaseClaim_MileageKM"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.mileageKM"
+                            (ngModelChange)="onMileageKMChange()"
+                            name="MileageKM"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            amount
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_MileageKM"></validation-messages>
+                    </div>
+
+                    <div class="col-xl-3">
+                        <label class="form-label" for="CaseClaim_MileageUnitPrice">{{ l('MileageUnitPrice') }}</label>
+                        <input
+                            type="number"
+                            #CaseClaim_MileageUnitPrice="ngModel"
+                            id="CaseClaim_MileageUnitPrice"
+                            class="form-control"
+                            [ngModel]="formatNumber(caseClaim.mileageUnitPrice)"
+                            name="MileageUnitPrice"
+                            min="0"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            disabled
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_MileageUnitPrice"></validation-messages>
+                    </div>
+
+                    <div class="col-xl-1"></div>
+
+                    <div class="col-xl-3">
+                        <label class="form-label" for="CaseClaim_MileageTotal">{{ l('MileageTotal') }}</label>
+                        <input
+                            type="number"
+                            #CaseClaim_MileageTotal="ngModel"
+                            id="CaseClaim_MileageTotal"
+                            class="form-control"
+                            [ngModel]="formatNumber(this.mileageTotal)"
+                            (ngModelChange)="updateTotal()"
+                            name="MileageTotal"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            disabled
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_MileageTotal"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label class="form-label" for="CaseClaim_Remarks">{{ l('Remarks') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                                type="text"
+                                #CaseClaim_Remarks="ngModel"
+                                id="CaseClaim_Remarks"
+                                class="form-control"
+                                [(ngModel)]="caseClaim.remarks"
+                                name="Remarks"
+                            />
+                            <validation-messages [formCtrl]="CaseClaim_Remarks"></validation-messages>
+                        </div>
+    
+                        <div class="col-xl-6"></div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-xl-6 mb-5">
+                            <label class="form-label" for="CaseClaim_PoliceRemark">{{ l('PoliceRemark') }}</label>
+                            <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                                type="text"
+                                #CaseClaim_PoliceRemark="ngModel"
+                                id="CaseClaim_PoliceRemark"
+                                class="form-control"
+                                [(ngModel)]="caseClaim.policeRemark"
+                                name="PoliceRemark"
+                            />
+                            <validation-messages [formCtrl]="CaseClaim_PoliceRemark"></validation-messages>
+                        </div>
+    
+                        <div class="col-xl-1"></div>
+    
+                        <div class="col-xl-3">
+                            <label class="form-label" for="CaseClaim_Police">{{ l('Police') }}</label>
+                            <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_Police="ngModel"
+                            id="CaseClaim_Police"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.police"
+                            (ngModelChange)="updateTotal()"
+                            name="Police"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_Police"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label class="form-label" for="CaseClaim_AirFareRemark">{{ l('AirFareRemark') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                                type="text"
+                                #CaseClaim_AirFareRemark="ngModel"
+                                id="CaseClaim_AirFareRemark"
+                                class="form-control"
+                                [(ngModel)]="caseClaim.airFareRemark"
+                                name="AirFareRemark"
+                            />
+                            <validation-messages [formCtrl]="CaseClaim_AirFareRemark"></validation-messages>
+                        </div>
+    
+                        <div class="col-xl-1"></div>
+    
+                        <div class="col-xl-3">
+                            <label class="form-label" for="CaseClaim_AirFare">{{ l('AirFare') }}</label>
+                            <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_AirFare="ngModel"
+                            id="CaseClaim_AirFare"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.airFare"
+                            (ngModelChange)="updateTotal()"
+                            name="AirFare"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_AirFare"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label class="form-label" for="CaseClaim_CharteredTransportRemark">
+                            {{ l('CharteredTransportRemark') }}
+                        </label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                                type="text"
+                                #CaseClaim_CharteredTransportRemark="ngModel"
+                                id="CaseClaim_CharteredTransportRemark"
+                                class="form-control"
+                                [(ngModel)]="caseClaim.charteredTransportRemark"
+                                name="CharteredTransportRemark"
+                            />
+                            <validation-messages [formCtrl]="CaseClaim_CharteredTransportRemark"></validation-messages>
+                        </div>
+    
+                        <div class="col-xl-1"></div>
+    
+                        <div class="col-xl-3">
+                            <label class="form-label" for="CaseClaim_CharteredTransport">
+                                {{ l('CharteredTransport') }}
+                            </label>
+                            <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_CharteredTransport="ngModel"
+                            id="CaseClaim_CharteredTransport"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.charteredTransport"
+                            (ngModelChange)="updateTotal()"
+                            name="CharteredTransport"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_CharteredTransport"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5">
+                        <label class="form-label" for="CaseClaim_TollRemark">{{ l('TollRemark') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                                type="text"
+                                #CaseClaim_TollRemark="ngModel"
+                                id="CaseClaim_TollRemark"
+                                class="form-control"
+                                [(ngModel)]="caseClaim.tollRemark"
+                                name="TollRemark"
+                            />
+                            <validation-messages [formCtrl]="CaseClaim_TollRemark"></validation-messages>
+                        </div>
+    
+                        <div class="col-xl-1"></div>
+    
+                        <div class="col-xl-3">
+                            <label class="form-label" for="CaseClaim_Toll">{{ l('Toll') }}</label>
+                            <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_Toll="ngModel"
+                            id="CaseClaim_Toll"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.toll"
+                            (ngModelChange)="updateTotal()"
+                            name="Toll"
+                            min="0.00"
+                            step="0.01"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_Toll"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5"></div>
+
+                    <div class="col-xl-1"></div>
+
+                    <div class="col-xl-3 mb-5">
+                        <label class="form-label" for="CaseClaim_Hotel">{{ l('Hotel') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_Hotel="ngModel"
+                            id="CaseClaim_Hotel"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.hotel"
+                            (ngModelChange)="updateTotal()"
+                            name="Hotel"
+                            min="0.00"
+                            step="0.01"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_Hotel"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5"></div>
+
+                    <div class="col-xl-1"></div>
+
+                    <div class="col-xl-3">
+                        <label class="form-label" for="CaseClaim_SD">{{ l('SD') }}</label>
+                        <input
+                            [disabled]="
+                                this.caseClaim.statusId !== this.EXP001Id &&
+                                this.caseClaim.statusId !== this.EXP002Id &&
+                                this.caseClaim.statusId !== null
+                            "
+                            type="number"
+                            #CaseClaim_SD="ngModel"
+                            id="CaseClaim_SD"
+                            class="form-control"
+                            [(ngModel)]="caseClaim.sd"
+                            (ngModelChange)="updateTotal()"
+                            name="SD"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            amount
+                            decimal
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_SD"></validation-messages>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-xl-6 d-flex justify-content-between">
+                        <label class="form-label" for="CaseClaim_SearchFee">{{ l('SearchFee') }}</label>
+                        <label
+                            id="btn_create_caseSearchFee"
+                            *ngIf="isGranted('Pages.CaseSearchFees.Create') && caseClaim.statusId == null"
+                            (click)="createCaseSearchFee()"
+                            class="form-label"
+                            [class.disabled]="caseClaim.statusId != null"
+                            style="cursor: pointer; color: rgb(13, 110, 253); margin-right: 15px"
+                        >
+                            <i class="fa fa-plus" style="color: rgb(13, 110, 253); margin-right: 5px"></i>
+                            {{ l('AddSearchFee') }}
+                        </label>
+                    </div>
+
+                    <div class="col-xl-1"></div>
+
+                    <div class="col-xl-3">
+                        <label class="form-label" for="CaseClaim_SearchFee">{{ l('SearchFeeTotal') }}</label>
+                        <validation-messages [formCtrl]="CaseClaim_SearchFee"></validation-messages>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xl-7 mb-5">
+                        <caseSearchFeesTable #caseSearchFeesTable (tableChange)="updateSearchfeeTotal()"></caseSearchFeesTable>
+                    </div>
+
+                    <div class="col-xl-3 mb-5">
+                        <input
+                            type="number"
+                            #CaseClaim_SearchFee="ngModel"
+                            id="CaseClaim_SearchFee"
+                            class="form-control"
+                            [ngModel]="formatNumber(this.caseClaim.searchFee)"
+                            name="SearchFee"
+                            min="0"
+                            step="0.01"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            style="text-align: right"
+                            disabled
+                        />
+                        <validation-messages [formCtrl]="CaseClaim_SearchFee"></validation-messages>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="form-group row">
+                    <div class="col-xl-7 mb-5"></div>
+
+                    <div class="col-xl-3">
+                        <label class="form-label" for="CaseClaim_Total">= {{ l('Total') }}:</label>
+                        <div class="input-group">
+                            <input
+                                [disabled]="
+                                    this.caseClaim.statusId !== this.EXP001Id &&
+                                    this.caseClaim.statusId !== this.EXP002Id &&
+                                    this.caseClaim.statusId !== null
+                                "
+                                type="number"
+                                #CaseClaim_Total="ngModel"
+                                id="CaseClaim_Total"
+                                class="form-control"
+                                [ngModel]="formatNumber(total)"
+                                name="total"
+                                step="0.01"
+                                style="text-align: right"
+                                    readonly
+                                />
+                            </div>
+                            <!-- <label class="form-label" for="CaseClaim_Total">= {{l("Total")}}:</label>
+                                                        <input     [disabled]="this.caseClaim.statusId !== this.EXP001Id && this.caseClaim.statusId !== this.EXP002Id && this.caseClaim.statusId !==null" 
+
+ type="number" #CaseClaim_Total="ngModel" id="CaseClaim_Total" class="form-control" [(ngModel)]="this.total" name="Total"  step="0.01" readonly/> -->
+                        </div>
+    
+                        <!-- <div class="col-xl-2 mb-5">
+                            <br>
+                            <button (click)="save()" class="btn btn-primary blue float-right " *ngIf="caseClaim.statusId == null"
+                            [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> 
+                            <span>{{l("Update")}}</span>
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+            </form>
+
+            <div class="card-footer">
+                <div class="form-group row">
+                    <div class="col-xl-6 mb-5"></div>
+
+                    <div class="col-xl-4 d-flex justify-content-end" *ngIf="caseClaim.statusId == null">
+                        <button (click)="goBack()" class="btn btn-light-primary fw-bold flex-grow-1">
+                            <span>{{ l('Back') }}</span>
+                        </button>
+                        <button
+                            (click)="save()"
+                            class="btn btn-primary blue float-right"
+                            *ngIf="caseClaim.statusId == null"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                        >
+                            <i class="fa fa-save"></i>
+                            <span>{{ l('Save Draft') }}</span>
+                        </button>
+                        <button
+                            (click)="submit()"
+                            class="btn btn-success blue float-left flex-grow-1"
+                            *ngIf="caseClaim.statusId == null"
+                            [buttonBusy]="saving"
+                            [busyText]="l('SavingWithThreeDot')"
+                        >
+                            <i class="fa fa-paper-plane"></i>
+                            <span>{{ l('FinalizeAndSubmit') }}</span>
+                        </button>
+                    </div>
+
+                    <div class="col-xl-1 mb-5" *ngIf="caseClaim.statusId != null"></div>
+
+                    <div class="col-xl-2 d-flex justify-content-end" *ngIf="caseClaim.statusId != null">
+                        <button (click)="goBack()" class="btn btn-light-primary fw-bold flex-grow-1">
+                            <span>{{ l('Back') }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<createOrEditCaseSearchFeeModal
+    #createOrEditCaseSearchFeeModal
+    (modalSave)="caseSearchFeesTable.getCaseSearchFees(); updateSearchfeeTotal()"
+></createOrEditCaseSearchFeeModal>
+<!-- (modalSave)="getCaseSearchFees()" -->

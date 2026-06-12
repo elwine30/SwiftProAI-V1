@@ -1,0 +1,103 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #lawFirmForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="lawFirm.id">{{l("EditLawFirm")}}</span>
+                        <span *ngIf="!lawFirm.id">{{l("CreateNewLawFirm")}}</span>
+                    </h4>                    
+                    
+                    
+                 <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving"></button>
+             
+                </div>
+                <div class="modal-body">
+                 
+
+
+
+
+								<div class="my-3">
+									<label class="form-label" for="LawFirm_Name">{{l("Name")}} *</label>
+									<input type="text" #LawFirm_Name="ngModel" id="LawFirm_Name" class="form-control" [(ngModel)]="lawFirm.name" name="Name"     required/>
+								    <validation-messages [formCtrl]="LawFirm_Name"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="LawFirm_ShortName">{{l("ShortName")}} *</label>
+									<input type="text" #LawFirm_ShortName="ngModel" id="LawFirm_ShortName" class="form-control" [(ngModel)]="lawFirm.shortName" name="ShortName"     required/>
+								    <validation-messages [formCtrl]="LawFirm_ShortName"></validation-messages>
+								</div>
+					
+								<div class="my-3">
+									<label class="form-label" for="LawFirm_Address">{{l("Address")}} *</label>
+									<input type="text" #LawFirm_Address="ngModel" id="LawFirm_Address" class="form-control" [(ngModel)]="lawFirm.address" name="Address"     required/>
+								    <validation-messages [formCtrl]="LawFirm_Address"></validation-messages>
+								</div>
+
+                                <div class="my-3">
+									<label class="form-label" for="LawFirm_BusinessRegistrationNo">{{l("businessRegistrationNo")}}</label>
+									<input type="text" #LawFirm_BusinessRegistrationNo="ngModel" id="LawFirm_BusinessRegistrationNo" class="form-control" [(ngModel)]="lawFirm.businessRegistrationNo" name="BusinessRegistrationNo" [readOnly]="!isCancelled && lawFirm.viewThirdPartyCaseRequest"/>
+								    <validation-messages [formCtrl]="LawFirm_BusinessRegistrationNo"></validation-messages>
+								</div>
+                                
+                                <br/>
+								<label class="form-check form-check-custom form-check-solid">
+                                    <input
+                                        id="LawFirm_IsActive" 
+                                        #LawFirm_IsActive="ngModel"
+                                        name="IsActive" 
+                                        [(ngModel)]="lawFirm.isActive"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                    />
+                                    <span class="form-check-label">
+                                        {{l("IsActive")}}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="LawFirm_IsActive"></validation-messages>
+
+                                <label class="form-check form-check-custom form-check-solid pt-2">
+                                    <input
+                                        id="LawFirm_AllowToViewAssignedCases" 
+                                        #LawFirm_AllowToViewAssignedCases="ngModel"
+                                        name="allowToViewAssignedCases" 
+                                        [(ngModel)]="lawFirm.allowToViewAssignedCases"
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        (click)="toggleAllowCompanyToViewAssignedCases($event)"
+                                    />
+                                    <span class="form-check-label">
+                                        {{l("AllowCompanyToViewAssignedCases")}}
+                                    </span>
+                                </label>
+                                <validation-messages [formCtrl]="LawFirm_AllowToViewAssignedCases"></validation-messages>
+
+                                <div class="my-5" [hidden]="isHideRemark" *ngIf="viewThirdPartyCaseRequest">
+                                    <label 
+                                    class="form-label" 
+                                    for="Remark">{{ 'Remark' | localize }}
+                                    </label>
+                                    <textarea
+                                            id="ViewThirdPartyCaseRequest_CancelRemark"
+                                            #ViewThirdPartyCaseRequest_CancelRemark="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="Remark"
+                                            [(ngModel)]="viewThirdPartyCaseRequest.cancelRemark"
+                                            placeholder="Enter remarks here"
+                                            rows="3"
+                                        ></textarea>
+                                    <validation-messages [formCtrl]="ViewThirdPartyCaseRequest_CancelRemark"></validation-messages>
+                                </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-light-primary fw-bold" (click)="close()">{{l("Back")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!lawFirmForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

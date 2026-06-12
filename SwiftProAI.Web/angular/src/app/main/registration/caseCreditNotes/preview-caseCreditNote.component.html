@@ -1,0 +1,481 @@
+﻿<div [@routerTransition]>
+    <div [class]="containerClass" >
+        <div class="row mb-5">
+            <div class="col-xl-10"></div>
+            <div class="col-xl-2 d-flex justify-content-end">
+                <button (click)="print()" class="btn btn-primary blue float-right"
+                    ><i class="fa fa-print"></i> 
+                    <span>{{l("PrintCreditNote")}}</span>
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom gutter-b">
+            <div class="card-body" id="creditNoteArea">
+                <div class="row mb-20">
+                    <div class="col-xl-12 text-center">
+                        <h2>{{ tenantCompanyName }}</h2>
+                    </div>
+                    <div class="col-xl-12 text-center">
+                        <h5>(Company No: {{tenantBusinessRegistrationNo}})</h5>
+                    </div>
+                    <div class="col-xl-12 text-center">
+                        <h5>{{tenantCompanyAddress}}</h5>
+                    </div>
+                    <div class="col-xl-12 text-center company-telno-info">
+                        <h5>{{tenantCompanyTelNo}}</h5>
+                    </div>
+                </div>
+
+                <div class="row mb-20">
+                    <!-- <div class="col-xl-12">
+						<p>File Reference: {{ fileReference }}</p>
+					</div> -->
+                    <div class="col-xl-12 text-center creditNote-title">
+                        <h1>{{l("CREDIT NOTE")}}</h1>
+                    </div>
+                </div>
+                <div class="row mb-20">
+                    <div class="col-xl-6">
+                        <table class="client-info" style="font-size:medium; width:50%; float:left">
+                            <tbody>
+                                <tr>
+                                    <td class="col-xl-12">
+                                        The Claims Manager
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-12">
+                                        {{companyName}}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-12">
+                                        {{companyAddress}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xl-6">
+                        <table class="creditNote-info" style="font-size:medium; width:50%; float:right">
+                            <tbody>
+                                <tr id="CreditNotePreview_CompanySstRegNo">
+                                    
+                                    <td class="col-xl-4">
+                                        SST Reg No
+                                    </td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-5">
+                                        {{companySstRegNo}}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td class="col-xl-4"><span id="CreditNotePreview_CreditNoteNo">Credit Note No</span>
+                                    </td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-5">{{caseCreditNote.creditRefNoPrefix}}{{caseCreditNote.creditRefNo}}</td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td class="col-xl-4">Date</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-5">{{creditNoteDate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+
+                <div class="row mb-20">
+                    <div class="col-xl-12">
+                        <table class="reference-info" style="font-size:medium; width:50%">
+                            <tbody>
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-2">Your Reference</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8"><span id="CreditNotePreview_lblreference"></span></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">Insured</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">{{insuredPersonName}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">Policy No</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">{{insuredPersonPolicyNo}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">Vehicle No</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">{{mainRegistrationVehicleNo}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-xl-1"></td>
+                                    <td class="col-xl-3">File Ref. No</td>
+                                    <td class="col-xl-1">:</td>
+                                    <td class="col-xl-8">
+                                        {{fileRefNo}}
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mb-10">
+                    <div class="col-xl-12">
+                        <table id="CreditNoteTable" class="table table-bordered td" style="font-weight:normal; border: 1px solid grey;">
+                            <tbody>
+                                <tr style="height:30px">
+                                    <td style="font-size: medium; text-align:center;width:600px">
+                                        ITEM</td>
+                                    <td style="text-align:center;font-size: medium">AMOUNT
+                                    </td>
+                                    <td style="text-align:center;font-size: medium">
+                                        SST
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                            <tbody style="font-size:medium">
+
+                                <tr id="CreditNotePreview_trService" *ngIf="caseCreditNote.serviceAmount!=0">
+                                    <td>Service Fee
+                                        <div id="CreditNotePreview_ServiceRemark" *ngIf="caseCreditNote.serviceRemark" style="margin-left:20px">-
+                                            {{caseCreditNote.serviceRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdServiceAmount" style="text-align:right;"> <span
+                                            id="CreditNotePreview_ServiceAmount">{{caseCreditNote.serviceAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdServiceSST" style="text-align:right"><span
+                                            id="CreditNotePreview_ServiceSST">{{caseCreditNote.serviceSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trMileage" *ngIf="caseCreditNote.mileageAmount!=0">
+                                    <td>Mileage
+                                        <div>
+                                            <span id="CreditNotePreview_MileageKM">{{caseCreditNote.mileageKM}}
+                                                KM</span>
+                                            <span id="CreditNotePreview_MileageUnitPrice"> (RM {{caseCreditNote.mileageUnitPrice}}
+                                                per KM)</span>
+                                        </div>
+                                        <div id="CreditNotePreview_MileageRemark" *ngIf="caseCreditNote.mileageRemark" style="margin-left:20px">-
+                                            {{caseCreditNote.mileageRemark}}
+
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdMileageAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_MileageAmount">{{caseCreditNote.mileageAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdMileageSST" style="text-align:right"><span
+                                            id="CreditNotePreview_MileageSST">{{caseCreditNote.mileageSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trPhotograph" *ngIf="caseCreditNote.photographTotalPrice!=0">
+                                    <td>Photograph
+                                        <div>
+                                            <span id="CreditNotePreview_PhotographQty">{{caseCreditNote.photographQty}}
+                                                pc</span>
+                                            <span id="CreditNotePreview_PhotographCharge"> (RM {{caseCreditNote.photographCharge}}
+                                                per pc)</span>
+                                        </div>
+                                        <div id="CreditNotePreview_PhotographRemark"*ngIf="caseCreditNote.photographRemark" style="margin-left:20px">-
+                                            {{caseCreditNote.photographRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdPhotographTotalPrice" style="text-align:right"> <span
+                                            id="CreditNotePreview_PhotographTotalPrice">{{caseCreditNote.photographTotalPrice | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdPhotographSST" style="text-align:right"><span
+                                            id="CreditNotePreview_PhotographSST">{{caseCreditNote.photographSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trToll" *ngIf="caseCreditNote.tollAmount!=0">
+                                    <td>Toll
+                                        <div id="CreditNotePreview_TollRemark" *ngIf="caseCreditNote.tollRemark" style="margin-left:20px">-
+                                            {{caseCreditNote.tollRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdTollAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_TollAmount">{{caseCreditNote.tollAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdTollSST" style="text-align:right"><span
+                                            id="CreditNotePreview_TollSST">{{caseCreditNote.tollSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trBridgeToll" *ngIf="caseCreditNote.bridgeTollAmount!=0">
+                                    <td>Bridge Toll
+                                        <div id="CreditNotePreview_BridgeTollRemark" *ngIf="caseCreditNote.bridgeTollRemark" style="margin-left:20px">-
+                                            {{caseCreditNote.bridgeTollRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdBridgeTollAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_BridgeTollAmount">{{caseCreditNote.bridgeTollAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdBridgeTollSST" style="text-align:right"><span
+                                            id="CreditNotePreview_BridgeTollSST">{{caseCreditNote.bridgeTollSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trPolice" *ngIf="caseCreditNote.policeAmount!=0">
+                                    <td>Police
+                                    </td>
+                                    <td id="CreditNotePreview_tdPoliceAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_PoliceAmount">{{caseCreditNote.policeAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdPoliceSST" style="text-align:right"><span
+                                            id="CreditNotePreview_PoliceSST">{{caseCreditNote.policeSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trStatutoryDeclaration" *ngIf="caseCreditNote.statutoryDeclarationAmount!=0">
+                                    <td>Statutory Declaration
+                                    </td>
+                                    <td id="CreditNotePreview_tdStatutoryDeclarationAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_StatutoryDeclarationeAmount">{{caseCreditNote.statutoryDeclarationAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdStatutoryDeclarationSST" style="text-align:right"><span
+                                            id="CreditNotePreview_StatutoryDeclarationSST">{{caseCreditNote.statutoryDeclarationSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trSurveillance" *ngIf="caseCreditNote.surveillanceAmount!=0">
+                                    <td>Surveillance
+                                        <div id="CreditNotePreview_SurveillanceRemark" *ngIf="caseCreditNote.surveillanceRemark" style="margin-left:20px">-&nbsp;
+                                            {{caseCreditNote.surveillanceRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdSurveillanceAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_SurveillanceAmount">{{caseCreditNote.surveillanceAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdSurveillanceSST" style="text-align:right"><span
+                                            id="CreditNotePreview_SurveillanceSST">{{caseCreditNote.surveillanceSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trTelco" *ngIf="caseCreditNote.telcoAmount!=0">
+                                    <td>Telco
+                                    </td>
+                                    <td id="CreditNotePreview_tdTelcoAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_TelcoAmount">{{caseCreditNote.telcoAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdTelcoSST" style="text-align:right"><span
+                                            id="CreditNotePreview_TelcoSST">{{caseCreditNote.telcoSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trThirdParty" *ngIf="caseCreditNote.thirdPartyAmount!=0">
+                                    <td>Third Party
+                                        <div *ngFor="let item of thirdPartyItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdThirdPartyAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_ThirdPartyAmount">{{caseCreditNote.thirdPartyAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdThirdPartySST" style="text-align:right"><span
+                                            id="CreditNotePreview_ThirdPartySST">{{caseCreditNote.thirdPartySST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trCourtAttendance" *ngIf="caseCreditNote.courtAttendanceAmount!=0">
+                                    <td>Court Attendance
+                                        <div id="CreditNotePreview_CourtAttendanceRemark" *ngIf="caseCreditNote.courtAttendanceRemark" style="margin-left:20px">- {{caseCreditNote.courtAttendanceRemark}}
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdCourtAttendanceAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_CourtAttendanceAmount">{{caseCreditNote.courtAttendanceAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdCourtAttendanceSST" style="text-align:right"><span
+                                            id="CreditNotePreview_CourtAttendanceSST">{{caseCreditNote.courtAttendanceSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trSearchFee" *ngIf="caseCreditNote.searchFeeAmount!=0">
+                                    <td>Search Fee
+                                        <div *ngFor="let item of searchFeeItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdSearchFeeAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_SearchFeeAmount">{{caseCreditNote.searchFeeAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdSearchFeeSST" style="text-align:right"><span
+                                            id="CreditNotePreview_SearchFeeSST">{{caseCreditNote.searchFeeSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trAirFare" *ngIf="caseCreditNote.airFareAmount!=0">
+                                    <td>Air Fare
+                                        <div *ngFor="let item of airFareItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdAirFareAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_AirFareAmount">{{caseCreditNote.airFareAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdAirFareSST" style="text-align:right"><span
+                                            id="CreditNotePreview_AirFareSST">{{caseCreditNote.airFareSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trChartered" *ngIf="caseCreditNote.charteredAmount!=0">
+                                    <td>Chartered Transport
+                                        <div *ngFor="let item of charteredItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdCharteredAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_CharteredAmount">{{caseCreditNote.charteredAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdCharteredSST" style="text-align:right"><span
+                                            id="CreditNotePreview_CharteredSST">{{caseCreditNote.charteredSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trTaxiFare" *ngIf="caseCreditNote.taxiFareAmount!=0">
+                                    <td>Taxi Fare
+                                        <div *ngFor="let item of taxiFareItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdTaxiFareAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_TaxiFareAmount">{{caseCreditNote.taxiFareAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdTaxiFareSST" style="text-align:right"><span
+                                            id="CreditNotePreview_TaxiFareSST">{{caseCreditNote.taxiFareSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trAccommodation" *ngIf="caseCreditNote.accommodationAmount!=0">
+                                    <td>Accommodation
+                                        <div *ngFor="let item of accommodationItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdAccommodationAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_AccommodationAmount">{{caseCreditNote.accommodationAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdAccommodationSST" style="text-align:right"><span
+                                            id="CreditNotePreview_AccommodationSST">{{caseCreditNote.accommodationSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+                                <tr id="CreditNotePreview_trMisc" *ngIf="caseCreditNote.miscAmount!=0">
+                                    <td>Miscellaneous Fees
+                                        <div *ngFor="let item of miscItemList" style="margin-left:20px">
+                                            -&nbsp;{{item.remark}}  (RM{{item.amount | number : '1.2-2'}})
+                                        </div>
+                                    </td>
+                                    <td id="CreditNotePreview_tdMiscAmount" style="text-align:right"> <span
+                                            id="CreditNotePreview_MiscAmount">{{caseCreditNote.miscAmount | number :
+                                            '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdMiscSST" style="text-align:right"><span
+                                            id="CreditNotePreview_MiscSST">{{caseCreditNote.miscSST | number :
+                                            '1.2-2'}}</span></td>
+                                </tr>
+
+
+                                <tr id="CreditNotePreview_trAmountExcludeSST">
+                                    <td> 
+                                        <div id="CreditNotePreview_AmountExcludeSSTHeading">Amount
+                                            Excluding SST
+                                        </div>
+                                    </td>
+                                    <td style="text-align:right"><span
+                                            id="CreditNotePreview_AmountExcludeSST">{{caseCreditNote.amountExcludeSST | number :
+                                                '1.2-2'}}</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+
+                                <tr *ngIf="caseCreditNote.includeSST">
+                                    <td><span id="CreditNotePreview_IncludeSSTHeading"> Add SST (6%)</span></td>
+                                    <td style="text-align:right"> </td>
+                                    <td id=" CreditNotePreview_tdSSTAmount" style="text-align:right"><span
+                                            id="CreditNotePreview_SSTAmount">{{sstAmount | number :
+                                                '1.2-2'}}</span></td>
+
+                                </tr>
+                                <tr class="total-row">
+                                    <td><em>Ringgit Malaysia: </em> <span id="CreditNotePreview_TotalInTextForm"
+                                            style="font-style:italic;">{{caseCreditNote.totalInTextForm}}</span></td>
+                                    <td style="text-align:right"> <span id="CreditNotePreview_TotalAmount">{{caseCreditNote.totalAmount | number :
+                                        '1.2-2'}}</span>
+                                    </td>
+                                    <td id="CreditNotePreview_tdTotal"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="note text-center">This is a computer generated Credit Note. No signature is required</div>
+
+            </div>
+
+
+            <div class="card-footer">
+
+                <div class="form-group row">
+                    <div class="form-group row">
+                        <div class="col-xl-9 mb-5">
+                        </div>
+    
+    
+                        <div class="col-xl-3 d-flex justify-content-end">
+                            <button (click)="edit()" class="btn btn-primary blue float-right "
+                                ><i class="fa fa-pencil"></i> 
+                                <span>{{l("Edit")}}</span>
+                            </button>
+
+                        </div>
+    
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>

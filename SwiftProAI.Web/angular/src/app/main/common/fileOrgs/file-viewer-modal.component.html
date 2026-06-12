@@ -1,0 +1,39 @@
+<div
+    bsModal
+    #fileViewerModal="bs-modal"
+    class="modal fade file-viewer-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="fileViewerModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ fileView.fileName }}</h4>
+                <button type="button" class="btn-close" (click)="close()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img
+                    *ngIf="fileView.contentType === 'Image'"
+                    [src]="fileUrl"
+                    alt="{{ fileView.fileName }}"
+                    class="modal-image"
+                />
+                <embed
+                    *ngIf="fileView.contentType === 'PDF'"
+                    [src]="fileUrl"
+                    type="application/pdf"
+                    width="100%"
+                    height="600px"
+                />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="downloadFile()">Download</button>
+                <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
