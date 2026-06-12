@@ -1,0 +1,48 @@
+---
+title: "Services"
+type: hub
+updated: 2026-06-12
+---
+
+# Services
+
+- [[main-registration-app-service]]
+- [[case-claims-app-service]]
+- [[case-invoices-app-service]]
+- [[case-adjusters-app-service]]
+- [[case-lawyers-app-service]]
+- [[case-workshops-app-service]]
+- [[case-insurers-app-service]]
+- [[case-third-party-infos-app-service]]
+- [[registration-exporter-app-service]]
+- [[company-app-service]]
+- [[view-third-party-case-requests-app-service]]
+- [[view-third-party-cases-app-service]]
+- [[ou-onboarding-app-service]]
+- [[open-ai-integration-logs-app-service]]
+- [[prompts-app-service]]
+- [[case-reports-app-service]]
+- [[wip-reports-app-service]]
+- [[adjuster-reports-app-service]]
+- [[case-type-app-service]]
+- [[company-app-service]]
+- [[document-settings-app-service]]
+- [[common-dropdown-app-service]]
+- [[remark-app-service]]
+- [[law-firms-app-service]]
+- [[branch-app-service]]
+- [[jwt-security-stamp-handler]]
+- [[external-login-info-manager-factory]]
+- [[signal-r-chat-communicator]]
+- [[openid-dict-data-seed-worker]]
+- [[abp-open-iddict-claims-principal-manager]]
+- [[abp-default-open-iddict-claims-principal-handler]]
+- [[per-request-session-cache]]
+- [[recaptcha-validator]]
+- [[ui-theme-customizer-factory]]
+- [[app-url-service-base]]
+- [[app-configuration-accessor]]
+- [[default-html-sanitizer]]
+- [[angular-app-url-service]]
+- [[web-url-service]]
+- [[payment-url-generator]]
